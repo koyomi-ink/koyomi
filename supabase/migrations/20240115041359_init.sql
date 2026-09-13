@@ -114,7 +114,26 @@ create table artwork_items (
 );
 
 -- ============================================================================
--- 6. BOOKINGS, TIME BLOCKS & APPOINTMENTS
+-- 6. CLIENTS (CRM)
+-- ============================================================================
+create table clients (
+  id uuid primary key default gen_random_uuid(),
+  studio_id uuid not null references studios(id) on delete cascade,
+  first_name text not null,
+  last_name text not null,
+  email text not null,
+  phone text,
+  notes text, 
+  
+  created_at timestamptz default now() not null,
+  updated_at timestamptz default now() not null,
+  
+  unique(studio_id, email)
+);
+
+
+-- ============================================================================
+-- 7. BOOKINGS, TIME BLOCKS & APPOINTMENTS
 -- ============================================================================
 create table bookings (
   id uuid primary key default gen_random_uuid(),
@@ -122,23 +141,22 @@ create table bookings (
   artist_id uuid references artists(id) on delete set null,
   location_id uuid references locations(id) on delete set null,
   
-  booking_type text not null check (booking_type in ('flash', 'custom', 'time_block'))
+  booking_type text not null check (booking_type in ('flash', 'custom', 'time_block')),
   artwork_item_id uuid references artwork_items(id) on delete set null,
   
-  -- Client Information (Nullable for internal time blocks)
-  client_first_name text,
-  client_last_name text,
-  client_email text,
-  client_phone text,
-  client_notes text,
+  -- Replaced raw text fields with the relational CRM link
+  client_id uuid references clients(id) on delete set null,
+
+  -- Book-specific notes
+  book_notes text,
   
-  -- Custom Request Payload (Idea description, budget, reference photo URLs)
+  -- Custom Request Payload
   custom_details jsonb default '{}'::jsonb,
   
-  -- Flash Selection Metadata (e.g., chosen color/size tier)
+  -- Flash Selection Metadata
   selected_tier jsonb default '{}'::jsonb,
   
-  -- The Handshake: 3 candidate start times submitted by client
+  -- The Handshake
   requested_slots jsonb default '[]'::jsonb,
   
   -- Confirmed Slot & Duration
@@ -153,15 +171,15 @@ create table bookings (
   
   -- Status Lifecycle
   status text default 'requested' check (status in (
-    'requested',             -- Client submitted 3 options
-    'reslot_requested',      -- Artist requested 3 new dates
-    'reslot_provided',       -- Client submitted replacement dates
-    'approved_awaiting_dep', -- Artist locked in a slot; awaiting deposit
-    'client_marked_paid',    -- Client clicked "I have paid"
-    'confirmed',             -- Artist confirmed deposit received
-    'completed',             -- Appointment fulfilled
-    'declined',              -- Artist declined the request
-    'cancelled'              -- Cancelled by client or expired
+    'requested',
+    'reslot_requested',
+    'reslot_provided',
+    'approved_awaiting_dep',
+    'client_marked_paid',
+    'confirmed',
+    'completed',
+    'declined',
+    'cancelled'
   )),
   
   created_at timestamptz default now() not null,
@@ -169,7 +187,7 @@ create table bookings (
 );
 
 
--- 7. SCHEDULE OVERRIDES (Date-specific exceptions to the weekly template)
+-- 8. SCHEDULE OVERRIDES (Date-specific exceptions to the weekly template)
 create table schedule_overrides (
   id uuid primary key default gen_random_uuid(),
   location_id uuid not null references locations(id) on delete cascade,
@@ -206,3 +224,142 @@ create trigger set_pricing_sets_updated_at before update on pricing_sets for eac
 create trigger set_artwork_items_updated_at before update on artwork_items for each row execute procedure handle_updated_at();
 create trigger set_bookings_updated_at before update on bookings for each row execute procedure handle_updated_at();
 create trigger set_overrides_updated_at before update on schedule_overrides for each row execute procedure handle_updated_at();
+create trigger set_clients_updated_at before update on clients for each row execute procedure handle_updated_at();
+
+
+-- ============================================================================
+-- 1. ENABLE ROW LEVEL SECURITY ON ALL TABLES
+-- ============================================================================
+alter table studios enable row level security;
+alter table artists enable row level security;
+alter table locations enable row level security;
+alter table pricing_sets enable row level security;
+alter table artwork_items enable row level security;
+alter table clients enable row level security;
+alter table bookings enable row level security;
+alter table schedule_overrides enable row level security;
+
+-- ============================================================================
+-- 2. PUBLIC READ POLICIES (For the Digital Hub & Client Checkout)
+-- ============================================================================
+-- Anyone can view studio profiles, locations, and pricing sets
+create policy "Public can view studios" on studios for select using (true);
+create policy "Public can view locations" on locations for select using (true);
+create policy "Public can view pricing_sets" on pricing_sets for select using (true);
+create policy "Public can view artists" on artists for select using (is_active = true);
+
+-- Anyone can view ACTIVE artwork items
+create policy "Public can view active artwork" on artwork_items for select using (status = 'active');
+
+-- Anyone can INSERT a new booking request (the client submitting the form)
+create policy "Public can insert booking requests" on bookings for insert with check (status = 'requested');
+
+-- ============================================================================
+-- 3. TENANT ISOLATION POLICIES (For the Artist Dashboard)
+-- ============================================================================
+-- Note: We use a subquery to check if the user requesting the data exists 
+-- in the `artists` table and belongs to the correct `studio_id`.
+
+-- STUDIOS
+create policy "Artists can update their own studio" on studios for update using (
+  id in (select studio_id from artists where id = auth.uid())
+);
+
+-- ARTISTS (Users can manage their own profile)
+create policy "Artists can update their own profile" on artists for update using (
+  id = auth.uid()
+);
+
+-- LOCATIONS & SCHEDULE OVERRIDES
+create policy "Artists can manage their locations" on locations using (
+  studio_id in (select studio_id from artists where id = auth.uid())
+);
+create policy "Artists can manage their overrides" on schedule_overrides using (
+  location_id in (select id from locations where studio_id in (select studio_id from artists where id = auth.uid()))
+);
+
+-- INVENTORY (Pricing Sets & Artwork)
+create policy "Artists can manage pricing sets" on pricing_sets using (
+  studio_id in (select studio_id from artists where id = auth.uid())
+);
+create policy "Artists can manage artwork" on artwork_items using (
+  studio_id in (select studio_id from artists where id = auth.uid())
+);
+
+-- CRM (Clients & Bookings)
+create policy "Artists can manage their clients" on clients using (
+  studio_id in (select studio_id from artists where id = auth.uid())
+);
+create policy "Artists can view and manage their bookings" on bookings for select using (
+  studio_id in (select studio_id from artists where id = auth.uid())
+);
+create policy "Artists can update their bookings" on bookings for update using (
+  studio_id in (select studio_id from artists where id = auth.uid())
+);
+
+-- ============================================================================
+-- CLIENT PORTAL POLICIES
+-- ============================================================================
+
+-- 1. CLIENTS TABLE: Allow clients to view and update their own contact info
+create policy "Clients can view their own profile" on clients
+  for select
+  using (email = (auth.jwt() ->> 'email'));
+
+create policy "Clients can update their own profile" on clients
+  for update
+  using (email = (auth.jwt() ->> 'email'));
+
+-- 2. BOOKINGS TABLE: Allow clients to view their own appointments
+create policy "Clients can view their own bookings" on bookings
+  for select
+  using (
+    client_id in (
+      select id from clients where email = (auth.jwt() ->> 'email')
+    )
+  );
+
+-- Optional: Allow clients to cancel or submit payment notes for their booking
+create policy "Clients can update their own booking status" on bookings
+  for update
+  using (
+    client_id in (
+      select id from clients where email = (auth.jwt() ->> 'email')
+    )
+  );
+
+-- ============================================================================
+-- 4. ANTI-TAMPERING TRIGGERS (Client Portal Security)
+-- ============================================================================
+create or replace function public.restrict_client_booking_updates()
+returns trigger as $$
+begin
+  -- Check if the person making the update is the client tied to this booking
+  if exists (
+    select 1 from clients 
+    where id = old.client_id 
+    and email = auth.jwt() ->> 'email'
+  ) then
+    -- TAMPERING MITIGATION:
+    -- If the client tries to change any of these, we silently revert them to the original data.
+    -- They are ONLY allowed to change 'status' and 'requested_slots' via the RLS policy.
+    new.quoted_price = old.quoted_price;
+    new.deposit_amount = old.deposit_amount;
+    new.artwork_item_id = old.artwork_item_id;
+    new.duration_minutes = old.duration_minutes;
+    new.scheduled_slot_start = old.scheduled_slot_start;
+    new.scheduled_slot_end = old.scheduled_slot_end;
+    new.book_notes = old.book_notes; 
+    new.custom_details = old.custom_details;
+    new.selected_tier = old.selected_tier;
+  end if;
+  
+  return new;
+end;
+$$ language plpgsql;
+
+-- Attach the trigger to fire before any update on the bookings table
+create trigger enforce_client_tampering_protection
+  before update on bookings
+  for each row
+  execute procedure restrict_client_booking_updates();
