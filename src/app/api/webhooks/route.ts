@@ -5,9 +5,11 @@ import { getEnvVar } from '@/utils/get-env-var';
 
 // 1. Listen ONLY to events relevant to metered billing and invoices
 const relevantEvents = new Set([
+  'checkout.session.completed',
   'invoice.paid',
   'invoice.payment_failed',
   'customer.subscription.created',
+  'customer.subscription.updated',
   'customer.subscription.deleted',
 ]);
 
@@ -28,7 +30,6 @@ export async function POST(req: Request) {
   if (relevantEvents.has(event.type)) {
     try {
       switch (event.type) {
-        
         // --- INVOICE EVENTS (Metered Billing) ---
         case 'invoice.paid':
           const paidInvoice = event.data.object as Stripe.Invoice;

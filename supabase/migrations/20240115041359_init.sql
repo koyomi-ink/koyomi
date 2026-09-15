@@ -22,6 +22,9 @@ create table studios (
   -- Koyomi Metered Billing
   stripe_customer_id text,
   stripe_subscription_id text,
+  stripe_subscription_status text,
+  current_period_end timestamptz,
+  stripe_price_id text,
   
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null

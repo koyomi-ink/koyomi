@@ -424,13 +424,16 @@ export type Database = {
           bio: string | null
           created_at: string
           currency: string
+          current_period_end: string | null
           id: string
           name: string
           payment_instructions: Json | null
           slug: string
           social_links: Json | null
           stripe_customer_id: string | null
+          stripe_price_id: string | null
           stripe_subscription_id: string | null
+          stripe_subscription_status: string | null
           theme: Json | null
           updated_at: string
         }
@@ -439,13 +442,16 @@ export type Database = {
           bio?: string | null
           created_at?: string
           currency: string
+          current_period_end?: string | null
           id?: string
           name: string
           payment_instructions?: Json | null
           slug: string
           social_links?: Json | null
           stripe_customer_id?: string | null
+          stripe_price_id?: string | null
           stripe_subscription_id?: string | null
+          stripe_subscription_status?: string | null
           theme?: Json | null
           updated_at?: string
         }
@@ -454,13 +460,16 @@ export type Database = {
           bio?: string | null
           created_at?: string
           currency?: string
+          current_period_end?: string | null
           id?: string
           name?: string
           payment_instructions?: Json | null
           slug?: string
           social_links?: Json | null
           stripe_customer_id?: string | null
+          stripe_price_id?: string | null
           stripe_subscription_id?: string | null
+          stripe_subscription_status?: string | null
           theme?: Json | null
           updated_at?: string
         }
