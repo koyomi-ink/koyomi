@@ -2,12 +2,8 @@ import { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
 import { Montserrat, Montserrat_Alternates } from 'next/font/google';
 
-import { cn } from '@/utils/cn';
+import { Button } from '@/components/ui/button';
 import { Analytics } from '@vercel/analytics/react';
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -28,10 +24,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>
-      <body className={cn('font-sans antialiased', montserrat.variable, montserratAlternates.variable)}>
-        <div className='m-auto flex h-full max-w-[1440px] flex-col px-4'>
-          <main className='relative flex-1'>
-            <div className='relative h-full'>{children}</div>
+      <body>
+        <div>
+          <Button>Log out</Button>
+        </div>
+        <div>
+          <main>
+            <div>{children}</div>
           </main>
         </div>
         <Analytics />

@@ -53,3 +53,11 @@ export async function signOut(): Promise<ActionResponse> {
 
   return { data: null, error: null };
 }
+
+export async function logout() {
+  const supabase = await createSupabaseServerClient()
+
+  await supabase.auth.signOut()
+
+  redirect('/login')
+}
