@@ -5,6 +5,10 @@ import { getSession } from '@/features/account/controllers/get-session';
 import { signInWithEmail, signInWithOAuth } from '../../../features/auth/actions/auth-actions';
 import { AuthUI } from '../../../features/auth/components/auth-ui';
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default async function LoginPage() {
   const session = await getSession();
 

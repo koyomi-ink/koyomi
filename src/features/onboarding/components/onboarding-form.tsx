@@ -14,7 +14,7 @@ export default function OnboardingForm() {
   const [state, formAction, isPending] = useActionState(completeOnboarding, initialState);
 
   return (
-    <Card className="mx-auto max-w-md shadow-sm">
+    <Card className="mx-auto max-w-md shadow-xs">
       <CardHeader>
         <CardTitle className="text-xl">Claim your Koyomi Hub</CardTitle>
         <CardDescription>
@@ -32,7 +32,7 @@ export default function OnboardingForm() {
                 name="slug"
                 type="text"
                 placeholder="swallowstudio"
-                className="w-full bg-transparent py-2 pl-1 outline-none text-sm placeholder:text-muted-foreground"
+                className="w-full bg-transparent py-2 pl-1 outline-hidden text-sm placeholder:text-muted-foreground"
                 required
               />
             </div>
@@ -68,7 +68,7 @@ export default function OnboardingForm() {
             <select
               id="currency"
               name="currency"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
