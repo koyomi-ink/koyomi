@@ -3,7 +3,6 @@
 import { FormEvent, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { IoLogoGoogle } from 'react-icons/io5';
 
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -75,7 +74,6 @@ export function AuthUI({
           onClick={() => handleOAuthClick('google')}
           disabled={pending}
         >
-          <IoLogoGoogle size={20} />
           Continue with Google
         </button>
 
