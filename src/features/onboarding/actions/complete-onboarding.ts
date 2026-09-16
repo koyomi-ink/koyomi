@@ -35,8 +35,8 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
 
   // 1. Create the Studio tenant (cast insert payload to any to bypass strict never[] generic inference)
   const { data: studio, error: studioError } = await supabase
-    .from('studios' as any)
-    .insert({ slug, name, currency } as any)
+    .from('studios')
+    .insert({ slug, name, currency })
     .select('id')
     .single();
 
@@ -47,20 +47,19 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
     return { error: { form: [studioError.message] } };
   }
 
-  const studioRecord = studio as { id: string };
 
   // 2. Link the authenticated user as the owner in artists table
   const { error: artistError } = await supabase
     .from('artists' as any)
     .insert({
       id: user.id,
-      studio_id: studioRecord.id,
+      studio_id: studio.id,
       display_name: displayName,
       role: 'owner',
     } as any);
 
   if (artistError) {
-    await supabase.from('studios' as any).delete().eq('id', studioRecord.id);
+    await supabase.from('studios').delete().eq('id', studio.id);
     return { error: { form: [artistError.message] } };
   }
 
