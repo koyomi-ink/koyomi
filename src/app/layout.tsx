@@ -2,8 +2,6 @@ import { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
 
 import { Analytics } from '@vercel/analytics/react';
-import { Button } from '@/components/ui/button';
-import { logout } from '@/features/auth/actions/auth-actions';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,11 +12,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>
       <body>
-        <div>
-          <form action={logout}>
-            <Button>Log out</Button>
-          </form>
-        </div>
         <div >
           <main >
             <div>{children}</div>
