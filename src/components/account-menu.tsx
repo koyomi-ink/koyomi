@@ -22,6 +22,7 @@ import { Button } from './ui/button';
 //     }
 //   }
 
+export function AccountMenu() {
   return (
     <>
       <h1>ACCOUNT MENU</h1>
