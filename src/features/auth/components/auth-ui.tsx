@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
 import { ActionResponse } from '@/types/action-response';
 
 const titleMap = {
@@ -34,16 +33,8 @@ export function AuthUI({
     const email = form['email'].value;
     const response = await signInWithEmail(email);
 
-    if (response?.error) {
-      toast({
-        variant: 'destructive',
-        description: 'An error occurred while authenticating. Please try again.',
-      });
-    } else {
-      toast({
-        description: `To continue, click the link in the email sent to: ${email}`,
-      });
-    }
+    // T0D0 - add toast here response?.error "An error occurred while authenticating. Please try again." & else `To continue, click the link in the email sent to: ${email}`
+    
 
     form.reset();
     setPending(false);
@@ -54,10 +45,7 @@ export function AuthUI({
     const response = await signInWithOAuth(provider);
 
     if (response?.error) {
-      toast({
-        variant: 'destructive',
-        description: 'An error occurred while authenticating. Please try again.',
-      });
+      // T0D0 - add toast here "An error occurred while authenticating. Please try again." 
       setPending(false);
     }
   }
