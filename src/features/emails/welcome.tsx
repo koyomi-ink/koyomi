@@ -1,4 +1,4 @@
-import { Body, Button, Container, Head, Heading, Html, Link, Preview, Section, Text } from '@react-email/components';
+import { Body, Button, Container, Head, Heading, Html, Link, Preview, Section, Text } from 'react-email';
 
 const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
 
