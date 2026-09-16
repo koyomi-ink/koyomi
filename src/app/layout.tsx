@@ -12,8 +12,6 @@ import '../styles/globals.css';
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
 export const instant = false;
 
-export const dynamic = 'force-dynamic';
-
 const montserrat = Montserrat({
   variable: '--font-montserrat',
   subsets: ['latin'],

@@ -12,8 +12,6 @@ import { Analytics } from '@vercel/analytics/react';
 export const instant = false;
 
 
-export const dynamic = 'force-dynamic';
-
 const montserrat = Montserrat({
   variable: '--font-montserrat',
   subsets: ['latin'],
