@@ -50,13 +50,13 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
 
   // 2. Link the authenticated user as the owner in artists table
   const { error: artistError } = await supabase
-    .from('artists' as any)
+    .from('artists')
     .insert({
       id: user.id,
       studio_id: studio.id,
       display_name: displayName,
       role: 'owner',
-    } as any);
+    });
 
   if (artistError) {
     await supabase.from('studios').delete().eq('id', studio.id);
