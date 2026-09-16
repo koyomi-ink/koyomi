@@ -1,32 +1,30 @@
 import { stripeAdmin } from '@/libs/stripe/stripe-admin';
 import { supabaseAdminClient } from '@/libs/supabase/supabase-admin';
 
-export async function getOrCreateCustomer({ userId, email }: { userId: string; email: string }) {
+export async function getOrCreateStudioCustomer({ studioId, email, studioName }: { studioId: string; email: string; studioName: string }){
   const { data, error } = await supabaseAdminClient
-    .from('customers')
+    .from('studios')
     .select('stripe_customer_id')
-    .eq('id', userId)
+    .eq('id', studioId)
     .single();
 
   if (error || !data?.stripe_customer_id) {
-    // No customer record found, let's create one.
+    // 1. Create the customer in Stripe
     const customerData = {
       email,
-      metadata: {
-        userId,
-      },
+      name: studioName,
+      metadata: { studioId },
     } as const;
 
     const customer = await stripeAdmin.customers.create(customerData);
 
-    // Insert the customer ID into our Supabase mapping table.
+    // 2. Save the new Stripe ID to the Koyomi studios table
     const { error: supabaseError } = await supabaseAdminClient
-      .from('customers')
-      .insert([{ id: userId, stripe_customer_id: customer.id }]);
+      .from('studios')
+      .update({ stripe_customer_id: customer.id })
+      .eq('id', studioId);
 
-    if (supabaseError) {
-      throw supabaseError;
-    }
+    if (supabaseError) throw supabaseError;
 
     return customer.id;
   }

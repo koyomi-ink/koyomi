@@ -1,5 +1,9 @@
-export default async function HomePage() {
+import OnboardingForm from '@/features/onboarding/components/onboarding-form';
+
+export default function OnboardingPage() {
   return (
-    <h1>Onboarding</h1>
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-muted/30">
+      <OnboardingForm />
+    </div>
   );
 }

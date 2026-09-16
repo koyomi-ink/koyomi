@@ -20,6 +20,7 @@ export type Database = {
           display_name: string
           id: string
           is_active: boolean
+          notification_preferences: Json | null
           role: string | null
           studio_id: string
           updated_at: string
@@ -29,6 +30,7 @@ export type Database = {
           display_name: string
           id: string
           is_active?: boolean
+          notification_preferences?: Json | null
           role?: string | null
           studio_id: string
           updated_at?: string
@@ -38,6 +40,7 @@ export type Database = {
           display_name?: string
           id?: string
           is_active?: boolean
+          notification_preferences?: Json | null
           role?: string | null
           studio_id?: string
           updated_at?: string
@@ -422,45 +425,57 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          client_communication_settings: Json | null
           created_at: string
           currency: string
+          current_period_end: string | null
           id: string
           name: string
           payment_instructions: Json | null
           slug: string
           social_links: Json | null
           stripe_customer_id: string | null
+          stripe_price_id: string | null
           stripe_subscription_id: string | null
+          stripe_subscription_status: string | null
           theme: Json | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          client_communication_settings?: Json | null
           created_at?: string
           currency: string
+          current_period_end?: string | null
           id?: string
           name: string
           payment_instructions?: Json | null
           slug: string
           social_links?: Json | null
           stripe_customer_id?: string | null
+          stripe_price_id?: string | null
           stripe_subscription_id?: string | null
+          stripe_subscription_status?: string | null
           theme?: Json | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          client_communication_settings?: Json | null
           created_at?: string
           currency?: string
+          current_period_end?: string | null
           id?: string
           name?: string
           payment_instructions?: Json | null
           slug?: string
           social_links?: Json | null
           stripe_customer_id?: string | null
+          stripe_price_id?: string | null
           stripe_subscription_id?: string | null
+          stripe_subscription_status?: string | null
           theme?: Json | null
           updated_at?: string
         }
