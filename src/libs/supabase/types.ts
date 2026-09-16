@@ -20,6 +20,7 @@ export type Database = {
           display_name: string
           id: string
           is_active: boolean
+          notification_preferences: Json | null
           role: string | null
           studio_id: string
           updated_at: string
@@ -29,6 +30,7 @@ export type Database = {
           display_name: string
           id: string
           is_active?: boolean
+          notification_preferences?: Json | null
           role?: string | null
           studio_id: string
           updated_at?: string
@@ -38,6 +40,7 @@ export type Database = {
           display_name?: string
           id?: string
           is_active?: boolean
+          notification_preferences?: Json | null
           role?: string | null
           studio_id?: string
           updated_at?: string
@@ -422,6 +425,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          client_communication_settings: Json | null
           created_at: string
           currency: string
           current_period_end: string | null
@@ -440,6 +444,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          client_communication_settings?: Json | null
           created_at?: string
           currency: string
           current_period_end?: string | null
@@ -458,6 +463,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          client_communication_settings?: Json | null
           created_at?: string
           currency?: string
           current_period_end?: string | null
