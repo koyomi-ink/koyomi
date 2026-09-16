@@ -2,15 +2,14 @@ import { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
 import { Montserrat, Montserrat_Alternates } from 'next/font/google';
 
-import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/utils/cn';
 import { Analytics } from '@vercel/analytics/react';
 
+import '../styles/globals.css';
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
 export const instant = false;
-
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -37,7 +36,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
             <div className='relative h-full'>{children}</div>
           </main>
         </div>
-        <Toaster />
         <Analytics />
       </body>
     </html>
