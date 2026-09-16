@@ -11,7 +11,7 @@ import { ActionResponse } from '@/types/action-response';
 
 const titleMap = {
   login: 'Login to Koyomi',
-  signup: 'Join Koyomi and start generating banners for free',
+  signup: 'Join Koyomi to manage your studio',
 } as const;
 
 export function AuthUI({
