@@ -4,9 +4,10 @@ import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://koyomi.ink'),
   title: 'Koyomi',
   description: 'Manage your tattoo business',
-  keywords: ['tattoo, scheduling, booking, books, schedule, management, studio'],
+  keywords: ['tattoo', 'scheduling', 'booking', 'books', 'schedule', 'management', 'studio'],
   verification: {
     google: 'TODO - string here'
   },
@@ -14,6 +15,13 @@ export const metadata: Metadata = {
     title: 'Koyomi',
     description: 'Manage your tattoo business',
     type: 'website',
+    images: [
+      {
+        url: '/og.jpg',
+        width: 800,
+        height: 600,
+      }
+    ]
   }
 };
 
