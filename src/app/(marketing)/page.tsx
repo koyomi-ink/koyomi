@@ -1,6 +1,6 @@
 export default async function HomePage() {
   return (
-    <div className='flex flex-col gap-8 lg:gap-32'>
+    <div>
       <HeroSection />
     </div>
   );
