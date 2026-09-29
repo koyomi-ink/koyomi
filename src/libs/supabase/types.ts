@@ -977,7 +977,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      complete_onboarding: {
+        Args: {
+          p_currency: string
+          p_display_name: string
+          p_studio_name: string
+          p_studio_slug: string
+        }
+        Returns: {
+          artist_id: string
+          studio_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

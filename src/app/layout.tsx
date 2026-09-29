@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 
 import { Analytics } from '@vercel/analytics/react';
 
+import '@/styles/globals.css';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://koyomi.ink'),
   title: 'Koyomi',

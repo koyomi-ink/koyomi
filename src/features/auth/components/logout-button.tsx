@@ -1,11 +1,12 @@
 import { logout } from '@/features/auth/actions/auth-actions';
+import { Button } from '@/components/ui/button';
 
 export function LogoutButton() {
   return (
     <form action={logout}>
-      <button type='submit'>
+      <Button type='submit'>
         Log out
-      </button>
+      </Button>
     </form>
   );
 }
