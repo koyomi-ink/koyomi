@@ -57,26 +57,6 @@ export async function signInWithEmail(
   };
 }
 
-export async function signOut(): Promise<ActionResponse> {
-  const supabase = await createSupabaseServerClient();
-
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    console.error('Sign-out failed:', error);
-
-    return {
-      data: null,
-      error: 'Could not sign out. Please try again.',
-    };
-  }
-
-  return {
-    data: null,
-    error: null,
-  };
-}
-
 export async function logout() {
   const supabase = await createSupabaseServerClient();
 
