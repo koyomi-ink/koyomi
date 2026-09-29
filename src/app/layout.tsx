@@ -32,7 +32,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang='en'>
       <body>
         <div >
-          <main >
+          <main>
             <div>{children}</div>
           </main>
         </div>
