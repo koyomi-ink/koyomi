@@ -12,36 +12,159 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
+      artist_availability: {
+        Row: {
+          artist_id: string
+          created_at: string
+          id: string
+          location_id: string
+          studio_id: string
+          updated_at: string
+          weekly_schedule: Json
+        }
+        Insert: {
+          artist_id: string
+          created_at?: string
+          id?: string
+          location_id: string
+          studio_id: string
+          updated_at?: string
+          weekly_schedule?: Json
+        }
+        Update: {
+          artist_id?: string
+          created_at?: string
+          id?: string
+          location_id?: string
+          studio_id?: string
+          updated_at?: string
+          weekly_schedule?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_availability_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "artist_availability_artist_same_studio_fkey"
+            columns: ["studio_id", "artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "artist_availability_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "artist_availability_location_same_studio_fkey"
+            columns: ["studio_id", "location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "artist_availability_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      artist_settings: {
+        Row: {
+          artist_id: string
+          created_at: string
+          notification_preferences: Json
+          updated_at: string
+        }
+        Insert: {
+          artist_id: string
+          created_at?: string
+          notification_preferences?: Json
+          updated_at?: string
+        }
+        Update: {
+          artist_id?: string
+          created_at?: string
+          notification_preferences?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_settings_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: true
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       artists: {
         Row: {
+          auth_user_id: string
           created_at: string
           display_name: string
           id: string
           is_active: boolean
-          notification_preferences: Json | null
-          role: string | null
+          is_bookable: boolean
+          role: string
           studio_id: string
           updated_at: string
         }
         Insert: {
+          auth_user_id: string
           created_at?: string
           display_name: string
-          id: string
+          id?: string
           is_active?: boolean
-          notification_preferences?: Json | null
-          role?: string | null
+          is_bookable?: boolean
+          role?: string
           studio_id: string
           updated_at?: string
         }
         Update: {
+          auth_user_id?: string
           created_at?: string
           display_name?: string
           id?: string
           is_active?: boolean
-          notification_preferences?: Json | null
-          role?: string | null
+          is_bookable?: boolean
+          role?: string
           studio_id?: string
           updated_at?: string
         }
@@ -60,7 +183,7 @@ export type Database = {
           artist_id: string | null
           category: string
           created_at: string
-          crop_settings: Json | null
+          crop_settings: Json
           deposit_amount: number | null
           estimated_duration_min: number | null
           id: string
@@ -69,11 +192,11 @@ export type Database = {
           max_price: number | null
           min_price: number | null
           order_index: number
-          pricing_mode: string | null
+          pricing_mode: string
           pricing_set_id: string | null
-          status: string | null
+          status: string
           studio_id: string
-          tiers: Json | null
+          tiers: Json
           type: string
           updated_at: string
         }
@@ -81,7 +204,7 @@ export type Database = {
           artist_id?: string | null
           category: string
           created_at?: string
-          crop_settings?: Json | null
+          crop_settings?: Json
           deposit_amount?: number | null
           estimated_duration_min?: number | null
           id?: string
@@ -90,11 +213,11 @@ export type Database = {
           max_price?: number | null
           min_price?: number | null
           order_index?: number
-          pricing_mode?: string | null
+          pricing_mode?: string
           pricing_set_id?: string | null
-          status?: string | null
+          status?: string
           studio_id: string
-          tiers?: Json | null
+          tiers?: Json
           type: string
           updated_at?: string
         }
@@ -102,7 +225,7 @@ export type Database = {
           artist_id?: string | null
           category?: string
           created_at?: string
-          crop_settings?: Json | null
+          crop_settings?: Json
           deposit_amount?: number | null
           estimated_duration_min?: number | null
           id?: string
@@ -111,11 +234,11 @@ export type Database = {
           max_price?: number | null
           min_price?: number | null
           order_index?: number
-          pricing_mode?: string | null
+          pricing_mode?: string
           pricing_set_id?: string | null
-          status?: string | null
+          status?: string
           studio_id?: string
-          tiers?: Json | null
+          tiers?: Json
           type?: string
           updated_at?: string
         }
@@ -128,6 +251,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "artwork_items_artist_same_studio_fkey"
+            columns: ["studio_id", "artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
             foreignKeyName: "artwork_items_pricing_set_id_fkey"
             columns: ["pricing_set_id"]
             isOneToOne: false
@@ -135,7 +265,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "artwork_items_pricing_set_same_studio_fkey"
+            columns: ["studio_id", "pricing_set_id"]
+            isOneToOne: false
+            referencedRelation: "pricing_sets"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
             foreignKeyName: "artwork_items_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_private_notes: {
+        Row: {
+          booking_id: string
+          created_at: string
+          notes: string | null
+          studio_id: string
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          notes?: string | null
+          studio_id: string
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          notes?: string | null
+          studio_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_private_notes_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_private_notes_booking_same_studio_fkey"
+            columns: ["studio_id", "booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "booking_private_notes_studio_id_fkey"
             columns: ["studio_id"]
             isOneToOne: false
             referencedRelation: "studios"
@@ -147,66 +330,63 @@ export type Database = {
         Row: {
           artist_id: string | null
           artwork_item_id: string | null
-          book_notes: string | null
           booking_type: string
-          buffer_minutes: number | null
+          buffer_minutes: number
           client_id: string | null
           created_at: string
-          custom_details: Json | null
+          custom_details: Json
           deposit_amount: number | null
           duration_minutes: number | null
           id: string
           location_id: string | null
           quoted_price: number | null
-          requested_slots: Json | null
+          requested_slots: Json
           scheduled_slot_end: string | null
           scheduled_slot_start: string | null
-          selected_tier: Json | null
-          status: string | null
+          selected_tier: Json
+          status: string
           studio_id: string
           updated_at: string
         }
         Insert: {
           artist_id?: string | null
           artwork_item_id?: string | null
-          book_notes?: string | null
           booking_type: string
-          buffer_minutes?: number | null
+          buffer_minutes?: number
           client_id?: string | null
           created_at?: string
-          custom_details?: Json | null
+          custom_details?: Json
           deposit_amount?: number | null
           duration_minutes?: number | null
           id?: string
           location_id?: string | null
           quoted_price?: number | null
-          requested_slots?: Json | null
+          requested_slots?: Json
           scheduled_slot_end?: string | null
           scheduled_slot_start?: string | null
-          selected_tier?: Json | null
-          status?: string | null
+          selected_tier?: Json
+          status?: string
           studio_id: string
           updated_at?: string
         }
         Update: {
           artist_id?: string | null
           artwork_item_id?: string | null
-          book_notes?: string | null
           booking_type?: string
-          buffer_minutes?: number | null
+          buffer_minutes?: number
           client_id?: string | null
           created_at?: string
-          custom_details?: Json | null
+          custom_details?: Json
           deposit_amount?: number | null
           duration_minutes?: number | null
           id?: string
           location_id?: string | null
           quoted_price?: number | null
-          requested_slots?: Json | null
+          requested_slots?: Json
           scheduled_slot_end?: string | null
           scheduled_slot_start?: string | null
-          selected_tier?: Json | null
-          status?: string | null
+          selected_tier?: Json
+          status?: string
           studio_id?: string
           updated_at?: string
         }
@@ -219,11 +399,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bookings_artist_same_studio_fkey"
+            columns: ["studio_id", "artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
             foreignKeyName: "bookings_artwork_item_id_fkey"
             columns: ["artwork_item_id"]
             isOneToOne: false
             referencedRelation: "artwork_items"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_artwork_item_same_studio_fkey"
+            columns: ["studio_id", "artwork_item_id"]
+            isOneToOne: false
+            referencedRelation: "artwork_items"
+            referencedColumns: ["studio_id", "id"]
           },
           {
             foreignKeyName: "bookings_client_id_fkey"
@@ -233,6 +427,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bookings_client_same_studio_fkey"
+            columns: ["studio_id", "client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
             foreignKeyName: "bookings_location_id_fkey"
             columns: ["location_id"]
             isOneToOne: false
@@ -240,7 +441,190 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "bookings_location_same_studio_fkey"
+            columns: ["studio_id", "location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
             foreignKeyName: "bookings_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      busy_block_private_details: {
+        Row: {
+          busy_block_id: string
+          created_at: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          busy_block_id: string
+          created_at?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          busy_block_id?: string
+          created_at?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "busy_block_private_details_busy_block_id_fkey"
+            columns: ["busy_block_id"]
+            isOneToOne: true
+            referencedRelation: "busy_blocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      busy_blocks: {
+        Row: {
+          artist_id: string
+          created_at: string
+          ends_at: string
+          external_event_id: string | null
+          id: string
+          location_id: string | null
+          source: string
+          starts_at: string
+          studio_id: string
+          updated_at: string
+        }
+        Insert: {
+          artist_id: string
+          created_at?: string
+          ends_at: string
+          external_event_id?: string | null
+          id?: string
+          location_id?: string | null
+          source?: string
+          starts_at: string
+          studio_id: string
+          updated_at?: string
+        }
+        Update: {
+          artist_id?: string
+          created_at?: string
+          ends_at?: string
+          external_event_id?: string | null
+          id?: string
+          location_id?: string | null
+          source?: string
+          starts_at?: string
+          studio_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "busy_blocks_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "busy_blocks_artist_same_studio_fkey"
+            columns: ["studio_id", "artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "busy_blocks_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "busy_blocks_location_same_studio_fkey"
+            columns: ["studio_id", "location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "busy_blocks_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_identities: {
+        Row: {
+          auth_user_id: string
+          client_id: string
+          created_at: string
+        }
+        Insert: {
+          auth_user_id: string
+          client_id: string
+          created_at?: string
+        }
+        Update: {
+          auth_user_id?: string
+          client_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_identities_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_private_notes: {
+        Row: {
+          client_id: string
+          created_at: string
+          notes: string | null
+          studio_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          notes?: string | null
+          studio_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          notes?: string | null
+          studio_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_private_notes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_private_notes_client_same_studio_fkey"
+            columns: ["studio_id", "client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "client_private_notes_studio_id_fkey"
             columns: ["studio_id"]
             isOneToOne: false
             referencedRelation: "studios"
@@ -255,7 +639,6 @@ export type Database = {
           first_name: string
           id: string
           last_name: string
-          notes: string | null
           phone: string | null
           studio_id: string
           updated_at: string
@@ -266,7 +649,6 @@ export type Database = {
           first_name: string
           id?: string
           last_name: string
-          notes?: string | null
           phone?: string | null
           studio_id: string
           updated_at?: string
@@ -277,7 +659,6 @@ export type Database = {
           first_name?: string
           id?: string
           last_name?: string
-          notes?: string | null
           phone?: string | null
           studio_id?: string
           updated_at?: string
@@ -295,33 +676,57 @@ export type Database = {
       locations: {
         Row: {
           address: string | null
+          available_from: string | null
+          available_until: string | null
           created_at: string
+          description: string | null
           id: string
+          is_active: boolean
+          is_public: boolean
+          location_type: string
           maps_url: string | null
+          max_booking_advance_days: number
           name: string
+          reopens_on: string | null
           studio_id: string
+          unavailable_message: string | null
           updated_at: string
-          weekly_schedule: Json
         }
         Insert: {
           address?: string | null
+          available_from?: string | null
+          available_until?: string | null
           created_at?: string
+          description?: string | null
           id?: string
+          is_active?: boolean
+          is_public?: boolean
+          location_type?: string
           maps_url?: string | null
+          max_booking_advance_days?: number
           name: string
+          reopens_on?: string | null
           studio_id: string
+          unavailable_message?: string | null
           updated_at?: string
-          weekly_schedule?: Json
         }
         Update: {
           address?: string | null
+          available_from?: string | null
+          available_until?: string | null
           created_at?: string
+          description?: string | null
           id?: string
+          is_active?: boolean
+          is_public?: boolean
+          location_type?: string
           maps_url?: string | null
+          max_booking_advance_days?: number
           name?: string
+          reopens_on?: string | null
           studio_id?: string
+          unavailable_message?: string | null
           updated_at?: string
-          weekly_schedule?: Json
         }
         Relationships: [
           {
@@ -343,8 +748,8 @@ export type Database = {
           min_price: number
           name: string
           studio_id: string
-          target_type: string | null
-          tiers: Json | null
+          target_type: string
+          tiers: Json
           updated_at: string
         }
         Insert: {
@@ -356,8 +761,8 @@ export type Database = {
           min_price: number
           name: string
           studio_id: string
-          target_type?: string | null
-          tiers?: Json | null
+          target_type?: string
+          tiers?: Json
           updated_at?: string
         }
         Update: {
@@ -369,8 +774,8 @@ export type Database = {
           min_price?: number
           name?: string
           studio_id?: string
-          target_type?: string | null
-          tiers?: Json | null
+          target_type?: string
+          tiers?: Json
           updated_at?: string
         }
         Relationships: [
@@ -385,38 +790,142 @@ export type Database = {
       }
       schedule_overrides: {
         Row: {
+          artist_id: string
           created_at: string
           id: string
           intervals: Json
           is_active: boolean
           location_id: string
           override_date: string
+          studio_id: string
           updated_at: string
         }
         Insert: {
+          artist_id: string
           created_at?: string
           id?: string
           intervals?: Json
           is_active: boolean
           location_id: string
           override_date: string
+          studio_id: string
           updated_at?: string
         }
         Update: {
+          artist_id?: string
           created_at?: string
           id?: string
           intervals?: Json
           is_active?: boolean
           location_id?: string
           override_date?: string
+          studio_id?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "schedule_overrides_location_id_fkey"
+            foreignKeyName: "schedule_overrides_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "schedule_overrides_artist_same_studio_fkey"
+            columns: ["studio_id", "artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "schedule_overrides_location_id_fkey1"
             columns: ["location_id"]
             isOneToOne: false
             referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "schedule_overrides_location_same_studio_fkey"
+            columns: ["studio_id", "location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["studio_id", "id"]
+          },
+          {
+            foreignKeyName: "schedule_overrides_studio_id_fkey1"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_billing: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          stripe_customer_id: string | null
+          stripe_price_id: string | null
+          stripe_subscription_id: string | null
+          stripe_subscription_status: string | null
+          studio_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          stripe_subscription_status?: string | null
+          studio_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          stripe_subscription_status?: string | null
+          studio_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_billing_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: true
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_settings: {
+        Row: {
+          client_communication_settings: Json
+          created_at: string
+          studio_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_communication_settings?: Json
+          created_at?: string
+          studio_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_communication_settings?: Json
+          created_at?: string
+          studio_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_settings_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: true
+            referencedRelation: "studios"
             referencedColumns: ["id"]
           },
         ]
@@ -425,58 +934,40 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
-          client_communication_settings: Json | null
           created_at: string
           currency: string
-          current_period_end: string | null
           id: string
           name: string
-          payment_instructions: Json | null
+          payment_instructions: Json
           slug: string
-          social_links: Json | null
-          stripe_customer_id: string | null
-          stripe_price_id: string | null
-          stripe_subscription_id: string | null
-          stripe_subscription_status: string | null
-          theme: Json | null
+          social_links: Json
+          theme: Json
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
-          client_communication_settings?: Json | null
           created_at?: string
           currency: string
-          current_period_end?: string | null
           id?: string
           name: string
-          payment_instructions?: Json | null
+          payment_instructions?: Json
           slug: string
-          social_links?: Json | null
-          stripe_customer_id?: string | null
-          stripe_price_id?: string | null
-          stripe_subscription_id?: string | null
-          stripe_subscription_status?: string | null
-          theme?: Json | null
+          social_links?: Json
+          theme?: Json
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
-          client_communication_settings?: Json | null
           created_at?: string
           currency?: string
-          current_period_end?: string | null
           id?: string
           name?: string
-          payment_instructions?: Json | null
+          payment_instructions?: Json
           slug?: string
-          social_links?: Json | null
-          stripe_customer_id?: string | null
-          stripe_price_id?: string | null
-          stripe_subscription_id?: string | null
-          stripe_subscription_status?: string | null
-          theme?: Json | null
+          social_links?: Json
+          theme?: Json
           updated_at?: string
         }
         Relationships: []
@@ -615,6 +1106,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
