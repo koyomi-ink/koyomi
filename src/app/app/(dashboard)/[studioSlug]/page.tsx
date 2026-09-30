@@ -1,3 +1,5 @@
+import { AppPanelTest } from "@/components/app-panel/app-panel-test";
+
 export default function StudioPage() {
   return (
     <div className='space-y-1'>
@@ -8,6 +10,8 @@ export default function StudioPage() {
       <p className='text-sm text-muted-foreground'>
         Bookings & insights
       </p>
+
+      <AppPanelTest />
     </div>
   );
 }

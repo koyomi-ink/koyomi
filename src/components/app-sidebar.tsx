@@ -136,9 +136,6 @@ export function AppSidebar({
                       {currentStudio.name}
                     </span>
 
-                    <span className='truncate text-xs text-muted-foreground'>
-                      Studio
-                    </span>
                   </div>
 
                   <ChevronsUpDown className='ml-auto' />
@@ -210,7 +207,7 @@ export function AppSidebar({
               <button
                 type='button'
                 onClick={handleCopyBookingUrl}
-                className='flex size-8 shrink-0 items-center justify-center rounded-md hover:bg-sidebar-accent'
+                className='flex size-8 shrink-0 items-center justify-center rounded-md hover:bg-sidebar-accent group-data-[collapsible=icon]:hidden'
                 aria-label='Copy booking URL'
                 title={copied ? 'Copied!' : 'Copy booking URL'}
               >

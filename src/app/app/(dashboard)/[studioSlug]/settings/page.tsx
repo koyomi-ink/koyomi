@@ -1,5 +1,5 @@
-export default async function HomePage() {
-  return (
-    <h1>Settings</h1>
-  );
+import { SettingsPage } from '@/features/settings/components/settings-page';
+
+export default function Page() {
+  return <SettingsPage />;
 }
