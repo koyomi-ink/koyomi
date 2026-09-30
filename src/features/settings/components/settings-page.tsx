@@ -11,6 +11,8 @@ import {
 
 import { useAppPanel } from '@/components/app-panel/app-panel-provider';
 
+import { MainProfileForm } from '@/features/settings/components/main-profile-form';
+
 const sections = [
   {
     title: 'Public profile',
@@ -109,7 +111,18 @@ const sections = [
   },
 ];
 
-export function SettingsPage() {
+type SettingsPageProps = {
+  studio: {
+    id: string;
+    name: string;
+    slug: string;
+    bio: string | null;
+  };
+};
+
+export function SettingsPage({
+  studio,
+}: SettingsPageProps) {
   const { togglePanel } = useAppPanel();
 
   return (
@@ -146,11 +159,15 @@ export function SettingsPage() {
                     togglePanel({
                       id: `${section.title}:${item.title}`,
                       title: item.title,
-                      content: (
-                        <p className='text-sm text-muted-foreground'>
-                          {item.description}
-                        </p>
-                      ),
+                      content:
+                        item.title === 'Main profile' &&
+                        section.title === 'Public profile' ? (
+                          <MainProfileForm studio={studio} />
+                        ) : (
+                          <p className='text-sm text-muted-foreground'>
+                            {item.description}
+                          </p>
+                        ),
                     })
                   }
                 >

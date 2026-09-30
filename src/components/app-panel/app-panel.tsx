@@ -132,7 +132,7 @@ export function AppPanel() {
           }
         }}
       >
-        <DrawerContent className='!max-h-[90dvh]'>
+        <DrawerContent className='!h-[90dvh] !min-h-[90dvh] !max-h-[90dvh] overflow-hidden'>
           {panel && (
             <>
               <DrawerHeader className='shrink-0 text-left'>
@@ -146,7 +146,7 @@ export function AppPanel() {
                     size='icon'
                     onClick={closePanel}
                     aria-label='Close panel'
-                  >
+                    >
                     <X className='size-4' />
                   </Button>
                 </div>
@@ -156,7 +156,8 @@ export function AppPanel() {
                 </DrawerDescription>
               </DrawerHeader>
 
-              <div className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-6'>
+              {/*mobile*/}
+              <div className='flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-6'>
                 {panel.content}
               </div>
             </>
@@ -207,7 +208,8 @@ export function AppPanel() {
         </Button>
       </div>
 
-      <div className='min-h-0 flex-1 overflow-y-auto p-5'>
+      {/*desktop*/}
+      <div className='flex min-h-0 flex-1 flex-col overflow-y-auto p-5'>
         {panel.content}
       </div>
     </aside>
