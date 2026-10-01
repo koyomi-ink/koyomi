@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { GuardedLink } from '@/components/app-panel/guarded-link';
 import { useState } from 'react';
 import {
   BookOpen,
@@ -160,7 +161,7 @@ export function AppSidebar({
                       key={membership.id}
                       asChild
                     >
-                      <Link href={`/app/${membership.studios.slug}`}>
+                      <GuardedLink href={`/app/${membership.studios.slug}`}>
                         <div className='flex size-6 items-center justify-center rounded-md border'>
                           {membership.studios.name
                             .charAt(0)
@@ -170,7 +171,7 @@ export function AppSidebar({
                         <span>
                           {membership.studios.name}
                         </span>
-                      </Link>
+                      </GuardedLink>
                     </DropdownMenuItem>
                   );
                 })}
@@ -232,10 +233,10 @@ export function AppSidebar({
                     asChild
                     tooltip={item.title}
                   >
-                    <Link href={item.url}>
+                    <GuardedLink href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </Link>
+                    </GuardedLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
