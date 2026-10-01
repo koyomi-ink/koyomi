@@ -188,7 +188,7 @@ export function AppSidebar({
             <div className='flex items-center gap-1'>
               <SidebarMenuButton
                 asChild
-                tooltip='Open booking page'
+                tooltip='Open digital hub'
                 className='min-w-0 flex-1'
               >
                 <Link
