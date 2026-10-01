@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,8 @@ import { UnsavedChangesBar } from '@/components/unsaved-changes';
 import { updateMainProfile } from '@/features/settings/actions/update-main-profile';
 import { mainProfileSchema } from '@/features/settings/schemas/main-profile';
 import { createSlug } from '@/utils/create-slug';
+
+import { useAppPanel } from '@/components/app-panel/app-panel-provider';
 
 type StudioProfile = {
   id: string;
@@ -38,10 +40,32 @@ export function MainProfileForm({
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  const {
+    setPanelDirty,
+    setPanelSaving,
+    registerDiscardHandler,
+  } = useAppPanel();
+
   const hasChanges =
     name !== saved.name ||
     slug !== saved.slug ||
     bio !== (saved.bio ?? '');
+
+  useEffect(() => {
+    setPanelDirty(hasChanges);
+
+    return () => {
+      setPanelDirty(false);
+    };
+  }, [hasChanges, setPanelDirty]);
+
+  useEffect(() => {
+    setPanelSaving(isPending);
+
+    return () => {
+      setPanelSaving(false);
+    };
+  }, [isPending, setPanelSaving]);
 
   function handleNameChange(value: string) {
     setName(value);
@@ -51,13 +75,21 @@ export function MainProfileForm({
     }
   }
 
-  function resetForm() {
+  const resetForm = useCallback(() => {
     setName(saved.name);
     setSlug(saved.slug);
     setBio(saved.bio ?? '');
     setSlugEdited(false);
     setError(null);
-  }
+  }, [saved]);
+
+  useEffect(() => {
+    registerDiscardHandler(resetForm);
+
+    return () => {
+      registerDiscardHandler(null);
+    };
+  }, [registerDiscardHandler, resetForm]);
 
   function handleSave() {
     setError(null);
