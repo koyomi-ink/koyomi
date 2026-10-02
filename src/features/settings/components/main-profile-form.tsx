@@ -10,9 +10,9 @@ import { UnsavedChangesBar } from '@/components/unsaved-changes';
 
 import { updateMainProfile } from '@/features/settings/actions/update-main-profile';
 import { mainProfileSchema } from '@/features/settings/schemas/main-profile';
-import { createSlug } from '@/utils/create-slug';
 
 import { useAppPanel } from '@/components/app-panel/app-panel-provider';
+import { formatSlugInput } from '@/utils/format-slug-input';
 
 type StudioProfile = {
   id: string;
@@ -36,7 +36,6 @@ export function MainProfileForm({
   const [slug, setSlug] = useState(studio.slug);
   const [bio, setBio] = useState(studio.bio ?? '');
 
-  const [slugEdited, setSlugEdited] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -67,19 +66,10 @@ export function MainProfileForm({
     };
   }, [isPending, setPanelSaving]);
 
-  function handleNameChange(value: string) {
-    setName(value);
-
-    if (!slugEdited) {
-      setSlug(createSlug(value));
-    }
-  }
-
   const resetForm = useCallback(() => {
     setName(saved.name);
     setSlug(saved.slug);
     setBio(saved.bio ?? '');
-    setSlugEdited(false);
     setError(null);
   }, [saved]);
 
@@ -134,12 +124,15 @@ export function MainProfileForm({
       setBio(updatedStudio.bio ?? '');
 
       if (updatedStudio.slug !== previousSlug) {
+        setPanelDirty(false);
+        setPanelSaving(false);
+
         window.location.replace(
           `/app/${updatedStudio.slug}/settings`
         );
-      } else {
-        router.refresh();
+        return;
       }
+      router.refresh();
     });
   }
 
@@ -155,7 +148,7 @@ export function MainProfileForm({
             id='studio-name'
             value={name}
             onChange={(event) =>
-              handleNameChange(event.target.value)
+              setName(event.target.value)
             }
             maxLength={100}
             disabled={isPending}
@@ -172,16 +165,17 @@ export function MainProfileForm({
               koyomi.ink/
             </span>
 
-            <Input
-              id='studio-slug'
-              value={slug}
-              onChange={(event) => {
-                setSlugEdited(true);
-                setSlug(createSlug(event.target.value));
-              }}
-              maxLength={50}
-              disabled={isPending}
-            />
+          <Input
+            id='studio-slug'
+            value={slug}
+            onChange={(event) =>
+              setSlug(
+                formatSlugInput(event.target.value)
+              )
+            }
+            maxLength={50}
+            disabled={isPending}
+          />
           </div>
 
           <p className='text-xs text-muted-foreground'>
