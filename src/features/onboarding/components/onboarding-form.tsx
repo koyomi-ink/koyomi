@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { createSlug } from '@/utils/create-slug';
+import { formatSlugInput } from '@/utils/format-slug-input';
 
 import { completeOnboarding } from '@/features/onboarding/actions/onboarding';
 
@@ -39,7 +40,7 @@ export function OnboardingForm() {
 
   function handleSlugChange(value: string) {
     setSlugEdited(true);
-    setStudioSlug(createSlug(value));
+    setStudioSlug(formatSlugInput(value));
   }
 
   return (
