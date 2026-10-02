@@ -214,3 +214,23 @@ describe('MainProfileForm', () => {
     ).not.toBeInTheDocument();
     });
 });
+
+it('formats the booking slug while it is edited', async () => {
+  const user = userEvent.setup();
+
+  render(<MainProfileForm studio={studio} />);
+
+  const slugInput =
+    screen.getByLabelText('Booking link');
+
+  await user.clear(slugInput);
+
+  await user.type(
+    slugInput,
+    'My COOL Studio!!'
+  );
+
+  expect(slugInput).toHaveValue(
+    'my-cool-studio'
+  );
+});

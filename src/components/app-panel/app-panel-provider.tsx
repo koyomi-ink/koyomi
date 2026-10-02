@@ -59,6 +59,14 @@ export function AppPanelProvider({
     useState<AppPanelState | null>(null);
 
   const [isDirty, setIsDirty] = useState(false);
+  const isDirtyRef = useRef(false);
+  const setPanelDirty = useCallback(
+    (dirty: boolean) => {
+      isDirtyRef.current = dirty;
+      setIsDirty(dirty);
+    },
+    []
+  );
   const [isSaving, setIsSaving] = useState(false);
 
   const [pendingPanel, setPendingPanel] =
@@ -91,12 +99,16 @@ export function AppPanelProvider({
       return;
     }
 
-    function handleBeforeUnload(
-      event: BeforeUnloadEvent
-    ) {
-      event.preventDefault();
-      event.returnValue = '';
+  function handleBeforeUnload(
+    event: BeforeUnloadEvent
+  ) {
+    if (!isDirtyRef.current) {
+      return;
     }
+
+    event.preventDefault();
+    event.returnValue = '';
+  }
 
     window.addEventListener(
       'beforeunload',
@@ -165,7 +177,7 @@ export function AppPanelProvider({
   const applyPanel = useCallback(
     (nextPanel: AppPanelState | null) => {
       setPanel(nextPanel);
-      setIsDirty(false);
+      setPanelDirty(false);
       setIsSaving(false);
     },
     []
@@ -243,7 +255,7 @@ export function AppPanelProvider({
       setPanel(null)
 
       historyGuardActive.current = false;
-      setIsDirty(false);
+      setPanelDirty(false);
       setIsSaving(false);
 
       window.history.go(-2);
@@ -258,7 +270,7 @@ export function AppPanelProvider({
       setPanel(null);
 
       historyGuardActive.current = false;
-      setIsDirty(false);
+      setPanelDirty(false);
       setIsSaving(false);
 
       router.push(href);
@@ -278,7 +290,7 @@ export function AppPanelProvider({
         openPanel,
         togglePanel,
         closePanel,
-        setPanelDirty: setIsDirty,
+        setPanelDirty,
         setPanelSaving: setIsSaving,
         navigate,
         registerDiscardHandler,

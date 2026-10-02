@@ -12,6 +12,7 @@ import { updateMainProfile } from '@/features/settings/actions/update-main-profi
 import { mainProfileSchema } from '@/features/settings/schemas/main-profile';
 
 import { useAppPanel } from '@/components/app-panel/app-panel-provider';
+import { formatSlugInput } from '@/utils/format-slug-input';
 
 type StudioProfile = {
   id: string;
@@ -123,12 +124,15 @@ export function MainProfileForm({
       setBio(updatedStudio.bio ?? '');
 
       if (updatedStudio.slug !== previousSlug) {
+        setPanelDirty(false);
+        setPanelSaving(false);
+
         window.location.replace(
           `/app/${updatedStudio.slug}/settings`
         );
-      } else {
-        router.refresh();
+        return;
       }
+      router.refresh();
     });
   }
 
@@ -161,15 +165,17 @@ export function MainProfileForm({
               koyomi.ink/
             </span>
 
-            <Input
-              id='studio-slug'
-              value={slug}
-              onChange={(event) =>
-                setSlug(event.target.value.toLowerCase())
-              }
-              maxLength={50}
-              disabled={isPending}
-            />
+          <Input
+            id='studio-slug'
+            value={slug}
+            onChange={(event) =>
+              setSlug(
+                formatSlugInput(event.target.value)
+              )
+            }
+            maxLength={50}
+            disabled={isPending}
+          />
           </div>
 
           <p className='text-xs text-muted-foreground'>
