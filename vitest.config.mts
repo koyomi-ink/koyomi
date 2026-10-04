@@ -7,12 +7,7 @@ export default defineConfig({
     tsconfigPaths: true,
 
     alias: {
-      'server-only': fileURLToPath(
-        new URL(
-          './vitest.server-only.ts',
-          import.meta.url
-        )
-      ),
+      'server-only': fileURLToPath(new URL('./vitest.server-only.ts', import.meta.url)),
     },
   },
 
