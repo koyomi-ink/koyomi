@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -45,52 +37,34 @@ type PendingNavigation = {
   href: string;
 };
 
-const AppPanelContext =
-  createContext<AppPanelContextValue | null>(null);
+const AppPanelContext = createContext<AppPanelContextValue | null>(null);
 
-export function AppPanelProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function AppPanelProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
-  const [panel, setPanel] =
-    useState<AppPanelState | null>(null);
+  const [panel, setPanel] = useState<AppPanelState | null>(null);
 
   const [isDirty, setIsDirty] = useState(false);
   const isDirtyRef = useRef(false);
-  const setPanelDirty = useCallback(
-    (dirty: boolean) => {
-      isDirtyRef.current = dirty;
-      setIsDirty(dirty);
-    },
-    []
-  );
+  const setPanelDirty = useCallback((dirty: boolean) => {
+    isDirtyRef.current = dirty;
+    setIsDirty(dirty);
+  }, []);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [pendingPanel, setPendingPanel] =
-    useState<AppPanelState | null | undefined>(
-      undefined
-    );
+  const [pendingPanel, setPendingPanel] = useState<AppPanelState | null | undefined>(undefined);
 
-  const [pendingNavigation, setPendingNavigation] =
-    useState<PendingNavigation | null>(null);
+  const [pendingNavigation, setPendingNavigation] = useState<PendingNavigation | null>(null);
 
-  const [pendingHistoryBack, setPendingHistoryBack] =
-    useState(false);
+  const [pendingHistoryBack, setPendingHistoryBack] = useState(false);
 
   const historyGuardActive = useRef(false);
 
-  const discardHandlerRef =
-    useRef<(() => void) | null>(null);
+  const discardHandlerRef = useRef<(() => void) | null>(null);
 
-  const registerDiscardHandler = useCallback(
-    (handler: (() => void) | null) => {
-      discardHandlerRef.current = handler;
-    },
-    []
-  );
+  const registerDiscardHandler = useCallback((handler: (() => void) | null) => {
+    discardHandlerRef.current = handler;
+  }, []);
   /*
    * Reload / tab close protection.
    */
@@ -99,27 +73,19 @@ export function AppPanelProvider({
       return;
     }
 
-  function handleBeforeUnload(
-    event: BeforeUnloadEvent
-  ) {
-    if (!isDirtyRef.current) {
-      return;
+    function handleBeforeUnload(event: BeforeUnloadEvent) {
+      if (!isDirtyRef.current) {
+        return;
+      }
+
+      event.preventDefault();
+      event.returnValue = '';
     }
 
-    event.preventDefault();
-    event.returnValue = '';
-  }
-
-    window.addEventListener(
-      'beforeunload',
-      handleBeforeUnload
-    );
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
-      window.removeEventListener(
-        'beforeunload',
-        handleBeforeUnload
-      );
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [isDirty]);
 
@@ -139,7 +105,7 @@ export function AppPanelProvider({
         koyomiUnsavedGuard: true,
       },
       '',
-      window.location.href
+      window.location.href,
     );
 
     function handlePopState() {
@@ -153,22 +119,16 @@ export function AppPanelProvider({
           koyomiUnsavedGuard: true,
         },
         '',
-        window.location.href
+        window.location.href,
       );
 
       setPendingHistoryBack(true);
     }
 
-    window.addEventListener(
-      'popstate',
-      handlePopState
-    );
+    window.addEventListener('popstate', handlePopState);
 
     return () => {
-      window.removeEventListener(
-        'popstate',
-        handlePopState
-      );
+      window.removeEventListener('popstate', handlePopState);
 
       historyGuardActive.current = false;
     };
@@ -180,7 +140,7 @@ export function AppPanelProvider({
       setPanelDirty(false);
       setIsSaving(false);
     },
-    []
+    [setPanelDirty],
   );
 
   const requestPanelChange = useCallback(
@@ -196,14 +156,14 @@ export function AppPanelProvider({
 
       applyPanel(nextPanel);
     },
-    [isDirty, isSaving, applyPanel]
+    [isDirty, isSaving, applyPanel],
   );
 
   const openPanel = useCallback(
     (nextPanel: AppPanelState) => {
       requestPanelChange(nextPanel);
     },
-    [requestPanelChange]
+    [requestPanelChange],
   );
 
   const closePanel = useCallback(() => {
@@ -212,13 +172,9 @@ export function AppPanelProvider({
 
   const togglePanel = useCallback(
     (nextPanel: AppPanelState) => {
-      requestPanelChange(
-        panel?.id === nextPanel.id
-          ? null
-          : nextPanel
-      );
+      requestPanelChange(panel?.id === nextPanel.id ? null : nextPanel);
     },
-    [panel, requestPanelChange]
+    [panel, requestPanelChange],
   );
 
   const navigate = useCallback(
@@ -235,7 +191,7 @@ export function AppPanelProvider({
       setPanel(null);
       router.push(href);
     },
-    [isDirty, isSaving, router]
+    [isDirty, isSaving, router],
   );
 
   function keepEditing() {
@@ -252,7 +208,7 @@ export function AppPanelProvider({
       setPendingNavigation(null);
       setPendingPanel(undefined);
 
-      setPanel(null)
+      setPanel(null);
 
       historyGuardActive.current = false;
       setPanelDirty(false);
@@ -299,11 +255,7 @@ export function AppPanelProvider({
       {children}
 
       <AlertDialog
-        open={
-          pendingPanel !== undefined ||
-          pendingNavigation !== null ||
-          pendingHistoryBack
-        }
+        open={pendingPanel !== undefined || pendingNavigation !== null || pendingHistoryBack}
         onOpenChange={(open) => {
           if (!open) {
             keepEditing();
@@ -312,28 +264,17 @@ export function AppPanelProvider({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Discard changes?
-            </AlertDialogTitle>
+            <AlertDialogTitle>Discard changes?</AlertDialogTitle>
 
             <AlertDialogDescription>
-              You have unsaved changes. If you leave
-              now, your changes will be lost.
+              You have unsaved changes. If you leave now, your changes will be lost.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            <AlertDialogCancel
-              onClick={keepEditing}
-            >
-              Keep editing
-            </AlertDialogCancel>
+            <AlertDialogCancel onClick={keepEditing}>Keep editing</AlertDialogCancel>
 
-            <AlertDialogAction
-              onClick={discardChanges}
-            >
-              Discard changes
-            </AlertDialogAction>
+            <AlertDialogAction onClick={discardChanges}>Discard changes</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -345,9 +286,7 @@ export function useAppPanel() {
   const context = useContext(AppPanelContext);
 
   if (!context) {
-    throw new Error(
-      'useAppPanel must be used within AppPanelProvider'
-    );
+    throw new Error('useAppPanel must be used within AppPanelProvider');
   }
 
   return context;

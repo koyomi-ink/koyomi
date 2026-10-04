@@ -1,33 +1,50 @@
+import 'server-only';
+
 import { stripeAdmin } from '@/libs/stripe/stripe-admin';
 import { supabaseAdminClient } from '@/libs/supabase/supabase-admin';
 
-export async function getOrCreateStudioCustomer({ studioId, email, studioName }: { studioId: string; email: string; studioName: string }){
-  const { data, error } = await supabaseAdminClient
-    .from('studios')
+type GetOrCreateStudioCustomerParams = {
+  studioId: string;
+  email: string;
+  studioName: string;
+};
+
+export async function getOrCreateStudioCustomer({ studioId, email, studioName }: GetOrCreateStudioCustomerParams) {
+  const { data: billing, error: billingError } = await supabaseAdminClient
+    .from('studio_billing')
     .select('stripe_customer_id')
-    .eq('id', studioId)
-    .single();
+    .eq('studio_id', studioId)
+    .maybeSingle();
 
-  if (error || !data?.stripe_customer_id) {
-    // 1. Create the customer in Stripe
-    const customerData = {
-      email,
-      name: studioName,
-      metadata: { studioId },
-    } as const;
-
-    const customer = await stripeAdmin.customers.create(customerData);
-
-    // 2. Save the new Stripe ID to the Koyomi studios table
-    const { error: supabaseError } = await supabaseAdminClient
-      .from('studios')
-      .update({ stripe_customer_id: customer.id })
-      .eq('id', studioId);
-
-    if (supabaseError) throw supabaseError;
-
-    return customer.id;
+  if (billingError) {
+    throw billingError;
   }
 
-  return data.stripe_customer_id;
+  if (billing?.stripe_customer_id) {
+    return billing.stripe_customer_id;
+  }
+
+  const customer = await stripeAdmin.customers.create({
+    email,
+    name: studioName,
+    metadata: {
+      studioId,
+    },
+  });
+
+  const { error: upsertError } = await supabaseAdminClient.from('studio_billing').upsert(
+    {
+      studio_id: studioId,
+      stripe_customer_id: customer.id,
+    },
+    {
+      onConflict: 'studio_id',
+    },
+  );
+
+  if (upsertError) {
+    throw upsertError;
+  }
+
+  return customer.id;
 }
