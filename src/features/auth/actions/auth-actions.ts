@@ -2,16 +2,38 @@
 
 import { redirect } from 'next/navigation';
 
+import { sendLoginHelpEmail } from '@/features/auth/emails/send-login-help-email';
+import { checkAuthEmailRateLimit } from '@/features/auth/rate-limit/check-auth-email-rate-limit';
 import { createSupabaseServerClient } from '@/libs/supabase/supabase-server-client';
 import type { ActionResponse } from '@/types/action-response';
 import { getURL } from '@/utils/get-url';
-
-import { sendLoginHelpEmail } from '@/features/auth/emails/send-login-help-email';
 
 type AuthIntent = 'login' | 'artist-signup';
 
 function getCallbackUrl(intent: AuthIntent) {
   return getURL(`/auth/callback?intent=${intent}`);
+}
+
+async function checkEmailRateLimit(email: string): Promise<ActionResponse | null> {
+  try {
+    const allowed = await checkAuthEmailRateLimit(email);
+
+    if (!allowed) {
+      return {
+        data: null,
+        error: 'Too many email attempts. Please wait a few minutes and try again.',
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Auth rate limiter failed:', error);
+
+    return {
+      data: null,
+      error: 'We could not process your request right now. Please try again.',
+    };
+  }
 }
 
 async function startOAuth(provider: 'google', intent: AuthIntent): Promise<ActionResponse> {
@@ -36,46 +58,21 @@ async function startOAuth(provider: 'google', intent: AuthIntent): Promise<Actio
   redirect(data.url);
 }
 
-async function startEmailAuth(email: string, intent: AuthIntent): Promise<ActionResponse> {
-  const supabase = await createSupabaseServerClient();
-
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: getCallbackUrl(intent),
-
-      /*
-       * Login must never silently create
-       * a new Koyomi identity.
-       *
-       * Artist signup is explicitly allowed
-       * to create one.
-       */
-      shouldCreateUser: intent === 'artist-signup',
-    },
-  });
-
-  if (error) {
-    console.error('Email authentication failed:', error);
-
-    return {
-      data: null,
-      error: 'Could not send the email. Please try again.',
-    };
-  }
-
-  return {
-    data: null,
-    error: null,
-  };
-}
-
 export async function signInWithOAuth(provider: 'google'): Promise<ActionResponse> {
   return startOAuth(provider, 'login');
 }
 
 export async function signInWithEmail(email: string): Promise<ActionResponse> {
   const normalizedEmail = email.trim().toLowerCase();
+
+  /*
+   * Rate-limit BEFORE Supabase or Resend.
+   */
+  const rateLimitError = await checkEmailRateLimit(normalizedEmail);
+
+  if (rateLimitError) {
+    return rateLimitError;
+  }
 
   const supabase = await createSupabaseServerClient();
 
@@ -84,6 +81,10 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
     options: {
       emailRedirectTo: getCallbackUrl('login'),
 
+      /*
+       * Signing in must never create
+       * a brand-new Koyomi identity.
+       */
       shouldCreateUser: false,
     },
   });
@@ -96,23 +97,21 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
   }
 
   /*
-   * With shouldCreateUser: false,
-   * Supabase returns otp_disabled when it
-   * cannot provision/sign in this address.
-   *
-   * Don't expose that distinction to the
-   * browser.
+   * Unknown/non-email-login identity:
+   * send the informational Resend email
+   * without revealing account existence
+   * in the browser.
    */
   if (error.code === 'otp_disabled') {
     try {
       await sendLoginHelpEmail(normalizedEmail);
     } catch (emailError) {
-      /*
-       * Log the operational failure, but don't
-       * reveal account existence through a
-       * different browser response.
-       */
       console.error('Could not send login help email:', emailError);
+
+      return {
+        data: null,
+        error: 'We could not send an email right now. Please try again or get in touch with support.',
+      };
     }
 
     return {
@@ -134,5 +133,46 @@ export async function signUpArtistWithOAuth(provider: 'google'): Promise<ActionR
 }
 
 export async function signUpArtistWithEmail(email: string): Promise<ActionResponse> {
-  return startEmailAuth(email, 'artist-signup');
+  const normalizedEmail = email.trim().toLowerCase();
+
+  /*
+   * Same limiter as login.
+   *
+   * This prevents someone from bypassing
+   * /login limits simply by using /signup.
+   */
+  const rateLimitError = await checkEmailRateLimit(normalizedEmail);
+
+  if (rateLimitError) {
+    return rateLimitError;
+  }
+
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase.auth.signInWithOtp({
+    email: normalizedEmail,
+    options: {
+      emailRedirectTo: getCallbackUrl('artist-signup'),
+
+      /*
+       * /signup is explicitly the artist
+       * account creation flow.
+       */
+      shouldCreateUser: true,
+    },
+  });
+
+  if (error) {
+    console.error('Artist email signup failed:', error);
+
+    return {
+      data: null,
+      error: 'Could not send the email. Please try again.',
+    };
+  }
+
+  return {
+    data: null,
+    error: null,
+  };
 }
