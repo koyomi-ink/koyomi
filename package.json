@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "next typegen && tsc --noEmit",
-    "format": "prettier --write .",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "email:build": "email build",
