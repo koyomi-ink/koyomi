@@ -45,6 +45,15 @@ jobs:
       - name: Run unit and component tests
         run: npm run test:run
 
+      - name: Build production app
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: ci-placeholder-service-role-key
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          STRIPE_SECRET_KEY: sk_test_ci_placeholder
+
   database:
     name: Database checks
     runs-on: ubuntu-latest
