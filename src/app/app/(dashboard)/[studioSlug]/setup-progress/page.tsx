@@ -1,3 +1,7 @@
-export default async function HomePage() {
-  return <h1>Setup progress</h1>;
+export default function SetupProgressPage() {
+  return (
+    <div className='space-y-1'>
+      <h1 className='text-2xl font-semibold tracking-tight'>All the setup steps here</h1>
+    </div>
+  );
 }

@@ -140,9 +140,9 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent className='min-w-56' align='start' side='bottom' sideOffset={4}>
-                <DropdownMenuLabel>Studios</DropdownMenuLabel>
+                {/* <DropdownMenuLabel>Studios</DropdownMenuLabel> */}
 
-                {memberships.map((membership) => {
+                {/* {memberships.map((membership) => {
                   if (!membership.studios) {
                     return null;
                   }
@@ -160,7 +160,7 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
                   );
                 })}
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator /> */}
 
                 <DropdownMenuItem
                   disabled={isSaving}
