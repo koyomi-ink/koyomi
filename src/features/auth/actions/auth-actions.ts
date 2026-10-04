@@ -107,12 +107,12 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
     try {
       await sendLoginHelpEmail(normalizedEmail);
     } catch (emailError) {
-      /*
-       * Log the operational failure, but don't
-       * reveal account existence through a
-       * different browser response.
-       */
       console.error('Could not send login help email:', emailError);
+
+      return {
+        data: null,
+        error: 'We could not send an email right now. Please try again or get in touch with support.',
+      };
     }
 
     return {

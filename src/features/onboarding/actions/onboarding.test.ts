@@ -6,6 +6,8 @@ const mocks = vi.hoisted(() => ({
   rpc: vi.fn(),
   requireAuth: vi.fn(),
   redirect: vi.fn(),
+  hasArtistSignupIntent: vi.fn(),
+  clearArtistSignupIntent: vi.fn(),
 }));
 
 vi.mock('@/libs/auth/require-auth', () => ({
@@ -14,6 +16,12 @@ vi.mock('@/libs/auth/require-auth', () => ({
 
 vi.mock('next/navigation', () => ({
   redirect: mocks.redirect,
+}));
+
+vi.mock('@/features/auth/artist-signup-intent', () => ({
+  hasArtistSignupIntent: mocks.hasArtistSignupIntent,
+
+  clearArtistSignupIntent: mocks.clearArtistSignupIntent,
 }));
 
 function createValidFormData() {
@@ -41,6 +49,33 @@ describe('completeOnboarding', () => {
       data: null,
       error: null,
     });
+
+    mocks.hasArtistSignupIntent.mockResolvedValue(true);
+
+    mocks.clearArtistSignupIntent.mockResolvedValue(undefined);
+  });
+
+  it('rejects onboarding without artist signup intent', async () => {
+    mocks.hasArtistSignupIntent.mockResolvedValue(false);
+
+    const result = await completeOnboarding(
+      {
+        data: null,
+        error: null,
+      },
+      createValidFormData(),
+    );
+
+    expect(result).toEqual({
+      data: null,
+      error: 'Your artist signup session has expired. Please start again from the signup page.',
+    });
+
+    expect(mocks.rpc).not.toHaveBeenCalled();
+
+    expect(mocks.clearArtistSignupIntent).not.toHaveBeenCalled();
+
+    expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
   it('rejects invalid form data before calling the RPC', async () => {
@@ -62,18 +97,19 @@ describe('completeOnboarding', () => {
     });
 
     expect(mocks.rpc).not.toHaveBeenCalled();
+
+    expect(mocks.clearArtistSignupIntent).not.toHaveBeenCalled();
+
     expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
   it('calls the onboarding RPC with validated values', async () => {
-    const formData = createValidFormData();
-
     await completeOnboarding(
       {
         data: null,
         error: null,
       },
-      formData,
+      createValidFormData(),
     );
 
     expect(mocks.rpc).toHaveBeenCalledWith('complete_onboarding', {
@@ -84,16 +120,16 @@ describe('completeOnboarding', () => {
     });
   });
 
-  it('redirects to the app after successful onboarding', async () => {
-    const formData = createValidFormData();
-
+  it('clears the signup intent and redirects after successful onboarding', async () => {
     await completeOnboarding(
       {
         data: null,
         error: null,
       },
-      formData,
+      createValidFormData(),
     );
+
+    expect(mocks.clearArtistSignupIntent).toHaveBeenCalledTimes(1);
 
     expect(mocks.redirect).toHaveBeenCalledWith('/app');
   });
@@ -121,6 +157,8 @@ describe('completeOnboarding', () => {
       data: null,
       error: 'That booking URL is already taken.',
     });
+
+    expect(mocks.clearArtistSignupIntent).not.toHaveBeenCalled();
 
     expect(mocks.redirect).not.toHaveBeenCalled();
 
@@ -150,6 +188,8 @@ describe('completeOnboarding', () => {
       data: null,
       error: 'Could not complete onboarding. Please try again.',
     });
+
+    expect(mocks.clearArtistSignupIntent).not.toHaveBeenCalled();
 
     expect(mocks.redirect).not.toHaveBeenCalled();
 
