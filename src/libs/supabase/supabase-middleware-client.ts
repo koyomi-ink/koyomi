@@ -18,24 +18,31 @@ export async function updateSession(request: NextRequest) {
         },
 
         setAll(cookiesToSet, headers) {
-          // Update the request cookies so downstream server code
-          // sees the refreshed session during this request.
+          /*
+           * Update the request cookies so
+           * downstream Server Components see
+           * the refreshed session immediately.
+           */
           for (const { name, value } of cookiesToSet) {
             request.cookies.set(name, value);
           }
 
-          // Recreate the response with the updated request.
           supabaseResponse = NextResponse.next({
             request,
           });
 
-          // Send refreshed cookies back to the browser.
+          /*
+           * Send refreshed cookies back to
+           * the browser.
+           */
           for (const { name, value, options } of cookiesToSet) {
             supabaseResponse.cookies.set(name, value, options);
           }
 
-          // Apply cache-related headers supplied by @supabase/ssr
-          // when a session refresh occurs.
+          /*
+           * Preserve cache-related headers
+           * supplied by @supabase/ssr.
+           */
           for (const [key, value] of Object.entries(headers)) {
             supabaseResponse.headers.set(key, value);
           }
@@ -44,60 +51,54 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // Do not put code between createServerClient() and getClaims().
-  // getClaims() verifies the access token and also allows Supabase
-  // to refresh the session when necessary.
+  /*
+   * Keep getClaims() immediately after
+   * createServerClient().
+   *
+   * It verifies the access token and lets
+   * Supabase refresh the session if needed.
+   */
   const { data } = await supabase.auth.getClaims();
+
   const claims = data?.claims;
 
   const { pathname } = request.nextUrl;
 
-  const isAuthRoute =
-    pathname === '/login' ||
-    pathname.startsWith('/login/') ||
-    pathname === '/signup' ||
-    pathname.startsWith('/signup/');
-
   const isProtectedRoute =
-    pathname === '/app' || pathname.startsWith('/app/') || pathname === '/portal' || pathname.startsWith('/portal/');
+    pathname === '/app' ||
+    pathname.startsWith('/app/') ||
+    pathname === '/portal' ||
+    pathname.startsWith('/portal/') ||
+    pathname === '/onboarding' ||
+    pathname.startsWith('/onboarding/');
 
-  // Authenticated users don't need to visit login/signup.
-  if (claims && isAuthRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/app';
-
-    const redirectResponse = NextResponse.redirect(url);
-
-    // Preserve any cookies refreshed by Supabase.
-    for (const cookie of supabaseResponse.cookies.getAll()) {
-      redirectResponse.cookies.set(cookie);
-    }
-
-    // Preserve the cache-related headers from Supabase.
-    for (const header of ['cache-control', 'expires', 'pragma']) {
-      const value = supabaseResponse.headers.get(header);
-
-      if (value) {
-        redirectResponse.headers.set(header, value);
-      }
-    }
-
-    return redirectResponse;
-  }
-
-  // Unauthenticated users cannot access protected routes.
+  /*
+   * Anonymous users cannot enter authenticated
+   * application surfaces.
+   *
+   * Authentication alone does NOT determine
+   * whether someone is an artist or client.
+   * Authorization for /app and /portal happens
+   * further inside those server-side surfaces.
+   */
   if (!claims && isProtectedRoute) {
     const url = request.nextUrl.clone();
+
     url.pathname = '/login';
 
     const redirectResponse = NextResponse.redirect(url);
 
-    // Preserve any cookies refreshed by Supabase.
+    /*
+     * Preserve any cookies refreshed by
+     * Supabase.
+     */
     for (const cookie of supabaseResponse.cookies.getAll()) {
       redirectResponse.cookies.set(cookie);
     }
 
-    // Preserve the cache-related headers from Supabase.
+    /*
+     * Preserve cache-related headers.
+     */
     for (const header of ['cache-control', 'expires', 'pragma']) {
       const value = supabaseResponse.headers.get(header);
 

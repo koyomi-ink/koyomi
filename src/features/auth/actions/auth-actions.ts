@@ -3,47 +3,62 @@
 import { redirect } from 'next/navigation';
 
 import { createSupabaseServerClient } from '@/libs/supabase/supabase-server-client';
-import { ActionResponse } from '@/types/action-response';
+import type { ActionResponse } from '@/types/action-response';
 import { getURL } from '@/utils/get-url';
 
-export async function signInWithOAuth(provider: 'google'): Promise<ActionResponse> {
+type AuthIntent = 'login' | 'artist-signup';
+
+function getCallbackUrl(intent: AuthIntent) {
+  return getURL(`/auth/callback?intent=${intent}`);
+}
+
+async function startOAuth(provider: 'google', intent: AuthIntent): Promise<ActionResponse> {
   const supabase = await createSupabaseServerClient();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: getURL('/auth/callback'),
+      redirectTo: getCallbackUrl(intent),
     },
   });
 
   if (error) {
-    console.error('OAuth sign-in failed:', error);
+    console.error('OAuth authentication failed:', error);
 
     return {
       data: null,
-      error: 'Could not sign in. Please try again.',
+      error: 'Could not continue with Google. Please try again.',
     };
   }
 
   redirect(data.url);
 }
 
-export async function signInWithEmail(email: string): Promise<ActionResponse> {
+async function startEmailAuth(email: string, intent: AuthIntent): Promise<ActionResponse> {
   const supabase = await createSupabaseServerClient();
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: getURL('/auth/callback'),
+      emailRedirectTo: getCallbackUrl(intent),
+
+      /*
+       * Login must never silently create
+       * a new Koyomi identity.
+       *
+       * Artist signup is explicitly allowed
+       * to create one.
+       */
+      shouldCreateUser: intent === 'artist-signup',
     },
   });
 
   if (error) {
-    console.error('Email sign-in failed:', error);
+    console.error('Email authentication failed:', error);
 
     return {
       data: null,
-      error: 'Could not send the sign-in email. Please try again.',
+      error: 'Could not send the email. Please try again.',
     };
   }
 
@@ -53,15 +68,18 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
   };
 }
 
-export async function logout() {
-  const supabase = await createSupabaseServerClient();
+export async function signInWithOAuth(provider: 'google'): Promise<ActionResponse> {
+  return startOAuth(provider, 'login');
+}
 
-  const { error } = await supabase.auth.signOut();
+export async function signInWithEmail(email: string): Promise<ActionResponse> {
+  return startEmailAuth(email, 'login');
+}
 
-  if (error) {
-    console.error('Logout failed:', error);
-    return;
-  }
+export async function signUpArtistWithOAuth(provider: 'google'): Promise<ActionResponse> {
+  return startOAuth(provider, 'artist-signup');
+}
 
-  redirect('/login');
+export async function signUpArtistWithEmail(email: string): Promise<ActionResponse> {
+  return startEmailAuth(email, 'artist-signup');
 }
