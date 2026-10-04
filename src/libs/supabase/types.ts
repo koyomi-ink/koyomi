@@ -274,6 +274,27 @@ export type Database = {
           },
         ];
       };
+      auth_rate_limits: {
+        Row: {
+          attempt_count: number;
+          bucket: string;
+          key_hash: string;
+          window_expires_at: string;
+        };
+        Insert: {
+          attempt_count: number;
+          bucket: string;
+          key_hash: string;
+          window_expires_at: string;
+        };
+        Update: {
+          attempt_count?: number;
+          bucket?: string;
+          key_hash?: string;
+          window_expires_at?: string;
+        };
+        Relationships: [];
+      };
       booking_private_notes: {
         Row: {
           booking_id: string;
@@ -982,6 +1003,15 @@ export type Database = {
           artist_id: string;
           studio_id: string;
         }[];
+      };
+      consume_auth_rate_limit: {
+        Args: {
+          p_bucket: string;
+          p_key_hash: string;
+          p_limit: number;
+          p_window_seconds: number;
+        };
+        Returns: boolean;
       };
     };
     Enums: {

@@ -8,6 +8,8 @@ import { getURL } from '@/utils/get-url';
 
 import { sendLoginHelpEmail } from '@/features/auth/emails/send-login-help-email';
 
+import { checkAuthEmailRateLimit } from '@/features/auth/rate-limit/check-auth-email-rate-limit';
+
 type AuthIntent = 'login' | 'artist-signup';
 
 function getCallbackUrl(intent: AuthIntent) {
@@ -87,6 +89,26 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
       shouldCreateUser: false,
     },
   });
+
+  let allowed: boolean;
+
+  try {
+    allowed = await checkAuthEmailRateLimit(normalizedEmail);
+  } catch (error) {
+    console.error('Auth rate limiter failed:', error);
+
+    return {
+      data: null,
+      error: 'We could not process your request right now. Please try again.',
+    };
+  }
+
+  if (!allowed) {
+    return {
+      data: null,
+      error: 'Too many email attempts. Please wait a few minutes and try again.',
+    };
+  }
 
   if (!error) {
     return {
