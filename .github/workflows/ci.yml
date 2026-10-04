@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -23,7 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
           node-version: '22'
@@ -52,15 +53,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-
-      - name: Set up Node
-        uses: actions/setup-node@v7
-        with:
-          node-version: '22'
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Set up Supabase CLI
         uses: supabase/setup-cli@v3
