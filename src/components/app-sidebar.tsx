@@ -1,23 +1,27 @@
 'use client';
 
 import Link from 'next/link';
-import { GuardedLink } from '@/components/app-panel/guarded-link';
 import { useState } from 'react';
+
+import { useAppPanel } from '@/components/app-panel/app-panel-provider';
+
 import {
   BookOpen,
   ChartLine,
+  Check,
   ChevronsUpDown,
   CircleDashedCheck,
+  Copy,
   ExternalLink,
   GlobeCode,
   LayoutDashboard,
+  LogOut,
   Mailbox,
   Settings,
   Users,
-  Check,
-  Copy,
 } from 'lucide-react';
 
+import { GuardedLink } from '@/components/app-panel/guarded-link';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +41,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { logout } from '@/features/auth/actions/logout';
 
 type Studio = {
   id: string;
@@ -102,6 +107,8 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
 
   const [copied, setCopied] = useState(false);
 
+  const { runGuardedAction, isSaving } = useAppPanel();
+
   async function handleCopyBookingUrl() {
     await navigator.clipboard.writeText(`https://koyomi.ink/${currentStudio.slug}`);
 
@@ -133,9 +140,9 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent className='min-w-56' align='start' side='bottom' sideOffset={4}>
-                <DropdownMenuLabel>Studios</DropdownMenuLabel>
+                {/* <DropdownMenuLabel>Studios</DropdownMenuLabel> */}
 
-                {memberships.map((membership) => {
+                {/* {memberships.map((membership) => {
                   if (!membership.studios) {
                     return null;
                   }
@@ -153,9 +160,17 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
                   );
                 })}
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator /> */}
 
-                <DropdownMenuItem disabled>Add studio</DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={isSaving}
+                  onSelect={() => {
+                    runGuardedAction(logout);
+                  }}
+                >
+                  <LogOut />
+                  <span>Log out</span>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

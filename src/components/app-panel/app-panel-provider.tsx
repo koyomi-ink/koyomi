@@ -20,6 +20,8 @@ type AppPanelState = {
   content: ReactNode;
 };
 
+type GuardedAction = () => void | Promise<void>;
+
 type AppPanelContextValue = {
   panel: AppPanelState | null;
   isDirty: boolean;
@@ -30,11 +32,16 @@ type AppPanelContextValue = {
   setPanelDirty: (dirty: boolean) => void;
   setPanelSaving: (saving: boolean) => void;
   navigate: (href: string) => void;
+  runGuardedAction: (action: GuardedAction) => void;
   registerDiscardHandler: (handler: (() => void) | null) => void;
 };
 
 type PendingNavigation = {
   href: string;
+};
+
+type PendingAction = {
+  execute: GuardedAction;
 };
 
 const AppPanelContext = createContext<AppPanelContextValue | null>(null);
@@ -46,15 +53,19 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
 
   const [isDirty, setIsDirty] = useState(false);
   const isDirtyRef = useRef(false);
+
   const setPanelDirty = useCallback((dirty: boolean) => {
     isDirtyRef.current = dirty;
     setIsDirty(dirty);
   }, []);
+
   const [isSaving, setIsSaving] = useState(false);
 
   const [pendingPanel, setPendingPanel] = useState<AppPanelState | null | undefined>(undefined);
 
   const [pendingNavigation, setPendingNavigation] = useState<PendingNavigation | null>(null);
+
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
 
   const [pendingHistoryBack, setPendingHistoryBack] = useState(false);
 
@@ -65,6 +76,7 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
   const registerDiscardHandler = useCallback((handler: (() => void) | null) => {
     discardHandlerRef.current = handler;
   }, []);
+
   /*
    * Reload / tab close protection.
    */
@@ -149,14 +161,14 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      if (isDirty) {
+      if (isDirtyRef.current) {
         setPendingPanel(nextPanel);
         return;
       }
 
       applyPanel(nextPanel);
     },
-    [isDirty, isSaving, applyPanel],
+    [isSaving, applyPanel],
   );
 
   const openPanel = useCallback(
@@ -183,7 +195,7 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      if (isDirty) {
+      if (isDirtyRef.current) {
         setPendingNavigation({ href });
         return;
       }
@@ -191,12 +203,36 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
       setPanel(null);
       router.push(href);
     },
-    [isDirty, isSaving, router],
+    [isSaving, router],
+  );
+
+  const runGuardedAction = useCallback(
+    (action: GuardedAction) => {
+      if (isSaving) {
+        return;
+      }
+
+      if (isDirtyRef.current) {
+        setPendingAction({
+          execute: action,
+        });
+
+        return;
+      }
+
+      setPanel(null);
+
+      historyGuardActive.current = false;
+
+      void action();
+    },
+    [isSaving],
   );
 
   function keepEditing() {
     setPendingPanel(undefined);
     setPendingNavigation(null);
+    setPendingAction(null);
     setPendingHistoryBack(false);
   }
 
@@ -206,11 +242,13 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
     if (pendingHistoryBack) {
       setPendingHistoryBack(false);
       setPendingNavigation(null);
+      setPendingAction(null);
       setPendingPanel(undefined);
 
       setPanel(null);
 
       historyGuardActive.current = false;
+
       setPanelDirty(false);
       setIsSaving(false);
 
@@ -222,10 +260,12 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
       const href = pendingNavigation.href;
 
       setPendingNavigation(null);
+      setPendingAction(null);
       setPendingPanel(undefined);
       setPanel(null);
 
       historyGuardActive.current = false;
+
       setPanelDirty(false);
       setIsSaving(false);
 
@@ -233,9 +273,30 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    if (pendingAction) {
+      const action = pendingAction.execute;
+
+      setPendingAction(null);
+      setPendingNavigation(null);
+      setPendingPanel(undefined);
+      setPendingHistoryBack(false);
+      setPanel(null);
+
+      historyGuardActive.current = false;
+
+      setPanelDirty(false);
+      setIsSaving(false);
+
+      void action();
+      return;
+    }
+
     applyPanel(pendingPanel ?? null);
     setPendingPanel(undefined);
   }
+
+  const confirmationOpen =
+    pendingPanel !== undefined || pendingNavigation !== null || pendingAction !== null || pendingHistoryBack;
 
   return (
     <AppPanelContext.Provider
@@ -249,13 +310,14 @@ export function AppPanelProvider({ children }: { children: ReactNode }) {
         setPanelDirty,
         setPanelSaving: setIsSaving,
         navigate,
+        runGuardedAction,
         registerDiscardHandler,
       }}
     >
       {children}
 
       <AlertDialog
-        open={pendingPanel !== undefined || pendingNavigation !== null || pendingHistoryBack}
+        open={confirmationOpen}
         onOpenChange={(open) => {
           if (!open) {
             keepEditing();

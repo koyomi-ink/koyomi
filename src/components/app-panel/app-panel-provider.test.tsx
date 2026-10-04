@@ -11,6 +11,7 @@ import { AppPanelProvider, useAppPanel } from './app-panel-provider';
 const mocks = vi.hoisted(() => ({
   push: vi.fn(),
   discard: vi.fn(),
+  action: vi.fn(),
 }));
 
 vi.mock('next/navigation', () => ({
@@ -20,8 +21,16 @@ vi.mock('next/navigation', () => ({
 }));
 
 function TestConsumer({ discardHandler }: { discardHandler?: () => void }) {
-  const { panel, openPanel, closePanel, setPanelDirty, setPanelSaving, navigate, registerDiscardHandler } =
-    useAppPanel();
+  const {
+    panel,
+    openPanel,
+    closePanel,
+    setPanelDirty,
+    setPanelSaving,
+    navigate,
+    runGuardedAction,
+    registerDiscardHandler,
+  } = useAppPanel();
 
   useEffect(() => {
     if (!discardHandler) {
@@ -58,6 +67,8 @@ function TestConsumer({ discardHandler }: { discardHandler?: () => void }) {
       <button onClick={() => setPanelSaving(true)}>Start saving</button>
 
       <button onClick={() => navigate('/app/swallow-studio/bookings')}>Go to bookings</button>
+
+      <button onClick={() => runGuardedAction(mocks.action)}>Run guarded action</button>
     </div>
   );
 }
@@ -318,5 +329,165 @@ describe('AppPanelProvider', () => {
     await waitFor(() => {
       expect(event.defaultPrevented).toBe(true);
     });
+  });
+
+  it('runs a guarded action immediately when clean', async () => {
+    const user = userEvent.setup();
+
+    renderProvider();
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Open panel',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Run guarded action',
+      }),
+    );
+
+    expect(mocks.action).toHaveBeenCalledTimes(1);
+
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('No panel');
+
+    expect(screen.queryByText('Discard changes?')).not.toBeInTheDocument();
+  });
+
+  it('guards an action when there are unsaved changes', async () => {
+    const user = userEvent.setup();
+
+    renderProvider();
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Open panel',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Make dirty',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Run guarded action',
+      }),
+    );
+
+    expect(mocks.action).not.toHaveBeenCalled();
+
+    expect(screen.getByText('Discard changes?')).toBeInTheDocument();
+
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('Main profile');
+  });
+
+  it('does not run a guarded action when Keep editing is chosen', async () => {
+    const user = userEvent.setup();
+
+    renderProvider();
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Open panel',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Make dirty',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Run guarded action',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Keep editing',
+      }),
+    );
+
+    expect(mocks.action).not.toHaveBeenCalled();
+
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('Main profile');
+
+    expect(screen.queryByText('Discard changes?')).not.toBeInTheDocument();
+  });
+
+  it('discards changes before running a guarded action', async () => {
+    const user = userEvent.setup();
+
+    renderProvider({
+      discardHandler: mocks.discard,
+    });
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Open panel',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Make dirty',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Run guarded action',
+      }),
+    );
+
+    expect(mocks.action).not.toHaveBeenCalled();
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Discard changes',
+      }),
+    );
+
+    expect(mocks.discard).toHaveBeenCalledTimes(1);
+
+    expect(mocks.action).toHaveBeenCalledTimes(1);
+
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('No panel');
+  });
+
+  it('blocks guarded actions while saving', async () => {
+    const user = userEvent.setup();
+
+    renderProvider();
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Open panel',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Start saving',
+      }),
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Run guarded action',
+      }),
+    );
+
+    expect(mocks.action).not.toHaveBeenCalled();
+
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('Main profile');
+
+    expect(screen.queryByText('Discard changes?')).not.toBeInTheDocument();
   });
 });
