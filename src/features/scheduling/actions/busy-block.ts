@@ -1,15 +1,10 @@
 'use server';
 
 import { requireAuth } from '@/libs/auth/require-auth';
-import {
-  createBusyBlockSchema,
-  type CreateBusyBlockInput,
-} from '@/features/scheduling/schemas/busy-block';
+import { createBusyBlockSchema, type CreateBusyBlockInput } from '@/features/scheduling/schemas/busy-block';
 import { ActionResponse } from '@/types/action-response';
 
-export async function createBusyBlock(
-  input: CreateBusyBlockInput
-): Promise<ActionResponse<{ id: string }>> {
+export async function createBusyBlock(input: CreateBusyBlockInput): Promise<ActionResponse<{ id: string }>> {
   const { supabase } = await requireAuth();
 
   const parsed = createBusyBlockSchema.safeParse(input);

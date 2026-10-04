@@ -6,10 +6,7 @@ import { onboardingSchema } from '@/features/onboarding/schemas/onboarding';
 import { requireAuth } from '@/libs/auth/require-auth';
 import type { ActionResponse } from '@/types/action-response';
 
-export async function completeOnboarding(
-  _previousState: ActionResponse,
-  formData: FormData
-): Promise<ActionResponse> {
+export async function completeOnboarding(_previousState: ActionResponse, formData: FormData): Promise<ActionResponse> {
   const { supabase } = await requireAuth();
 
   const parsed = onboardingSchema.safeParse({
@@ -26,12 +23,7 @@ export async function completeOnboarding(
     };
   }
 
-  const {
-    displayName,
-    studioName,
-    studioSlug,
-    currency,
-  } = parsed.data;
+  const { displayName, studioName, studioSlug, currency } = parsed.data;
 
   const { error } = await supabase.rpc('complete_onboarding', {
     p_display_name: displayName,
@@ -43,10 +35,7 @@ export async function completeOnboarding(
   if (error) {
     console.error('Failed to complete onboarding:', error);
 
-    if (
-      error.code === '23505' &&
-      error.message.includes('studios_slug_key')
-    ) {
+    if (error.code === '23505' && error.message.includes('studios_slug_key')) {
       return {
         data: null,
         error: 'That booking URL is already taken.',

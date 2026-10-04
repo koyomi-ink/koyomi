@@ -4,16 +4,10 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { requireAuth } from '@/libs/auth/require-auth';
-import {
-  mainProfileSchema,
-  type MainProfileInput,
-} from '@/features/settings/schemas/main-profile';
+import { mainProfileSchema, type MainProfileInput } from '@/features/settings/schemas/main-profile';
 import type { ActionResponse } from '@/types/action-response';
 
-export async function updateMainProfile(
-  studioId: string,
-  input: MainProfileInput
-): Promise<ActionResponse> {
+export async function updateMainProfile(studioId: string, input: MainProfileInput): Promise<ActionResponse> {
   const { supabase } = await requireAuth();
 
   // Validate the studio identifier.
@@ -37,12 +31,11 @@ export async function updateMainProfile(
   const { name, slug, bio } = parsed.data;
 
   // Retrieve the current slug before updating it.
-  const { data: currentStudio, error: lookupError } =
-    await supabase
-      .from('studios')
-      .select('slug')
-      .eq('id', studioId)
-      .single();
+  const { data: currentStudio, error: lookupError } = await supabase
+    .from('studios')
+    .select('slug')
+    .eq('id', studioId)
+    .single();
 
   if (lookupError || !currentStudio) {
     return {
@@ -73,10 +66,7 @@ export async function updateMainProfile(
       };
     }
 
-    console.error(
-      'Failed to update studio profile:',
-      updateError
-    );
+    console.error('Failed to update studio profile:', updateError);
 
     return {
       data: null,

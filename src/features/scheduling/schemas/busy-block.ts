@@ -8,14 +8,9 @@ export const createBusyBlockSchema = z
     startsAt: z.iso.datetime({ offset: true }),
     endsAt: z.iso.datetime({ offset: true }),
   })
-  .refine(
-    (data) => new Date(data.endsAt) > new Date(data.startsAt),
-    {
-      message: 'End time must be after start time.',
-      path: ['endsAt'],
-    }
-  );
+  .refine((data) => new Date(data.endsAt) > new Date(data.startsAt), {
+    message: 'End time must be after start time.',
+    path: ['endsAt'],
+  });
 
-export type CreateBusyBlockInput = z.infer<
-  typeof createBusyBlockSchema
->;
+export type CreateBusyBlockInput = z.infer<typeof createBusyBlockSchema>;

@@ -7,9 +7,7 @@ export default function OnboardingPage() {
       <Card>
         <CardHeader>
           <CardTitle>Welcome to Koyomi</CardTitle>
-          <CardDescription>
-            Set up your studio to get started.
-          </CardDescription>
+          <CardDescription>Set up your studio to get started.</CardDescription>
         </CardHeader>
 
         <CardContent>

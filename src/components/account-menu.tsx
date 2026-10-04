@@ -17,7 +17,7 @@ import { Button } from './ui/button';
 //       console.log('failed')
 //     } else {
 //       router.refresh();
-      
+
 //       // TODO - add toast 'you have been logged out'
 //     }
 //   }

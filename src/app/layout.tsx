@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Manage your tattoo business',
   keywords: ['tattoo', 'scheduling', 'booking', 'books', 'schedule', 'management', 'studio'],
   verification: {
-    google: 'TODO - string here'
+    google: 'TODO - string here',
   },
   openGraph: {
     title: 'Koyomi',
@@ -22,16 +22,16 @@ export const metadata: Metadata = {
         url: '/og.jpg',
         width: 800,
         height: 600,
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang='en'>
       <body>
-        <div >
+        <div>
           <main>
             <div>{children}</div>
           </main>

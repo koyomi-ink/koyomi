@@ -1,8 +1,8 @@
-'use server'
+'use server';
 
 import { redirect } from 'next/navigation';
 
-import { getOrCreateStudioCustomer } from '@/features/account/controllers/get-or-create-customer'; 
+import { getOrCreateStudioCustomer } from '@/features/account/controllers/get-or-create-customer';
 import { stripeAdmin } from '@/libs/stripe/stripe-admin';
 import { createSupabaseServerClient } from '@/libs/supabase/supabase-server-client';
 import { getEnvVar } from '@/utils/get-env-var';
@@ -18,7 +18,10 @@ export async function createCheckoutSession(formData: FormData) {
 
   // 2. Validate the user making the request (Security Check)
   const supabase = await createSupabaseServerClient();
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
   if (authError || !user?.email) {
     throw new Error('Not authenticated');
@@ -51,13 +54,13 @@ export async function createCheckoutSession(formData: FormData) {
     line_items: [
       {
         price: priceId,
-        quantity: 1, 
+        quantity: 1,
       },
     ],
     // CRITICAL: This passes the studioId through Stripe and into your webhook
     subscription_data: {
       metadata: {
-        studioId: studioId, 
+        studioId: studioId,
       },
     },
     success_url: `${appUrl}/dashboard?billing=success`,

@@ -4,9 +4,7 @@ import { redirect } from 'next/navigation';
 import { isOnboarded } from '@/features/onboarding/utils/is-onboarded';
 import { createSupabaseServerClient } from '@/libs/supabase/supabase-server-client';
 
-async function OnboardingGate({
-  children,
-}: PropsWithChildren) {
+async function OnboardingGate({ children }: PropsWithChildren) {
   const supabase = await createSupabaseServerClient();
 
   const { data, error } = await supabase.auth.getClaims();
@@ -25,9 +23,7 @@ async function OnboardingGate({
   return children;
 }
 
-export default function OnboardingLayout({
-  children,
-}: PropsWithChildren) {
+export default function OnboardingLayout({ children }: PropsWithChildren) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <OnboardingGate>{children}</OnboardingGate>

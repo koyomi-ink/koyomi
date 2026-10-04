@@ -34,7 +34,6 @@ export function AuthUI({
     const response = await signInWithEmail(email);
 
     // T0D0 - add toast here response?.error "An error occurred while authenticating. Please try again." & else `To continue, click the link in the email sent to: ${email}`
-    
 
     form.reset();
     setPending(false);
@@ -45,7 +44,7 @@ export function AuthUI({
     const response = await signInWithOAuth(provider);
 
     if (response?.error) {
-      // T0D0 - add toast here "An error occurred while authenticating. Please try again." 
+      // T0D0 - add toast here "An error occurred while authenticating. Please try again."
       setPending(false);
     }
   }

@@ -4,10 +4,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { Database } from '@/libs/supabase/types';
 
-export async function isOnboarded(
-  supabase: SupabaseClient<Database>,
-  userId: string
-) {
+export async function isOnboarded(supabase: SupabaseClient<Database>, userId: string) {
   const { data, error } = await supabase
     .from('artists')
     .select('id')

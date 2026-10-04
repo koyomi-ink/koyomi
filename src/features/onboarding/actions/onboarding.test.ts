@@ -1,10 +1,4 @@
-import {
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { completeOnboarding } from './onboarding';
 
@@ -26,14 +20,8 @@ function createValidFormData() {
   const formData = new FormData();
 
   formData.set('displayName', 'Sarah');
-  formData.set(
-    'studioName',
-    'Swallow Studio'
-  );
-  formData.set(
-    'studioSlug',
-    'swallow-studio'
-  );
+  formData.set('studioName', 'Swallow Studio');
+  formData.set('studioSlug', 'swallow-studio');
   formData.set('currency', 'GBP');
 
   return formData;
@@ -65,19 +53,16 @@ describe('completeOnboarding', () => {
         data: null,
         error: null,
       },
-      formData
+      formData,
     );
 
     expect(result).toEqual({
       data: null,
-      error:
-        'Please check your information and try again.',
+      error: 'Please check your information and try again.',
     });
 
     expect(mocks.rpc).not.toHaveBeenCalled();
-    expect(
-      mocks.redirect
-    ).not.toHaveBeenCalled();
+    expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
   it('calls the onboarding RPC with validated values', async () => {
@@ -88,18 +73,15 @@ describe('completeOnboarding', () => {
         data: null,
         error: null,
       },
-      formData
+      formData,
     );
 
-    expect(mocks.rpc).toHaveBeenCalledWith(
-      'complete_onboarding',
-      {
-        p_display_name: 'Sarah',
-        p_studio_name: 'Swallow Studio',
-        p_studio_slug: 'swallow-studio',
-        p_currency: 'GBP',
-      }
-    );
+    expect(mocks.rpc).toHaveBeenCalledWith('complete_onboarding', {
+      p_display_name: 'Sarah',
+      p_studio_name: 'Swallow Studio',
+      p_studio_slug: 'swallow-studio',
+      p_currency: 'GBP',
+    });
   });
 
   it('redirects to the app after successful onboarding', async () => {
@@ -110,25 +92,20 @@ describe('completeOnboarding', () => {
         data: null,
         error: null,
       },
-      formData
+      formData,
     );
 
-    expect(
-      mocks.redirect
-    ).toHaveBeenCalledWith('/app');
+    expect(mocks.redirect).toHaveBeenCalledWith('/app');
   });
 
   it('returns a clear error when the booking URL is already taken', async () => {
-    const consoleError = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => undefined);
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     mocks.rpc.mockResolvedValue({
       data: null,
       error: {
         code: '23505',
-        message:
-          'duplicate key value violates unique constraint "studios_slug_key"',
+        message: 'duplicate key value violates unique constraint "studios_slug_key"',
       },
     });
 
@@ -137,26 +114,21 @@ describe('completeOnboarding', () => {
         data: null,
         error: null,
       },
-      createValidFormData()
+      createValidFormData(),
     );
 
     expect(result).toEqual({
       data: null,
-      error:
-        'That booking URL is already taken.',
+      error: 'That booking URL is already taken.',
     });
 
-    expect(
-      mocks.redirect
-    ).not.toHaveBeenCalled();
+    expect(mocks.redirect).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
   });
 
   it('returns a generic error when onboarding fails', async () => {
-    const consoleError = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => undefined);
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     mocks.rpc.mockResolvedValue({
       data: null,
@@ -171,18 +143,15 @@ describe('completeOnboarding', () => {
         data: null,
         error: null,
       },
-      createValidFormData()
+      createValidFormData(),
     );
 
     expect(result).toEqual({
       data: null,
-      error:
-        'Could not complete onboarding. Please try again.',
+      error: 'Could not complete onboarding. Please try again.',
     });
 
-    expect(
-      mocks.redirect
-    ).not.toHaveBeenCalled();
+    expect(mocks.redirect).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
   });

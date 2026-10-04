@@ -6,9 +6,7 @@ import { createSupabaseServerClient } from '@/libs/supabase/supabase-server-clie
 import { ActionResponse } from '@/types/action-response';
 import { getURL } from '@/utils/get-url';
 
-export async function signInWithOAuth(
-  provider: 'google'
-): Promise<ActionResponse> {
+export async function signInWithOAuth(provider: 'google'): Promise<ActionResponse> {
   const supabase = await createSupabaseServerClient();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -30,9 +28,7 @@ export async function signInWithOAuth(
   redirect(data.url);
 }
 
-export async function signInWithEmail(
-  email: string
-): Promise<ActionResponse> {
+export async function signInWithEmail(email: string): Promise<ActionResponse> {
   const supabase = await createSupabaseServerClient();
 
   const { error } = await supabase.auth.signInWithOtp({

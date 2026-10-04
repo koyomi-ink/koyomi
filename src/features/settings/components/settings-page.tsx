@@ -2,12 +2,7 @@
 
 import { ChevronRight } from 'lucide-react';
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { useAppPanel } from '@/components/app-panel/app-panel-provider';
 
@@ -92,7 +87,8 @@ const sections = [
       },
       {
         title: 'Bank account',
-        description: 'TODO - CHANGE THIS TO BE MORE CLEAR THAT ITS THE PAYMENT METHOD THAT IS DISPLAYED DURING CHECKOUT',
+        description:
+          'TODO - CHANGE THIS TO BE MORE CLEAR THAT ITS THE PAYMENT METHOD THAT IS DISPLAYED DURING CHECKOUT',
       },
       {
         title: 'Calendar sync',
@@ -120,38 +116,24 @@ type SettingsPageProps = {
   };
 };
 
-export function SettingsPage({
-  studio,
-}: SettingsPageProps) {
+export function SettingsPage({ studio }: SettingsPageProps) {
   const { togglePanel } = useAppPanel();
 
   return (
     <div className='space-y-8'>
       <div>
-        <h1 className='text-2xl font-semibold tracking-tight'>
-          Settings
-        </h1>
+        <h1 className='text-2xl font-semibold tracking-tight'>Settings</h1>
 
-        <p className='text-sm text-muted-foreground'>
-          Manage your studio and account.
-        </p>
+        <p className='text-muted-foreground text-sm'>Manage your studio and account.</p>
       </div>
 
       {sections.map((section) => (
-        <section
-          key={section.title}
-          className='space-y-3'
-        >
-          <h2 className='text-lg font-semibold'>
-            {section.title}
-          </h2>
+        <section key={section.title} className='space-y-3'>
+          <h2 className='text-lg font-semibold'>{section.title}</h2>
 
           <div className='grid gap-3 sm:grid-cols-2 xl:grid-cols-3'>
             {section.items.map((item) => (
-              <Card
-                key={item.title}
-                className='gap-0 overflow-hidden p-0 transition-colors hover:bg-accent'
-              >
+              <Card key={item.title} className='hover:bg-accent gap-0 overflow-hidden p-0 transition-colors'>
                 <button
                   type='button'
                   className='w-full cursor-pointer text-left'
@@ -160,29 +142,22 @@ export function SettingsPage({
                       id: `${section.title}:${item.title}`,
                       title: item.title,
                       content:
-                        item.title === 'Main profile' &&
-                        section.title === 'Public profile' ? (
+                        item.title === 'Main profile' && section.title === 'Public profile' ? (
                           <MainProfileForm studio={studio} />
                         ) : (
-                          <p className='text-sm text-muted-foreground'>
-                            {item.description}
-                          </p>
+                          <p className='text-muted-foreground text-sm'>{item.description}</p>
                         ),
                     })
                   }
                 >
                   <CardHeader className='flex flex-row items-center justify-between gap-4 py-6'>
                     <div className='space-y-1'>
-                      <CardTitle className='text-base'>
-                        {item.title}
-                      </CardTitle>
+                      <CardTitle className='text-base'>{item.title}</CardTitle>
 
-                      <CardDescription>
-                        {item.description}
-                      </CardDescription>
+                      <CardDescription>{item.description}</CardDescription>
                     </div>
 
-                    <ChevronRight className='size-4 shrink-0 text-muted-foreground' />
+                    <ChevronRight className='text-muted-foreground size-4 shrink-0' />
                   </CardHeader>
                 </button>
               </Card>

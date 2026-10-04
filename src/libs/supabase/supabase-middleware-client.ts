@@ -9,14 +9,8 @@ export async function updateSession(request: NextRequest) {
   });
 
   const supabase = createServerClient(
-    getEnvVar(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      'NEXT_PUBLIC_SUPABASE_URL'
-    ),
-    getEnvVar(
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      'NEXT_PUBLIC_SUPABASE_ANON_KEY'
-    ),
+    getEnvVar(process.env.NEXT_PUBLIC_SUPABASE_URL, 'NEXT_PUBLIC_SUPABASE_URL'),
+    getEnvVar(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, 'NEXT_PUBLIC_SUPABASE_ANON_KEY'),
     {
       cookies: {
         getAll() {
@@ -47,7 +41,7 @@ export async function updateSession(request: NextRequest) {
           }
         },
       },
-    }
+    },
   );
 
   // Do not put code between createServerClient() and getClaims().
@@ -65,10 +59,7 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/signup/');
 
   const isProtectedRoute =
-    pathname === '/app' ||
-    pathname.startsWith('/app/') ||
-    pathname === '/portal' ||
-    pathname.startsWith('/portal/');
+    pathname === '/app' || pathname.startsWith('/app/') || pathname === '/portal' || pathname.startsWith('/portal/');
 
   // Authenticated users don't need to visit login/signup.
   if (claims && isAuthRoute) {

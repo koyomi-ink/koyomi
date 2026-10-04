@@ -1,1120 +1,1104 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
-  }
+    PostgrestVersion: '14.5';
+  };
   graphql_public: {
     Tables: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
       graphql: {
         Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       artist_availability: {
         Row: {
-          artist_id: string
-          created_at: string
-          id: string
-          location_id: string
-          studio_id: string
-          updated_at: string
-          weekly_schedule: Json
-        }
+          artist_id: string;
+          created_at: string;
+          id: string;
+          location_id: string;
+          studio_id: string;
+          updated_at: string;
+          weekly_schedule: Json;
+        };
         Insert: {
-          artist_id: string
-          created_at?: string
-          id?: string
-          location_id: string
-          studio_id: string
-          updated_at?: string
-          weekly_schedule?: Json
-        }
+          artist_id: string;
+          created_at?: string;
+          id?: string;
+          location_id: string;
+          studio_id: string;
+          updated_at?: string;
+          weekly_schedule?: Json;
+        };
         Update: {
-          artist_id?: string
-          created_at?: string
-          id?: string
-          location_id?: string
-          studio_id?: string
-          updated_at?: string
-          weekly_schedule?: Json
-        }
+          artist_id?: string;
+          created_at?: string;
+          id?: string;
+          location_id?: string;
+          studio_id?: string;
+          updated_at?: string;
+          weekly_schedule?: Json;
+        };
         Relationships: [
           {
-            foreignKeyName: "artist_availability_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artist_availability_artist_id_fkey';
+            columns: ['artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "artist_availability_artist_same_studio_fkey"
-            columns: ["studio_id", "artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'artist_availability_artist_same_studio_fkey';
+            columns: ['studio_id', 'artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "artist_availability_location_id_fkey"
-            columns: ["location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artist_availability_location_id_fkey';
+            columns: ['location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "artist_availability_location_same_studio_fkey"
-            columns: ["studio_id", "location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'artist_availability_location_same_studio_fkey';
+            columns: ['studio_id', 'location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "artist_availability_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artist_availability_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       artist_settings: {
         Row: {
-          artist_id: string
-          created_at: string
-          notification_preferences: Json
-          updated_at: string
-        }
+          artist_id: string;
+          created_at: string;
+          notification_preferences: Json;
+          updated_at: string;
+        };
         Insert: {
-          artist_id: string
-          created_at?: string
-          notification_preferences?: Json
-          updated_at?: string
-        }
+          artist_id: string;
+          created_at?: string;
+          notification_preferences?: Json;
+          updated_at?: string;
+        };
         Update: {
-          artist_id?: string
-          created_at?: string
-          notification_preferences?: Json
-          updated_at?: string
-        }
+          artist_id?: string;
+          created_at?: string;
+          notification_preferences?: Json;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "artist_settings_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: true
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artist_settings_artist_id_fkey';
+            columns: ['artist_id'];
+            isOneToOne: true;
+            referencedRelation: 'artists';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       artists: {
         Row: {
-          auth_user_id: string
-          created_at: string
-          display_name: string
-          id: string
-          is_active: boolean
-          is_bookable: boolean
-          role: string
-          studio_id: string
-          updated_at: string
-        }
+          auth_user_id: string;
+          created_at: string;
+          display_name: string;
+          id: string;
+          is_active: boolean;
+          is_bookable: boolean;
+          role: string;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          auth_user_id: string
-          created_at?: string
-          display_name: string
-          id?: string
-          is_active?: boolean
-          is_bookable?: boolean
-          role?: string
-          studio_id: string
-          updated_at?: string
-        }
+          auth_user_id: string;
+          created_at?: string;
+          display_name: string;
+          id?: string;
+          is_active?: boolean;
+          is_bookable?: boolean;
+          role?: string;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          auth_user_id?: string
-          created_at?: string
-          display_name?: string
-          id?: string
-          is_active?: boolean
-          is_bookable?: boolean
-          role?: string
-          studio_id?: string
-          updated_at?: string
-        }
+          auth_user_id?: string;
+          created_at?: string;
+          display_name?: string;
+          id?: string;
+          is_active?: boolean;
+          is_bookable?: boolean;
+          role?: string;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "artists_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artists_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       artwork_items: {
         Row: {
-          artist_id: string | null
-          category: string
-          created_at: string
-          crop_settings: Json
-          deposit_amount: number | null
-          estimated_duration_min: number | null
-          id: string
-          image_url: string
-          is_repeatable: boolean
-          max_price: number | null
-          min_price: number | null
-          order_index: number
-          pricing_mode: string
-          pricing_set_id: string | null
-          status: string
-          studio_id: string
-          tiers: Json
-          type: string
-          updated_at: string
-        }
+          artist_id: string | null;
+          category: string;
+          created_at: string;
+          crop_settings: Json;
+          deposit_amount: number | null;
+          estimated_duration_min: number | null;
+          id: string;
+          image_url: string;
+          is_repeatable: boolean;
+          max_price: number | null;
+          min_price: number | null;
+          order_index: number;
+          pricing_mode: string;
+          pricing_set_id: string | null;
+          status: string;
+          studio_id: string;
+          tiers: Json;
+          type: string;
+          updated_at: string;
+        };
         Insert: {
-          artist_id?: string | null
-          category: string
-          created_at?: string
-          crop_settings?: Json
-          deposit_amount?: number | null
-          estimated_duration_min?: number | null
-          id?: string
-          image_url: string
-          is_repeatable?: boolean
-          max_price?: number | null
-          min_price?: number | null
-          order_index?: number
-          pricing_mode?: string
-          pricing_set_id?: string | null
-          status?: string
-          studio_id: string
-          tiers?: Json
-          type: string
-          updated_at?: string
-        }
+          artist_id?: string | null;
+          category: string;
+          created_at?: string;
+          crop_settings?: Json;
+          deposit_amount?: number | null;
+          estimated_duration_min?: number | null;
+          id?: string;
+          image_url: string;
+          is_repeatable?: boolean;
+          max_price?: number | null;
+          min_price?: number | null;
+          order_index?: number;
+          pricing_mode?: string;
+          pricing_set_id?: string | null;
+          status?: string;
+          studio_id: string;
+          tiers?: Json;
+          type: string;
+          updated_at?: string;
+        };
         Update: {
-          artist_id?: string | null
-          category?: string
-          created_at?: string
-          crop_settings?: Json
-          deposit_amount?: number | null
-          estimated_duration_min?: number | null
-          id?: string
-          image_url?: string
-          is_repeatable?: boolean
-          max_price?: number | null
-          min_price?: number | null
-          order_index?: number
-          pricing_mode?: string
-          pricing_set_id?: string | null
-          status?: string
-          studio_id?: string
-          tiers?: Json
-          type?: string
-          updated_at?: string
-        }
+          artist_id?: string | null;
+          category?: string;
+          created_at?: string;
+          crop_settings?: Json;
+          deposit_amount?: number | null;
+          estimated_duration_min?: number | null;
+          id?: string;
+          image_url?: string;
+          is_repeatable?: boolean;
+          max_price?: number | null;
+          min_price?: number | null;
+          order_index?: number;
+          pricing_mode?: string;
+          pricing_set_id?: string | null;
+          status?: string;
+          studio_id?: string;
+          tiers?: Json;
+          type?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "artwork_items_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artwork_items_artist_id_fkey';
+            columns: ['artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "artwork_items_artist_same_studio_fkey"
-            columns: ["studio_id", "artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'artwork_items_artist_same_studio_fkey';
+            columns: ['studio_id', 'artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "artwork_items_pricing_set_id_fkey"
-            columns: ["pricing_set_id"]
-            isOneToOne: false
-            referencedRelation: "pricing_sets"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artwork_items_pricing_set_id_fkey';
+            columns: ['pricing_set_id'];
+            isOneToOne: false;
+            referencedRelation: 'pricing_sets';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "artwork_items_pricing_set_same_studio_fkey"
-            columns: ["studio_id", "pricing_set_id"]
-            isOneToOne: false
-            referencedRelation: "pricing_sets"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'artwork_items_pricing_set_same_studio_fkey';
+            columns: ['studio_id', 'pricing_set_id'];
+            isOneToOne: false;
+            referencedRelation: 'pricing_sets';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "artwork_items_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'artwork_items_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       booking_private_notes: {
         Row: {
-          booking_id: string
-          created_at: string
-          notes: string | null
-          studio_id: string
-          updated_at: string
-        }
+          booking_id: string;
+          created_at: string;
+          notes: string | null;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          booking_id: string
-          created_at?: string
-          notes?: string | null
-          studio_id: string
-          updated_at?: string
-        }
+          booking_id: string;
+          created_at?: string;
+          notes?: string | null;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          booking_id?: string
-          created_at?: string
-          notes?: string | null
-          studio_id?: string
-          updated_at?: string
-        }
+          booking_id?: string;
+          created_at?: string;
+          notes?: string | null;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "booking_private_notes_booking_id_fkey"
-            columns: ["booking_id"]
-            isOneToOne: true
-            referencedRelation: "bookings"
-            referencedColumns: ["id"]
+            foreignKeyName: 'booking_private_notes_booking_id_fkey';
+            columns: ['booking_id'];
+            isOneToOne: true;
+            referencedRelation: 'bookings';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "booking_private_notes_booking_same_studio_fkey"
-            columns: ["studio_id", "booking_id"]
-            isOneToOne: false
-            referencedRelation: "bookings"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'booking_private_notes_booking_same_studio_fkey';
+            columns: ['studio_id', 'booking_id'];
+            isOneToOne: false;
+            referencedRelation: 'bookings';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "booking_private_notes_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'booking_private_notes_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       bookings: {
         Row: {
-          artist_id: string | null
-          artwork_item_id: string | null
-          booking_type: string
-          buffer_minutes: number
-          client_id: string | null
-          created_at: string
-          custom_details: Json
-          deposit_amount: number | null
-          duration_minutes: number | null
-          id: string
-          location_id: string | null
-          quoted_price: number | null
-          requested_slots: Json
-          scheduled_slot_end: string | null
-          scheduled_slot_start: string | null
-          selected_tier: Json
-          status: string
-          studio_id: string
-          updated_at: string
-        }
+          artist_id: string | null;
+          artwork_item_id: string | null;
+          booking_type: string;
+          buffer_minutes: number;
+          client_id: string | null;
+          created_at: string;
+          custom_details: Json;
+          deposit_amount: number | null;
+          duration_minutes: number | null;
+          id: string;
+          location_id: string | null;
+          quoted_price: number | null;
+          requested_slots: Json;
+          scheduled_slot_end: string | null;
+          scheduled_slot_start: string | null;
+          selected_tier: Json;
+          status: string;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          artist_id?: string | null
-          artwork_item_id?: string | null
-          booking_type: string
-          buffer_minutes?: number
-          client_id?: string | null
-          created_at?: string
-          custom_details?: Json
-          deposit_amount?: number | null
-          duration_minutes?: number | null
-          id?: string
-          location_id?: string | null
-          quoted_price?: number | null
-          requested_slots?: Json
-          scheduled_slot_end?: string | null
-          scheduled_slot_start?: string | null
-          selected_tier?: Json
-          status?: string
-          studio_id: string
-          updated_at?: string
-        }
+          artist_id?: string | null;
+          artwork_item_id?: string | null;
+          booking_type: string;
+          buffer_minutes?: number;
+          client_id?: string | null;
+          created_at?: string;
+          custom_details?: Json;
+          deposit_amount?: number | null;
+          duration_minutes?: number | null;
+          id?: string;
+          location_id?: string | null;
+          quoted_price?: number | null;
+          requested_slots?: Json;
+          scheduled_slot_end?: string | null;
+          scheduled_slot_start?: string | null;
+          selected_tier?: Json;
+          status?: string;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          artist_id?: string | null
-          artwork_item_id?: string | null
-          booking_type?: string
-          buffer_minutes?: number
-          client_id?: string | null
-          created_at?: string
-          custom_details?: Json
-          deposit_amount?: number | null
-          duration_minutes?: number | null
-          id?: string
-          location_id?: string | null
-          quoted_price?: number | null
-          requested_slots?: Json
-          scheduled_slot_end?: string | null
-          scheduled_slot_start?: string | null
-          selected_tier?: Json
-          status?: string
-          studio_id?: string
-          updated_at?: string
-        }
+          artist_id?: string | null;
+          artwork_item_id?: string | null;
+          booking_type?: string;
+          buffer_minutes?: number;
+          client_id?: string | null;
+          created_at?: string;
+          custom_details?: Json;
+          deposit_amount?: number | null;
+          duration_minutes?: number | null;
+          id?: string;
+          location_id?: string | null;
+          quoted_price?: number | null;
+          requested_slots?: Json;
+          scheduled_slot_end?: string | null;
+          scheduled_slot_start?: string | null;
+          selected_tier?: Json;
+          status?: string;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "bookings_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
+            foreignKeyName: 'bookings_artist_id_fkey';
+            columns: ['artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "bookings_artist_same_studio_fkey"
-            columns: ["studio_id", "artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'bookings_artist_same_studio_fkey';
+            columns: ['studio_id', 'artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "bookings_artwork_item_id_fkey"
-            columns: ["artwork_item_id"]
-            isOneToOne: false
-            referencedRelation: "artwork_items"
-            referencedColumns: ["id"]
+            foreignKeyName: 'bookings_artwork_item_id_fkey';
+            columns: ['artwork_item_id'];
+            isOneToOne: false;
+            referencedRelation: 'artwork_items';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "bookings_artwork_item_same_studio_fkey"
-            columns: ["studio_id", "artwork_item_id"]
-            isOneToOne: false
-            referencedRelation: "artwork_items"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'bookings_artwork_item_same_studio_fkey';
+            columns: ['studio_id', 'artwork_item_id'];
+            isOneToOne: false;
+            referencedRelation: 'artwork_items';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "bookings_client_id_fkey"
-            columns: ["client_id"]
-            isOneToOne: false
-            referencedRelation: "clients"
-            referencedColumns: ["id"]
+            foreignKeyName: 'bookings_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "bookings_client_same_studio_fkey"
-            columns: ["studio_id", "client_id"]
-            isOneToOne: false
-            referencedRelation: "clients"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'bookings_client_same_studio_fkey';
+            columns: ['studio_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "bookings_location_id_fkey"
-            columns: ["location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            foreignKeyName: 'bookings_location_id_fkey';
+            columns: ['location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "bookings_location_same_studio_fkey"
-            columns: ["studio_id", "location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'bookings_location_same_studio_fkey';
+            columns: ['studio_id', 'location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "bookings_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'bookings_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       busy_block_private_details: {
         Row: {
-          busy_block_id: string
-          created_at: string
-          title: string | null
-          updated_at: string
-        }
+          busy_block_id: string;
+          created_at: string;
+          title: string | null;
+          updated_at: string;
+        };
         Insert: {
-          busy_block_id: string
-          created_at?: string
-          title?: string | null
-          updated_at?: string
-        }
+          busy_block_id: string;
+          created_at?: string;
+          title?: string | null;
+          updated_at?: string;
+        };
         Update: {
-          busy_block_id?: string
-          created_at?: string
-          title?: string | null
-          updated_at?: string
-        }
+          busy_block_id?: string;
+          created_at?: string;
+          title?: string | null;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "busy_block_private_details_busy_block_id_fkey"
-            columns: ["busy_block_id"]
-            isOneToOne: true
-            referencedRelation: "busy_blocks"
-            referencedColumns: ["id"]
+            foreignKeyName: 'busy_block_private_details_busy_block_id_fkey';
+            columns: ['busy_block_id'];
+            isOneToOne: true;
+            referencedRelation: 'busy_blocks';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       busy_blocks: {
         Row: {
-          artist_id: string
-          created_at: string
-          ends_at: string
-          external_event_id: string | null
-          id: string
-          location_id: string | null
-          source: string
-          starts_at: string
-          studio_id: string
-          updated_at: string
-        }
+          artist_id: string;
+          created_at: string;
+          ends_at: string;
+          external_event_id: string | null;
+          id: string;
+          location_id: string | null;
+          source: string;
+          starts_at: string;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          artist_id: string
-          created_at?: string
-          ends_at: string
-          external_event_id?: string | null
-          id?: string
-          location_id?: string | null
-          source?: string
-          starts_at: string
-          studio_id: string
-          updated_at?: string
-        }
+          artist_id: string;
+          created_at?: string;
+          ends_at: string;
+          external_event_id?: string | null;
+          id?: string;
+          location_id?: string | null;
+          source?: string;
+          starts_at: string;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          artist_id?: string
-          created_at?: string
-          ends_at?: string
-          external_event_id?: string | null
-          id?: string
-          location_id?: string | null
-          source?: string
-          starts_at?: string
-          studio_id?: string
-          updated_at?: string
-        }
+          artist_id?: string;
+          created_at?: string;
+          ends_at?: string;
+          external_event_id?: string | null;
+          id?: string;
+          location_id?: string | null;
+          source?: string;
+          starts_at?: string;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "busy_blocks_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
+            foreignKeyName: 'busy_blocks_artist_id_fkey';
+            columns: ['artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "busy_blocks_artist_same_studio_fkey"
-            columns: ["studio_id", "artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'busy_blocks_artist_same_studio_fkey';
+            columns: ['studio_id', 'artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "busy_blocks_location_id_fkey"
-            columns: ["location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            foreignKeyName: 'busy_blocks_location_id_fkey';
+            columns: ['location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "busy_blocks_location_same_studio_fkey"
-            columns: ["studio_id", "location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'busy_blocks_location_same_studio_fkey';
+            columns: ['studio_id', 'location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "busy_blocks_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'busy_blocks_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       client_identities: {
         Row: {
-          auth_user_id: string
-          client_id: string
-          created_at: string
-        }
+          auth_user_id: string;
+          client_id: string;
+          created_at: string;
+        };
         Insert: {
-          auth_user_id: string
-          client_id: string
-          created_at?: string
-        }
+          auth_user_id: string;
+          client_id: string;
+          created_at?: string;
+        };
         Update: {
-          auth_user_id?: string
-          client_id?: string
-          created_at?: string
-        }
+          auth_user_id?: string;
+          client_id?: string;
+          created_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "client_identities_client_id_fkey"
-            columns: ["client_id"]
-            isOneToOne: true
-            referencedRelation: "clients"
-            referencedColumns: ["id"]
+            foreignKeyName: 'client_identities_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       client_private_notes: {
         Row: {
-          client_id: string
-          created_at: string
-          notes: string | null
-          studio_id: string
-          updated_at: string
-        }
+          client_id: string;
+          created_at: string;
+          notes: string | null;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          client_id: string
-          created_at?: string
-          notes?: string | null
-          studio_id: string
-          updated_at?: string
-        }
+          client_id: string;
+          created_at?: string;
+          notes?: string | null;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          client_id?: string
-          created_at?: string
-          notes?: string | null
-          studio_id?: string
-          updated_at?: string
-        }
+          client_id?: string;
+          created_at?: string;
+          notes?: string | null;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "client_private_notes_client_id_fkey"
-            columns: ["client_id"]
-            isOneToOne: true
-            referencedRelation: "clients"
-            referencedColumns: ["id"]
+            foreignKeyName: 'client_private_notes_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "client_private_notes_client_same_studio_fkey"
-            columns: ["studio_id", "client_id"]
-            isOneToOne: false
-            referencedRelation: "clients"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'client_private_notes_client_same_studio_fkey';
+            columns: ['studio_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "client_private_notes_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'client_private_notes_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       clients: {
         Row: {
-          created_at: string
-          email: string
-          first_name: string
-          id: string
-          last_name: string
-          phone: string | null
-          studio_id: string
-          updated_at: string
-        }
+          created_at: string;
+          email: string;
+          first_name: string;
+          id: string;
+          last_name: string;
+          phone: string | null;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          created_at?: string
-          email: string
-          first_name: string
-          id?: string
-          last_name: string
-          phone?: string | null
-          studio_id: string
-          updated_at?: string
-        }
+          created_at?: string;
+          email: string;
+          first_name: string;
+          id?: string;
+          last_name: string;
+          phone?: string | null;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          created_at?: string
-          email?: string
-          first_name?: string
-          id?: string
-          last_name?: string
-          phone?: string | null
-          studio_id?: string
-          updated_at?: string
-        }
+          created_at?: string;
+          email?: string;
+          first_name?: string;
+          id?: string;
+          last_name?: string;
+          phone?: string | null;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "clients_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'clients_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       locations: {
         Row: {
-          address: string | null
-          available_from: string | null
-          available_until: string | null
-          created_at: string
-          description: string | null
-          id: string
-          is_active: boolean
-          is_public: boolean
-          location_type: string
-          maps_url: string | null
-          max_booking_advance_days: number
-          name: string
-          reopens_on: string | null
-          studio_id: string
-          unavailable_message: string | null
-          updated_at: string
-        }
+          address: string | null;
+          available_from: string | null;
+          available_until: string | null;
+          created_at: string;
+          description: string | null;
+          id: string;
+          is_active: boolean;
+          is_public: boolean;
+          location_type: string;
+          maps_url: string | null;
+          max_booking_advance_days: number;
+          name: string;
+          reopens_on: string | null;
+          studio_id: string;
+          unavailable_message: string | null;
+          updated_at: string;
+        };
         Insert: {
-          address?: string | null
-          available_from?: string | null
-          available_until?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_active?: boolean
-          is_public?: boolean
-          location_type?: string
-          maps_url?: string | null
-          max_booking_advance_days?: number
-          name: string
-          reopens_on?: string | null
-          studio_id: string
-          unavailable_message?: string | null
-          updated_at?: string
-        }
+          address?: string | null;
+          available_from?: string | null;
+          available_until?: string | null;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_public?: boolean;
+          location_type?: string;
+          maps_url?: string | null;
+          max_booking_advance_days?: number;
+          name: string;
+          reopens_on?: string | null;
+          studio_id: string;
+          unavailable_message?: string | null;
+          updated_at?: string;
+        };
         Update: {
-          address?: string | null
-          available_from?: string | null
-          available_until?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_active?: boolean
-          is_public?: boolean
-          location_type?: string
-          maps_url?: string | null
-          max_booking_advance_days?: number
-          name?: string
-          reopens_on?: string | null
-          studio_id?: string
-          unavailable_message?: string | null
-          updated_at?: string
-        }
+          address?: string | null;
+          available_from?: string | null;
+          available_until?: string | null;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_public?: boolean;
+          location_type?: string;
+          maps_url?: string | null;
+          max_booking_advance_days?: number;
+          name?: string;
+          reopens_on?: string | null;
+          studio_id?: string;
+          unavailable_message?: string | null;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "locations_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'locations_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       pricing_sets: {
         Row: {
-          created_at: string
-          deposit_amount: number
-          estimated_duration_min: number
-          id: string
-          max_price: number
-          min_price: number
-          name: string
-          studio_id: string
-          target_type: string
-          tiers: Json
-          updated_at: string
-        }
+          created_at: string;
+          deposit_amount: number;
+          estimated_duration_min: number;
+          id: string;
+          max_price: number;
+          min_price: number;
+          name: string;
+          studio_id: string;
+          target_type: string;
+          tiers: Json;
+          updated_at: string;
+        };
         Insert: {
-          created_at?: string
-          deposit_amount: number
-          estimated_duration_min?: number
-          id?: string
-          max_price: number
-          min_price: number
-          name: string
-          studio_id: string
-          target_type?: string
-          tiers?: Json
-          updated_at?: string
-        }
+          created_at?: string;
+          deposit_amount: number;
+          estimated_duration_min?: number;
+          id?: string;
+          max_price: number;
+          min_price: number;
+          name: string;
+          studio_id: string;
+          target_type?: string;
+          tiers?: Json;
+          updated_at?: string;
+        };
         Update: {
-          created_at?: string
-          deposit_amount?: number
-          estimated_duration_min?: number
-          id?: string
-          max_price?: number
-          min_price?: number
-          name?: string
-          studio_id?: string
-          target_type?: string
-          tiers?: Json
-          updated_at?: string
-        }
+          created_at?: string;
+          deposit_amount?: number;
+          estimated_duration_min?: number;
+          id?: string;
+          max_price?: number;
+          min_price?: number;
+          name?: string;
+          studio_id?: string;
+          target_type?: string;
+          tiers?: Json;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "pricing_sets_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'pricing_sets_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       schedule_overrides: {
         Row: {
-          artist_id: string
-          created_at: string
-          id: string
-          intervals: Json
-          is_active: boolean
-          location_id: string
-          override_date: string
-          studio_id: string
-          updated_at: string
-        }
+          artist_id: string;
+          created_at: string;
+          id: string;
+          intervals: Json;
+          is_active: boolean;
+          location_id: string;
+          override_date: string;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          artist_id: string
-          created_at?: string
-          id?: string
-          intervals?: Json
-          is_active: boolean
-          location_id: string
-          override_date: string
-          studio_id: string
-          updated_at?: string
-        }
+          artist_id: string;
+          created_at?: string;
+          id?: string;
+          intervals?: Json;
+          is_active: boolean;
+          location_id: string;
+          override_date: string;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          artist_id?: string
-          created_at?: string
-          id?: string
-          intervals?: Json
-          is_active?: boolean
-          location_id?: string
-          override_date?: string
-          studio_id?: string
-          updated_at?: string
-        }
+          artist_id?: string;
+          created_at?: string;
+          id?: string;
+          intervals?: Json;
+          is_active?: boolean;
+          location_id?: string;
+          override_date?: string;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "schedule_overrides_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
+            foreignKeyName: 'schedule_overrides_artist_id_fkey';
+            columns: ['artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "schedule_overrides_artist_same_studio_fkey"
-            columns: ["studio_id", "artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'schedule_overrides_artist_same_studio_fkey';
+            columns: ['studio_id', 'artist_id'];
+            isOneToOne: false;
+            referencedRelation: 'artists';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "schedule_overrides_location_id_fkey1"
-            columns: ["location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
+            foreignKeyName: 'schedule_overrides_location_id_fkey1';
+            columns: ['location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "schedule_overrides_location_same_studio_fkey"
-            columns: ["studio_id", "location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["studio_id", "id"]
+            foreignKeyName: 'schedule_overrides_location_same_studio_fkey';
+            columns: ['studio_id', 'location_id'];
+            isOneToOne: false;
+            referencedRelation: 'locations';
+            referencedColumns: ['studio_id', 'id'];
           },
           {
-            foreignKeyName: "schedule_overrides_studio_id_fkey1"
-            columns: ["studio_id"]
-            isOneToOne: false
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'schedule_overrides_studio_id_fkey1';
+            columns: ['studio_id'];
+            isOneToOne: false;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       studio_billing: {
         Row: {
-          created_at: string
-          current_period_end: string | null
-          stripe_customer_id: string | null
-          stripe_price_id: string | null
-          stripe_subscription_id: string | null
-          stripe_subscription_status: string | null
-          studio_id: string
-          updated_at: string
-        }
+          created_at: string;
+          current_period_end: string | null;
+          stripe_customer_id: string | null;
+          stripe_price_id: string | null;
+          stripe_subscription_id: string | null;
+          stripe_subscription_status: string | null;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          created_at?: string
-          current_period_end?: string | null
-          stripe_customer_id?: string | null
-          stripe_price_id?: string | null
-          stripe_subscription_id?: string | null
-          stripe_subscription_status?: string | null
-          studio_id: string
-          updated_at?: string
-        }
+          created_at?: string;
+          current_period_end?: string | null;
+          stripe_customer_id?: string | null;
+          stripe_price_id?: string | null;
+          stripe_subscription_id?: string | null;
+          stripe_subscription_status?: string | null;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          created_at?: string
-          current_period_end?: string | null
-          stripe_customer_id?: string | null
-          stripe_price_id?: string | null
-          stripe_subscription_id?: string | null
-          stripe_subscription_status?: string | null
-          studio_id?: string
-          updated_at?: string
-        }
+          created_at?: string;
+          current_period_end?: string | null;
+          stripe_customer_id?: string | null;
+          stripe_price_id?: string | null;
+          stripe_subscription_id?: string | null;
+          stripe_subscription_status?: string | null;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "studio_billing_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: true
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'studio_billing_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: true;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       studio_settings: {
         Row: {
-          client_communication_settings: Json
-          created_at: string
-          studio_id: string
-          updated_at: string
-        }
+          client_communication_settings: Json;
+          created_at: string;
+          studio_id: string;
+          updated_at: string;
+        };
         Insert: {
-          client_communication_settings?: Json
-          created_at?: string
-          studio_id: string
-          updated_at?: string
-        }
+          client_communication_settings?: Json;
+          created_at?: string;
+          studio_id: string;
+          updated_at?: string;
+        };
         Update: {
-          client_communication_settings?: Json
-          created_at?: string
-          studio_id?: string
-          updated_at?: string
-        }
+          client_communication_settings?: Json;
+          created_at?: string;
+          studio_id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "studio_settings_studio_id_fkey"
-            columns: ["studio_id"]
-            isOneToOne: true
-            referencedRelation: "studios"
-            referencedColumns: ["id"]
+            foreignKeyName: 'studio_settings_studio_id_fkey';
+            columns: ['studio_id'];
+            isOneToOne: true;
+            referencedRelation: 'studios';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
       studios: {
         Row: {
-          avatar_url: string | null
-          bio: string | null
-          created_at: string
-          currency: string
-          id: string
-          name: string
-          payment_instructions: Json
-          slug: string
-          social_links: Json
-          theme: Json
-          updated_at: string
-        }
+          avatar_url: string | null;
+          bio: string | null;
+          created_at: string;
+          currency: string;
+          id: string;
+          name: string;
+          payment_instructions: Json;
+          slug: string;
+          social_links: Json;
+          theme: Json;
+          updated_at: string;
+        };
         Insert: {
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          currency: string
-          id?: string
-          name: string
-          payment_instructions?: Json
-          slug: string
-          social_links?: Json
-          theme?: Json
-          updated_at?: string
-        }
+          avatar_url?: string | null;
+          bio?: string | null;
+          created_at?: string;
+          currency: string;
+          id?: string;
+          name: string;
+          payment_instructions?: Json;
+          slug: string;
+          social_links?: Json;
+          theme?: Json;
+          updated_at?: string;
+        };
         Update: {
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          currency?: string
-          id?: string
-          name?: string
-          payment_instructions?: Json
-          slug?: string
-          social_links?: Json
-          theme?: Json
-          updated_at?: string
-        }
-        Relationships: []
-      }
-    }
+          avatar_url?: string | null;
+          bio?: string | null;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          name?: string;
+          payment_instructions?: Json;
+          slug?: string;
+          social_links?: Json;
+          theme?: Json;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
       complete_onboarding: {
         Args: {
-          p_currency: string
-          p_display_name: string
-          p_studio_name: string
-          p_studio_slug: string
-        }
+          p_currency: string;
+          p_display_name: string;
+          p_studio_name: string;
+          p_studio_slug: string;
+        };
         Returns: {
-          artist_id: string
-          studio_id: string
-        }[]
-      }
-    }
+          artist_id: string;
+          studio_id: string;
+        }[];
+      };
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof (DefaultSchema['Tables'] & DefaultSchema['Views']) | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+      Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Insert: infer I;
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Update: infer U;
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
+  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums'] | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
     : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema['CompositeTypes'] | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    : never;
 
 export const Constants = {
   graphql_public: {
@@ -1123,4 +1107,4 @@ export const Constants = {
   public: {
     Enums: {},
   },
-} as const
+} as const;
