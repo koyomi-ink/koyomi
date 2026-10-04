@@ -5,11 +5,7 @@ import { requireAuth } from '@/libs/auth/require-auth';
 export async function getMainProfile(studioSlug: string) {
   const { supabase } = await requireAuth();
 
-  const { data, error } = await supabase
-    .from('studios')
-    .select('id, name, slug, bio')
-    .eq('slug', studioSlug)
-    .single();
+  const { data, error } = await supabase.from('studios').select('id, name, slug, bio').eq('slug', studioSlug).single();
 
   if (error || !data) {
     console.error('Failed to load main profile:', {

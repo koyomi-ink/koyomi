@@ -1,13 +1,6 @@
-import {
-  describe,
-  expect,
-  it,
-} from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import {
-  onboardingSchema,
-  supportedCurrencies,
-} from './onboarding';
+import { onboardingSchema, supportedCurrencies } from './onboarding';
 
 describe('onboardingSchema', () => {
   const validInput = {
@@ -18,8 +11,7 @@ describe('onboardingSchema', () => {
   };
 
   it('accepts valid onboarding information', () => {
-    const result =
-      onboardingSchema.safeParse(validInput);
+    const result = onboardingSchema.safeParse(validInput);
 
     expect(result.success).toBe(true);
   });
@@ -38,17 +30,11 @@ describe('onboardingSchema', () => {
       return;
     }
 
-    expect(result.data.displayName).toBe(
-      'Sarah'
-    );
+    expect(result.data.displayName).toBe('Sarah');
 
-    expect(result.data.studioName).toBe(
-      'Swallow Studio'
-    );
+    expect(result.data.studioName).toBe('Swallow Studio');
 
-    expect(result.data.studioSlug).toBe(
-      'swallow-studio'
-    );
+    expect(result.data.studioSlug).toBe('swallow-studio');
   });
 
   it('normalizes the studio slug to lowercase', () => {
@@ -63,9 +49,7 @@ describe('onboardingSchema', () => {
       return;
     }
 
-    expect(result.data.studioSlug).toBe(
-      'swallow-studio'
-    );
+    expect(result.data.studioSlug).toBe('swallow-studio');
   });
 
   it('rejects an empty display name', () => {
@@ -95,18 +79,14 @@ describe('onboardingSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it.each(supportedCurrencies)(
-    'accepts supported currency %s',
-    (currency) => {
-      const result =
-        onboardingSchema.safeParse({
-          ...validInput,
-          currency,
-        });
+  it.each(supportedCurrencies)('accepts supported currency %s', (currency) => {
+    const result = onboardingSchema.safeParse({
+      ...validInput,
+      currency,
+    });
 
-      expect(result.success).toBe(true);
-    }
-  );
+    expect(result.success).toBe(true);
+  });
 
   it('rejects an unsupported currency', () => {
     const result = onboardingSchema.safeParse({

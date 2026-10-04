@@ -9,9 +9,7 @@ type SettingsRouteProps = {
   }>;
 };
 
-async function SettingsContent({
-  params,
-}: SettingsRouteProps) {
+async function SettingsContent({ params }: SettingsRouteProps) {
   const { studioSlug } = await params;
 
   const studio = await getMainProfile(studioSlug);
@@ -19,9 +17,7 @@ async function SettingsContent({
   return <SettingsPage studio={studio} />;
 }
 
-export default function Page({
-  params,
-}: SettingsRouteProps) {
+export default function Page({ params }: SettingsRouteProps) {
   return (
     <Suspense fallback={<div>Loading settings...</div>}>
       <SettingsContent params={params} />

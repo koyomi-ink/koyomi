@@ -16,7 +16,8 @@ export async function UserInfo() {
 
   const { data: artists, error: artistsError } = await supabase
     .from('artists')
-    .select(`
+    .select(
+      `
       id,
       display_name,
       role,
@@ -27,7 +28,8 @@ export async function UserInfo() {
         id,
         name
       )
-    `)
+    `,
+    )
     .eq('auth_user_id', userId);
 
   if (artistsError) {
@@ -37,10 +39,12 @@ export async function UserInfo() {
 
   return (
     <div>
-        <div>{user.email}</div>
+      <div>{user.email}</div>
       {artists.map((artist) => (
         <div key={artist.id}>
-          <div>{artist.display_name} @ {artist.studios?.name} as an {artist.role}</div>
+          <div>
+            {artist.display_name} @ {artist.studios?.name} as an {artist.role}
+          </div>
         </div>
       ))}
     </div>

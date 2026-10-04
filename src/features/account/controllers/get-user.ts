@@ -1,10 +1,13 @@
 import { createSupabaseServerClient } from '@/libs/supabase/supabase-server-client';
 
-export async function getUserProfile(){
+export async function getUserProfile() {
   const supabase = await createSupabaseServerClient();
 
   // Step 1: Securely verify the session and get the Identity ID
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
   if (authError || !user) {
     return null; // Not logged in, or session expired
@@ -13,7 +16,8 @@ export async function getUserProfile(){
   // Step 2: Fetch the Koyomi-specific application profile
   const { data: profile, error: profileError } = await supabase
     .from('artists')
-    .select(`
+    .select(
+      `
       id,
       display_name,
       role,
@@ -23,7 +27,8 @@ export async function getUserProfile(){
         slug,
         currency
       )
-    `)
+    `,
+    )
     .eq('id', user.id)
     .single();
 

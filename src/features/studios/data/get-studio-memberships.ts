@@ -7,7 +7,8 @@ export async function getStudioMemberships() {
 
   const { data, error } = await supabase
     .from('artists')
-    .select(`
+    .select(
+      `
       id,
       role,
       studio_id,
@@ -16,7 +17,8 @@ export async function getStudioMemberships() {
         name,
         slug
       )
-    `)
+    `,
+    )
     .eq('auth_user_id', userId)
     .eq('is_active', true)
     .order('created_at', { ascending: true });

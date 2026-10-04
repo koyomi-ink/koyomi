@@ -50,23 +50,21 @@ describe('mainProfileSchema', () => {
     expect(result.success).toBe(false);
   });
 
-    it('normalizes uppercase characters in the slug', () => {
+  it('normalizes uppercase characters in the slug', () => {
     const result = mainProfileSchema.safeParse({
-        name: 'Swallow Studio',
-        slug: 'Swallow-Studio',
-        bio: '',
+      name: 'Swallow Studio',
+      slug: 'Swallow-Studio',
+      bio: '',
     });
 
     expect(result.success).toBe(true);
 
     if (!result.success) {
-        return;
+      return;
     }
 
-    expect(result.data.slug).toBe(
-        'swallow-studio'
-    );
-    });
+    expect(result.data.slug).toBe('swallow-studio');
+  });
 
   it('rejects unsupported slug characters', () => {
     const result = mainProfileSchema.safeParse({

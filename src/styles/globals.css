@@ -43,14 +43,8 @@
   --radius-sm: calc(var(--radius) - 4px);
 
   --font-sans:
-    var(--font-montserrat),
-    ui-sans-serif,
-    system-ui,
-    sans-serif,
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol',
-    'Noto Color Emoji';
+    var(--font-montserrat), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 
   --font-alt: var(--font-montserrat-alternates);
 
@@ -188,7 +182,7 @@
 
   body {
     min-height: 100vh;
-    @apply bg-background font-sans text-foreground antialiased;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 
   button,

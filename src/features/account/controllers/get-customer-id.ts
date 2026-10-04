@@ -1,15 +1,17 @@
+import 'server-only';
+
 import { supabaseAdminClient } from '@/libs/supabase/supabase-admin';
 
-export async function getStudioStripeId({ studioId }: { studioId: string }){
+export async function getStudioStripeId({ studioId }: { studioId: string }) {
   const { data, error } = await supabaseAdminClient
-    .from('studios')
+    .from('studio_billing')
     .select('stripe_customer_id')
-    .eq('id', studioId)
-    .single();
+    .eq('studio_id', studioId)
+    .maybeSingle();
 
   if (error) {
-    throw new Error('Error fetching stripe_customer_id for studio');
+    throw new Error('Error fetching Stripe customer ID for studio.');
   }
 
-  return data.stripe_customer_id;
+  return data?.stripe_customer_id ?? null;
 }

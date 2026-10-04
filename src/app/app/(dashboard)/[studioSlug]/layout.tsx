@@ -8,28 +8,16 @@ type StudioLayoutProps = PropsWithChildren<{
   }>;
 }>;
 
-async function StudioLayoutContent({
-  children,
-  params,
-}: StudioLayoutProps) {
+async function StudioLayoutContent({ children, params }: StudioLayoutProps) {
   const { studioSlug } = await params;
 
-  return (
-    <StudioContextGate studioSlug={studioSlug}>
-      {children}
-    </StudioContextGate>
-  );
+  return <StudioContextGate studioSlug={studioSlug}>{children}</StudioContextGate>;
 }
 
-export default function StudioLayout({
-  children,
-  params,
-}: StudioLayoutProps) {
+export default function StudioLayout({ children, params }: StudioLayoutProps) {
   return (
     <Suspense fallback={<div>Loading studio...</div>}>
-      <StudioLayoutContent params={params}>
-        {children}
-      </StudioLayoutContent>
+      <StudioLayoutContent params={params}>{children}</StudioLayoutContent>
     </Suspense>
   );
 }

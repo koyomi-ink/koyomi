@@ -1,28 +1,12 @@
-import {
-  type ReactNode,
-  useEffect,
-} from 'react';
+import { type ReactNode, useEffect } from 'react';
 
-import {
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 
 import userEvent from '@testing-library/user-event';
 
-import {
-  AppPanelProvider,
-  useAppPanel,
-} from './app-panel-provider';
+import { AppPanelProvider, useAppPanel } from './app-panel-provider';
 
 const mocks = vi.hoisted(() => ({
   push: vi.fn(),
@@ -35,20 +19,9 @@ vi.mock('next/navigation', () => ({
   }),
 }));
 
-function TestConsumer({
-  discardHandler,
-}: {
-  discardHandler?: () => void;
-}) {
-  const {
-    panel,
-    openPanel,
-    closePanel,
-    setPanelDirty,
-    setPanelSaving,
-    navigate,
-    registerDiscardHandler,
-  } = useAppPanel();
+function TestConsumer({ discardHandler }: { discardHandler?: () => void }) {
+  const { panel, openPanel, closePanel, setPanelDirty, setPanelSaving, navigate, registerDiscardHandler } =
+    useAppPanel();
 
   useEffect(() => {
     if (!discardHandler) {
@@ -60,10 +33,7 @@ function TestConsumer({
     return () => {
       registerDiscardHandler(null);
     };
-  }, [
-    discardHandler,
-    registerDiscardHandler,
-  ]);
+  }, [discardHandler, registerDiscardHandler]);
 
   function openTestPanel() {
     openPanel({
@@ -75,60 +45,28 @@ function TestConsumer({
 
   return (
     <div>
-      <div data-testid='panel-state'>
-        {panel?.title ?? 'No panel'}
-      </div>
+      <div data-testid='panel-state'>{panel?.title ?? 'No panel'}</div>
 
-      <button onClick={openTestPanel}>
-        Open panel
-      </button>
+      <button onClick={openTestPanel}>Open panel</button>
 
-      <button onClick={closePanel}>
-        Close panel
-      </button>
+      <button onClick={closePanel}>Close panel</button>
 
-      <button
-        onClick={() => setPanelDirty(true)}
-      >
-        Make dirty
-      </button>
+      <button onClick={() => setPanelDirty(true)}>Make dirty</button>
 
-      <button
-        onClick={() => setPanelDirty(false)}
-      >
-        Make clean
-      </button>
+      <button onClick={() => setPanelDirty(false)}>Make clean</button>
 
-      <button
-        onClick={() => setPanelSaving(true)}
-      >
-        Start saving
-      </button>
+      <button onClick={() => setPanelSaving(true)}>Start saving</button>
 
-      <button
-        onClick={() =>
-          navigate('/app/swallow-studio/bookings')
-        }
-      >
-        Go to bookings
-      </button>
+      <button onClick={() => navigate('/app/swallow-studio/bookings')}>Go to bookings</button>
     </div>
   );
 }
 
-function renderProvider(
-  options?: {
-    discardHandler?: () => void;
-  }
-) {
+function renderProvider(options?: { discardHandler?: () => void }) {
   return render(
     <AppPanelProvider>
-      <TestConsumer
-        discardHandler={
-          options?.discardHandler
-        }
-      />
-    </AppPanelProvider>
+      <TestConsumer discardHandler={options?.discardHandler} />
+    </AppPanelProvider>,
   );
 }
 
@@ -141,15 +79,9 @@ describe('AppPanelProvider', () => {
      * history entries. We don't want unit tests
      * mutating jsdom's actual history stack.
      */
-    vi.spyOn(
-      window.history,
-      'pushState'
-    ).mockImplementation(() => undefined);
+    vi.spyOn(window.history, 'pushState').mockImplementation(() => undefined);
 
-    vi.spyOn(
-      window.history,
-      'go'
-    ).mockImplementation(() => undefined);
+    vi.spyOn(window.history, 'go').mockImplementation(() => undefined);
   });
 
   it('opens and closes a clean panel immediately', async () => {
@@ -160,26 +92,20 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Open panel',
-      })
+      }),
     );
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('Main profile');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('Main profile');
 
     await user.click(
       screen.getByRole('button', {
         name: 'Close panel',
-      })
+      }),
     );
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('No panel');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('No panel');
 
-    expect(
-      screen.queryByText('Discard changes?')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Discard changes?')).not.toBeInTheDocument();
   });
 
   it('asks for confirmation before closing a dirty panel', async () => {
@@ -190,28 +116,24 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Open panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Make dirty',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Close panel',
-      })
+      }),
     );
 
-    expect(
-      screen.getByText('Discard changes?')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Discard changes?')).toBeInTheDocument();
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('Main profile');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('Main profile');
   });
 
   it('keeps the panel open when Keep editing is chosen', async () => {
@@ -222,34 +144,30 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Open panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Make dirty',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Close panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Keep editing',
-      })
+      }),
     );
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('Main profile');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('Main profile');
 
-    expect(
-      screen.queryByText('Discard changes?')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Discard changes?')).not.toBeInTheDocument();
   });
 
   it('discards changes and closes the panel after confirmation', async () => {
@@ -262,34 +180,30 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Open panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Make dirty',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Close panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Discard changes',
-      })
+      }),
     );
 
-    expect(
-      mocks.discard
-    ).toHaveBeenCalledTimes(1);
+    expect(mocks.discard).toHaveBeenCalledTimes(1);
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('No panel');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('No panel');
   });
 
   it('closes an open clean panel when navigating', async () => {
@@ -300,22 +214,18 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Open panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Go to bookings',
-      })
+      }),
     );
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('No panel');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('No panel');
 
-    expect(mocks.push).toHaveBeenCalledWith(
-      '/app/swallow-studio/bookings'
-    );
+    expect(mocks.push).toHaveBeenCalledWith('/app/swallow-studio/bookings');
   });
 
   it('guards navigation when the panel is dirty', async () => {
@@ -328,44 +238,36 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Open panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Make dirty',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Go to bookings',
-      })
+      }),
     );
 
     expect(mocks.push).not.toHaveBeenCalled();
 
-    expect(
-      screen.getByText('Discard changes?')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Discard changes?')).toBeInTheDocument();
 
     await user.click(
       screen.getByRole('button', {
         name: 'Discard changes',
-      })
+      }),
     );
 
-    expect(
-      mocks.discard
-    ).toHaveBeenCalledTimes(1);
+    expect(mocks.discard).toHaveBeenCalledTimes(1);
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('No panel');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('No panel');
 
-    expect(mocks.push).toHaveBeenCalledWith(
-      '/app/swallow-studio/bookings'
-    );
+    expect(mocks.push).toHaveBeenCalledWith('/app/swallow-studio/bookings');
   });
 
   it('blocks panel changes while saving', async () => {
@@ -376,28 +278,24 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Open panel',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Start saving',
-      })
+      }),
     );
 
     await user.click(
       screen.getByRole('button', {
         name: 'Close panel',
-      })
+      }),
     );
 
-    expect(
-      screen.getByTestId('panel-state')
-    ).toHaveTextContent('Main profile');
+    expect(screen.getByTestId('panel-state')).toHaveTextContent('Main profile');
 
-    expect(
-      screen.queryByText('Discard changes?')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Discard changes?')).not.toBeInTheDocument();
   });
 
   it('protects browser unload while dirty', async () => {
@@ -408,22 +306,17 @@ describe('AppPanelProvider', () => {
     await user.click(
       screen.getByRole('button', {
         name: 'Make dirty',
-      })
+      }),
     );
 
-    const event = new Event(
-      'beforeunload',
-      {
-        cancelable: true,
-      }
-    );
+    const event = new Event('beforeunload', {
+      cancelable: true,
+    });
 
     window.dispatchEvent(event);
 
     await waitFor(() => {
-      expect(event.defaultPrevented).toBe(
-        true
-      );
+      expect(event.defaultPrevented).toBe(true);
     });
   });
 });

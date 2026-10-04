@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     // 4. ARTIST ROUTING
     if (artistRecord) {
       const hasCompletedOnboarding = artistRecord.studios?.slug;
-      
+
       if (!hasCompletedOnboarding) {
         // Send new artists to claim their slug and set up their studio
         return NextResponse.redirect(`${siteUrl}/onboarding`);
@@ -47,11 +47,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 5. CLIENT ROUTING (If they are not an artist)
-    const { data: clientRecord } = await supabase
-      .from('clients')
-      .select('id')
-      .eq('email', user.email)
-      .maybeSingle();
+    const { data: clientRecord } = await supabase.from('clients').select('id').eq('email', user.email).maybeSingle();
 
     if (clientRecord) {
       // Send returning clients directly to their portal

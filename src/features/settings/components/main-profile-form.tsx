@@ -25,9 +25,7 @@ type MainProfileFormProps = {
   studio: StudioProfile;
 };
 
-export function MainProfileForm({
-  studio,
-}: MainProfileFormProps) {
+export function MainProfileForm({ studio }: MainProfileFormProps) {
   const router = useRouter();
 
   const [saved, setSaved] = useState(studio);
@@ -39,16 +37,9 @@ export function MainProfileForm({
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const {
-    setPanelDirty,
-    setPanelSaving,
-    registerDiscardHandler,
-  } = useAppPanel();
+  const { setPanelDirty, setPanelSaving, registerDiscardHandler } = useAppPanel();
 
-  const hasChanges =
-    name !== saved.name ||
-    slug !== saved.slug ||
-    bio !== (saved.bio ?? '');
+  const hasChanges = name !== saved.name || slug !== saved.slug || bio !== (saved.bio ?? '');
 
   useEffect(() => {
     setPanelDirty(hasChanges);
@@ -91,18 +82,12 @@ export function MainProfileForm({
     });
 
     if (!parsed.success) {
-      setError(
-        parsed.error.issues[0]?.message ??
-          'Please check your information.'
-      );
+      setError(parsed.error.issues[0]?.message ?? 'Please check your information.');
       return;
     }
 
     startTransition(async () => {
-      const result = await updateMainProfile(
-        saved.id,
-        parsed.data
-      );
+      const result = await updateMainProfile(saved.id, parsed.data);
 
       if (result.error) {
         setError(result.error);
@@ -127,9 +112,7 @@ export function MainProfileForm({
         setPanelDirty(false);
         setPanelSaving(false);
 
-        window.location.replace(
-          `/app/${updatedStudio.slug}/settings`
-        );
+        window.location.replace(`/app/${updatedStudio.slug}/settings`);
         return;
       }
       router.refresh();
@@ -140,88 +123,60 @@ export function MainProfileForm({
     <div className='flex min-h-full flex-col gap-6'>
       <div className='space-y-6'>
         <div className='space-y-2'>
-          <Label htmlFor='studio-name'>
-            Studio name
-          </Label>
+          <Label htmlFor='studio-name'>Studio name</Label>
 
           <Input
             id='studio-name'
             value={name}
-            onChange={(event) =>
-              setName(event.target.value)
-            }
+            onChange={(event) => setName(event.target.value)}
             maxLength={100}
             disabled={isPending}
           />
         </div>
 
         <div className='space-y-2'>
-          <Label htmlFor='studio-slug'>
-            Booking link
-          </Label>
+          <Label htmlFor='studio-slug'>Booking link</Label>
 
           <div className='flex items-center gap-2'>
-            <span className='shrink-0 text-sm text-muted-foreground'>
-              koyomi.ink/
-            </span>
+            <span className='text-muted-foreground shrink-0 text-sm'>koyomi.ink/</span>
 
-          <Input
-            id='studio-slug'
-            value={slug}
-            onChange={(event) =>
-              setSlug(
-                formatSlugInput(event.target.value)
-              )
-            }
-            maxLength={50}
-            disabled={isPending}
-          />
+            <Input
+              id='studio-slug'
+              value={slug}
+              onChange={(event) => setSlug(formatSlugInput(event.target.value))}
+              maxLength={50}
+              disabled={isPending}
+            />
           </div>
 
-          <p className='text-xs text-muted-foreground'>
-            Changing this will change your public booking URL.
-          </p>
+          <p className='text-muted-foreground text-xs'>Changing this will change your public booking URL.</p>
         </div>
 
         <div className='space-y-2'>
-          <Label htmlFor='studio-bio'>
-            Description
-          </Label>
+          <Label htmlFor='studio-bio'>Description</Label>
 
           <Textarea
             id='studio-bio'
             value={bio}
-            onChange={(event) =>
-              setBio(event.target.value)
-            }
+            onChange={(event) => setBio(event.target.value)}
             maxLength={50}
             rows={5}
             disabled={isPending}
           />
 
-          <p className='text-right text-xs text-muted-foreground'>
-            {bio.length}/50
-          </p>
+          <p className='text-muted-foreground text-right text-xs'>{bio.length}/50</p>
         </div>
 
         {error && (
-          <p
-            role='alert'
-            className='text-sm text-destructive'
-          >
+          <p role='alert' className='text-destructive text-sm'>
             {error}
           </p>
         )}
       </div>
 
       {hasChanges && (
-        <div className='sticky bottom-0 z-10 mt-auto bg-background pt-3'>
-          <UnsavedChangesBar
-            visible={hasChanges}
-            saving={isPending}
-            onSave={handleSave}
-            onCancel={resetForm}
-          />
+        <div className='bg-background sticky bottom-0 z-10 mt-auto pt-3'>
+          <UnsavedChangesBar visible={hasChanges} saving={isPending} onSave={handleSave} onCancel={resetForm} />
         </div>
       )}
     </div>

@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature') as string;
   const webhookSecret = getEnvVar(process.env.STRIPE_WEBHOOK_SECRET, 'STRIPE_WEBHOOK_SECRET');
-  
+
   let event: Stripe.Event;
 
   try {
@@ -64,6 +64,6 @@ export async function POST(req: Request) {
       });
     }
   }
-  
+
   return Response.json({ received: true });
 }

@@ -15,13 +15,9 @@ export function AppPanelTest() {
           title: 'Drawer',
           content: (
             <div className='space-y-4'>
-              <p className='text-sm text-muted-foreground'>
-                Drawer test
-              </p>
+              <p className='text-muted-foreground text-sm'>Drawer test</p>
 
-              <div className='rounded-lg border p-4'>
-                fdslkjfdlskj
-              </div>
+              <div className='rounded-lg border p-4'>fdslkjfdlskj</div>
             </div>
           ),
         })

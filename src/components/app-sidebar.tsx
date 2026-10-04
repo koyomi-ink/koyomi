@@ -56,10 +56,7 @@ type AppSidebarProps = {
   memberships: StudioMembership[];
 };
 
-export function AppSidebar({
-  currentStudio,
-  memberships,
-}: AppSidebarProps) {
+export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
   const menuItems = [
     {
       title: 'Home',
@@ -103,18 +100,16 @@ export function AppSidebar({
     },
   ];
 
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   async function handleCopyBookingUrl() {
-    await navigator.clipboard.writeText(
-      `https://koyomi.ink/${currentStudio.slug}`
-    )
+    await navigator.clipboard.writeText(`https://koyomi.ink/${currentStudio.slug}`);
 
-    setCopied(true)
+    setCopied(true);
 
     window.setTimeout(() => {
-      setCopied(false)
-    }, 2000)
+      setCopied(false);
+    }, 2000);
   }
 
   return (
@@ -124,31 +119,20 @@ export function AppSidebar({
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size='lg'
-                  className='data-[state=open]:bg-sidebar-accent'
-                >
+                <SidebarMenuButton size='lg' className='data-[state=open]:bg-sidebar-accent'>
                   <div className='flex aspect-square size-8 items-center justify-center rounded-lg border'>
                     {currentStudio.name.charAt(0).toUpperCase()}
                   </div>
 
                   <div className='grid flex-1 text-left text-sm leading-tight'>
-                    <span className='truncate font-semibold'>
-                      {currentStudio.name}
-                    </span>
-
+                    <span className='truncate font-semibold'>{currentStudio.name}</span>
                   </div>
 
                   <ChevronsUpDown className='ml-auto' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent
-                className='min-w-56'
-                align='start'
-                side='bottom'
-                sideOffset={4}
-              >
+              <DropdownMenuContent className='min-w-56' align='start' side='bottom' sideOffset={4}>
                 <DropdownMenuLabel>Studios</DropdownMenuLabel>
 
                 {memberships.map((membership) => {
@@ -157,20 +141,13 @@ export function AppSidebar({
                   }
 
                   return (
-                    <DropdownMenuItem
-                      key={membership.id}
-                      asChild
-                    >
+                    <DropdownMenuItem key={membership.id} asChild>
                       <GuardedLink href={`/app/${membership.studios.slug}`}>
                         <div className='flex size-6 items-center justify-center rounded-md border'>
-                          {membership.studios.name
-                            .charAt(0)
-                            .toUpperCase()}
+                          {membership.studios.name.charAt(0).toUpperCase()}
                         </div>
 
-                        <span>
-                          {membership.studios.name}
-                        </span>
+                        <span>{membership.studios.name}</span>
                       </GuardedLink>
                     </DropdownMenuItem>
                   );
@@ -178,45 +155,29 @@ export function AppSidebar({
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem disabled>
-                  Add studio
-                </DropdownMenuItem>
+                <DropdownMenuItem disabled>Add studio</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
             <div className='flex items-center gap-1'>
-              <SidebarMenuButton
-                asChild
-                tooltip='Open digital hub'
-                className='min-w-0 flex-1'
-              >
-                <Link
-                  href={`/${currentStudio.slug}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
+              <SidebarMenuButton asChild tooltip='Open digital hub' className='min-w-0 flex-1'>
+                <Link href={`/${currentStudio.slug}`} target='_blank' rel='noopener noreferrer'>
                   <ExternalLink />
 
-                  <span className='truncate'>
-                    koyomi.ink/{currentStudio.slug}
-                  </span>
+                  <span className='truncate'>koyomi.ink/{currentStudio.slug}</span>
                 </Link>
               </SidebarMenuButton>
 
               <button
                 type='button'
                 onClick={handleCopyBookingUrl}
-                className='flex size-8 shrink-0 items-center justify-center rounded-md hover:bg-sidebar-accent group-data-[collapsible=icon]:hidden'
+                className='hover:bg-sidebar-accent flex size-8 shrink-0 items-center justify-center rounded-md group-data-[collapsible=icon]:hidden'
                 aria-label='Copy booking URL'
                 title={copied ? 'Copied!' : 'Copy booking URL'}
               >
-                {copied ? (
-                  <Check className='size-4' />
-                ) : (
-                  <Copy className='size-4' />
-                )}
+                {copied ? <Check className='size-4' /> : <Copy className='size-4' />}
               </button>
             </div>
           </SidebarMenuItem>
@@ -229,10 +190,7 @@ export function AppSidebar({
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.title}
-                  >
+                  <SidebarMenuButton asChild tooltip={item.title}>
                     <GuardedLink href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
