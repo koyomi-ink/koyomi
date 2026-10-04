@@ -8,7 +8,6 @@ import { getStudioMemberships } from '@/features/studios/data/get-studio-members
 import { getCurrentStudio } from '@/features/studios/data/get-current-studio';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
-import { AppPanel } from '@/components/app-panel/app-panel';
 import { AppPanelProvider } from '@/components/app-panel/app-panel-provider';
 import { AppShell } from '@/components/app-shell/app-shell';
 
