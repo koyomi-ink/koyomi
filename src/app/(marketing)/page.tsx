@@ -3,6 +3,8 @@ import { Dela_Gothic_One, Prompt, Source_Code_Pro } from 'next/font/google';
 import { MarketingHeader } from '@/components/marketing/marketing-header';
 import { HeroSection } from '@/components/marketing/hero-section';
 import { HowItWorksSection } from '@/components/marketing/how-it-works-section';
+import { ClientJourneySection } from '@/components/marketing/client-journey-section';
+import { SignupCTASection } from '@/components/marketing/signup-cta-section';
 
 const sourceCodePro = Source_Code_Pro({
   subsets: ['latin'],
@@ -47,14 +49,12 @@ export default function HomePage() {
       <main>
         <HeroSection />
 
-        <section id='how-it-works' data-marketing-section>
-          <HeroToHowItWorksCurve />
-          <HowItWorksSection />
-        </section>
+        <HeroToHowItWorksCurve />
+        <HowItWorksSection />
 
-        <section id='client-journey' data-marketing-section>
-          Client journey
-        </section>
+        <ClientJourneySection />
+
+        <SignupCTASection />
 
         <section id='features' data-marketing-section>
           Features
