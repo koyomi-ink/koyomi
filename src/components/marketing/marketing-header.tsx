@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { MobileNavigation } from './mobile-navigation';
 import { marketingNavigation } from './marketing-navigation';
+import { MarketingNavLink } from './marketing-nav-link';
 
 const navigationLinkClassName =
   'rounded-md px-2 py-2 font-marketing-mono text-sm font-medium text-[var(--marketing-ink)] transition-colors hover:text-[var(--marketing-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)]';
@@ -14,19 +15,19 @@ export function MarketingHeader() {
         aria-label='Main navigation'
         className='mx-auto flex h-16 w-full max-w-[1600px] items-center gap-6 rounded-full bg-[var(--marketing-background)]/95 px-4 backdrop-blur md:px-6'
       >
-        <Link
-          href='/'
-          aria-label=''
+        <MarketingNavLink
+          href='/#home'
+          aria-label='Koyomi home'
           className='shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:outline-none'
         >
-          <Image src='/nav logo.png' alt='Koyomi' width={190} height={48} priority className='h-10 w-auto' />
-        </Link>
+          <Image src='/logo-extended-red.png' alt='Koyomi' width={190} height={48} priority className='h-10 w-auto' />
+        </MarketingNavLink>
 
         <div className='hidden min-w-0 flex-1 items-center gap-1 lg:flex'>
           {marketingNavigation.map((item) => (
-            <Link key={item.href} href={item.href} className={navigationLinkClassName}>
+            <MarketingNavLink key={item.href} href={item.href} className={navigationLinkClassName}>
               {item.label}
-            </Link>
+            </MarketingNavLink>
           ))}
         </div>
 

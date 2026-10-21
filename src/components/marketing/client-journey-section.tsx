@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 import { MarketingContainer } from './marketing-container';
+import Link from 'next/link';
 
 const journeys = [
   {
@@ -99,6 +100,18 @@ export function ClientJourneySection() {
               sizes='(max-width: 768px) 100vw, 672px'
               className='h-auto w-full'
             />
+          </div>
+          <div className='mt-12 flex flex-col items-center gap-3 sm:mt-9'>
+            <Link
+              href='/demo'
+              className='font-marketing-body inline-flex min-w-64 items-center justify-center rounded-full bg-[var(--marketing-accent)] px-8 py-3 font-semibold text-white shadow-[0_6px_0_var(--marketing-dark)] transition-all hover:translate-y-[2px] hover:shadow-[0_4px_0_var(--marketing-dark)] active:translate-y-[6px] active:shadow-none'
+            >
+              Try out demo
+            </Link>
+
+            <p className='font-marketing-body text-sm text-[var(--marketing-ink)]/65'>
+              See what your clients will experience · No registration needed
+            </p>
           </div>
         </div>
       </MarketingContainer>

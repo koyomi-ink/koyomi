@@ -5,7 +5,7 @@ import { MarketingContainer } from './marketing-container';
 
 export function HeroSection() {
   return (
-    <section className='overflow-hidden pt-20 pb-10 sm:pt-24 lg:pt-28 lg:pb-10'>
+    <section id='home' className='overflow-hidden pt-20 pb-10 sm:pt-24 lg:pt-28 lg:pb-10'>
       <MarketingContainer>
         <div className='mx-auto flex max-w-5xl flex-col items-center text-center'>
           <p className='font-marketing-mono text-sm font-semibold tracking-wide text-[var(--marketing-blue)] sm:text-base'>
@@ -46,7 +46,7 @@ export function HeroSection() {
             />
           </div>
 
-          <div className='mt-12 flex flex-col items-center gap-3 sm:mt-16'>
+          <div className='mt-12 flex flex-col items-center gap-3 sm:mt-5'>
             <Link
               href='/signup'
               className='font-marketing-body inline-flex min-w-64 items-center justify-center rounded-full bg-[var(--marketing-accent)] px-8 py-3 font-semibold text-white shadow-[0_6px_0_var(--marketing-dark)] transition-all hover:translate-y-[2px] hover:shadow-[0_4px_0_var(--marketing-dark)] active:translate-y-[6px] active:shadow-none'

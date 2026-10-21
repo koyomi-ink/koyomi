@@ -95,7 +95,7 @@ export function AuthUI({ mode, authenticateWithOAuth, authenticateWithEmail, ini
           aria-label='Koyomi home'
           className='shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:outline-none'
         >
-          <Image src='/nav logo.png' alt='Koyomi' width={190} height={48} priority className='h-10 w-auto' />
+          <Image src='/logo-extended-red.png' alt='Koyomi' width={190} height={48} priority className='h-10 w-auto' />
         </Link>
 
         <h1 className='mt-6 text-2xl font-semibold tracking-tight'>{content[mode].title}</h1>

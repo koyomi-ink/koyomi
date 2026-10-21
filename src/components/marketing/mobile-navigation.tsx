@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 
 import { marketingNavigation } from './marketing-navigation';
+import { MarketingNavLink } from './marketing-nav-link';
 
 export function MobileNavigation() {
   return (
@@ -36,12 +37,12 @@ export function MobileNavigation() {
           <div className='flex flex-col'>
             {marketingNavigation.map((item) => (
               <SheetClose key={item.href} asChild>
-                <Link
+                <MarketingNavLink
                   href={item.href}
-                  className='rounded-md px-3 py-3 text-base font-medium text-[var(--marketing-ink)] transition-colors hover:bg-black/5 focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:outline-none'
+                  className='font-marketing-mono rounded-md px-3 py-3 text-base font-medium text-[var(--marketing-ink)] transition-colors hover:bg-black/5 focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:outline-none'
                 >
                   {item.label}
-                </Link>
+                </MarketingNavLink>
               </SheetClose>
             ))}
           </div>

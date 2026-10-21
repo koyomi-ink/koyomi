@@ -13,7 +13,7 @@ export function SignupCTASection() {
             </h2>
 
             <p className='font-marketing-body mt-6 max-w-2xl text-base leading-7 text-white/85 sm:text-lg'>
-              No fixed fees or setup fees, only pay when you start booking.
+              No fixed fees or setup fees, only pay when you complete appointments.
             </p>
 
             <Link
