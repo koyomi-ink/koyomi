@@ -42,7 +42,7 @@ export function HowItWorksSection() {
     <section
       id='how-it-works'
       data-marketing-section
-      className='bg-[var(--marketing-dark)] py-24 text-[#f3dfdc] sm:py-28 lg:py-10'
+      className='bg-[var(--marketing-dark)] py-24 text-[#f3dfdc] sm:py-28 lg:py-15'
     >
       <MarketingContainer>
         <div className='text-center'>
