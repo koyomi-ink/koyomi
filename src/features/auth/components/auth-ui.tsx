@@ -90,7 +90,13 @@ export function AuthUI({ mode, authenticateWithOAuth, authenticateWithEmail, ini
   return (
     <div className='bg-background w-full rounded-xl border p-6 shadow-sm sm:p-8'>
       <div className='flex flex-col items-center text-center'>
-        <Image src='/logo.png' width={56} height={56} alt='Koyomi' priority />
+        <Link
+          href='/'
+          aria-label='Koyomi home'
+          className='shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:outline-none'
+        >
+          <Image src='/nav logo.png' alt='Koyomi' width={190} height={48} priority className='h-10 w-auto' />
+        </Link>
 
         <h1 className='mt-6 text-2xl font-semibold tracking-tight'>{content[mode].title}</h1>
 

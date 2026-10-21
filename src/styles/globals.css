@@ -156,6 +156,10 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-marketing-body: var(--font-prompt);
+  --font-marketing-display: var(--font-dela-gothic);
+  --font-marketing-mono: var(--font-source-code-pro);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -226,4 +230,27 @@
   html {
     scroll-behavior: auto;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Marketing                                                                  */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  --marketing-background: #ead8d6;
+  --marketing-ink: #2c2b29;
+  --marketing-dark: #1c1b1c;
+
+  --marketing-accent: #782b2b;
+  --marketing-accent-hover: #782b2b;
+
+  --marketing-blue: #3d5f92;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+[data-marketing-section] {
+  scroll-margin-top: 6rem;
 }
