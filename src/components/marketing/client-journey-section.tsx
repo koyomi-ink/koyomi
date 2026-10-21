@@ -44,7 +44,7 @@ const journeys = [
 type JourneyId = (typeof journeys)[number]['id'];
 
 export function ClientJourneySection() {
-  const [selectedId, setSelectedId] = useState<JourneyId>('flash');
+  const [selectedId, setSelectedId] = useState<JourneyId>('learn-more');
 
   const selectedJourney = journeys.find((journey) => journey.id === selectedId) ?? journeys[0];
 
