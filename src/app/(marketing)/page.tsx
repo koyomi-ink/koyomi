@@ -5,6 +5,10 @@ import { HeroSection } from '@/components/marketing/hero-section';
 import { HowItWorksSection } from '@/components/marketing/how-it-works-section';
 import { ClientJourneySection } from '@/components/marketing/client-journey-section';
 import { SignupCTASection } from '@/components/marketing/signup-cta-section';
+import { FeaturesSection } from '@/components/marketing/features-section';
+import { PricingSection } from '@/components/marketing/pricing-section';
+import { ContactSection } from '@/components/marketing/contact-section';
+import { MarketingFooter } from '@/components/marketing/marketing-footer';
 
 const sourceCodePro = Source_Code_Pro({
   subsets: ['latin'],
@@ -54,19 +58,17 @@ export default function HomePage() {
 
         <ClientJourneySection />
 
+        <hr className='mx-auto my-8 w-[85%] max-w-5xl border-0 border-t border-[var(--marketing-accent)]/90' />
+
+        <FeaturesSection />
+
         <SignupCTASection />
 
-        <section id='features' data-marketing-section>
-          Features
-        </section>
+        <PricingSection />
 
-        <section id='pricing' data-marketing-section>
-          Pricing
-        </section>
+        <ContactSection />
 
-        <section id='contact' data-marketing-section>
-          Contact
-        </section>
+        <MarketingFooter />
       </main>
     </div>
   );
