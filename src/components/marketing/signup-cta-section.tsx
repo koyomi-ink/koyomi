@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { MarketingContainer } from './marketing-container';
 
+import { MarketingCTA } from './marketing-cta';
+
 export function SignupCTASection() {
   return (
     <section className='py-10'>
@@ -12,18 +14,18 @@ export function SignupCTASection() {
               Set up your account for free in 5 minutes.
             </h2>
 
-            <p className='font-marketing-body mt-6 max-w-2xl text-base leading-7 text-white/85 sm:text-lg'>
+            <p className='font-marketing-body mt-6 max-w-2xl text-base leading-7 text-white sm:text-lg'>
               No fixed fees or setup fees, only pay when you complete appointments.
             </p>
 
-            <Link
+            <MarketingCTA
               href='/signup'
-              className='font-marketing-body mt-10 inline-flex min-w-64 items-center justify-center rounded-full bg-[var(--marketing-accent)] px-8 py-3 font-semibold text-white shadow-[0_6px_0_var(--marketing-dark)] transition-all hover:translate-y-[2px] hover:shadow-[0_4px_0_var(--marketing-dark)] active:translate-y-[6px] active:shadow-none'
-            >
-              Join as an artist
-            </Link>
-
-            <p className='font-marketing-body mt-4 text-sm text-white/85'>No credit card required · No time limit</p>
+              label='Join as an artist'
+              variant='light-shadow'
+              subtitle='No credit card required · No time limit'
+              className='mt-15'
+              subtitleClassName='text-white'
+            />
           </div>
         </div>
       </MarketingContainer>

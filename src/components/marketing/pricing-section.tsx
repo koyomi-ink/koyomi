@@ -4,6 +4,8 @@ import { MarketingContainer } from './marketing-container';
 
 import { ArrowRight } from 'lucide-react';
 
+import { MarketingCTA } from './marketing-cta';
+
 export function PricingSection() {
   return (
     <section id='pricing' data-marketing-section className='mt-10 bg-[var(--marketing-dark)] py-15 text-white'>
@@ -15,14 +17,14 @@ export function PricingSection() {
 
           <h2 className='font-marketing-display mt-4 text-4xl leading-tight sm:text-5xl lg:text-6xl'>Pricing</h2>
 
-          <p className='font-marketing-body mx-auto mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg'>
+          <p className='font-marketing-body mx-auto mt-6 max-w-2xl text-base leading-7 text-white sm:text-lg'>
             You pay for completed appointments, with a monthly limit.
             <br />
             No fixed fees or setup fees.
           </p>
         </div>
 
-        <div className='mx-auto mt-10 max-w-120 rounded-[2.5rem] border-2 border-white/40 p-6 text-white/70'>
+        <div className='mx-auto mt-10 max-w-120 rounded-[2.5rem] border-2 border-white/40 p-6 text-white'>
           <div className='text-center'>
             <div className='flex flex-wrap items-end justify-center gap-x-3'>
               <span className='font-marketing-display text-6xl leading-none text-[var(--marketing-accent)] sm:text-7xl lg:text-8xl'>
@@ -38,7 +40,7 @@ export function PricingSection() {
           </div>
         </div>
         <div>
-          <div className='mx-auto mt-10 w-full max-w-120 rounded-[2.5rem] bg-[var(--marketing-ink)]/70 px-4 py-6 text-white/70 sm:px-6'>
+          <div className='mx-auto mt-10 w-full max-w-120 rounded-[2.5rem] bg-[var(--marketing-ink)]/70 px-4 py-6 text-white sm:px-6'>
             <div className='mx-auto grid w-full max-w-sm grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-5'>
               <div className='text-center'>
                 <p className='font-marketing-mono text-xs sm:text-sm'>Upfront</p>
@@ -60,16 +62,14 @@ export function PricingSection() {
             <p className='font-marketing-body text-sm'>No charge for cancellations.</p>
           </div>
 
-          <div className='mt-12 flex flex-col items-center'>
-            <Link
-              href='/signup'
-              className='font-marketing-body inline-flex min-w-64 items-center justify-center rounded-full bg-[var(--marketing-accent)] px-8 py-3 font-semibold text-white shadow-[0_6px_0_var(--marketing-background)] transition-all hover:translate-y-[2px] hover:shadow-[0_4px_0_var(--marketing-background)] active:translate-y-[6px] active:shadow-none'
-            >
-              Join as an artist
-            </Link>
-
-            <p className='font-marketing-body mt-4 text-sm text-white'>No credit card required · No setup fee</p>
-          </div>
+          <MarketingCTA
+            href='/signup'
+            label='Join as an artist'
+            variant='light-shadow'
+            subtitle='No credit card required · No time limit'
+            className='mt-15'
+            subtitleClassName='text-white'
+          />
         </div>
       </MarketingContainer>
     </section>
