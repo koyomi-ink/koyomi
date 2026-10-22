@@ -114,7 +114,7 @@ export function ClientJourneySection() {
             />
           </div>
           <MarketingCTA
-            href='/client-demo'
+            href='/#waitlist'
             label='Join waitlist'
             variant='dark-shadow'
             subtitle='Be the first to know when Koyomi launches'

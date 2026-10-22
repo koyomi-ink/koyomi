@@ -19,7 +19,7 @@ export function SignupCTASection() {
             </p>
 
             <MarketingCTA
-              href='/signup'
+              href='/#waitlist'
               label='Join waitlist'
               variant='light-shadow'
               subtitle='Be the first to know when Koyomi launches'
