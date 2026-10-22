@@ -26,10 +26,9 @@ export function HeroSection() {
             <Image
               src='/desktop display.png'
               alt='Koyomi artist dashboard'
+              loading='eager'
               width={1600}
               height={900}
-              priority
-              quality={100}
               sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 896px'
               className='h-auto w-full'
             />
@@ -39,8 +38,6 @@ export function HeroSection() {
               alt='Koyomi mobile experience'
               width={600}
               height={1200}
-              priority
-              quality={100}
               sizes='(max-width: 640px) 34vw, 25vw'
               className='absolute right-[0%] -bottom-[0%] h-auto w-[42%] sm:right-[0%] sm:-bottom-[0%] sm:w-[34%]'
             />
