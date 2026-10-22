@@ -1,0 +1,14 @@
+# Koyomi
+
+> Koyomi is booking and studio management software built for tattoo artists.
+
+Koyomi helps tattoo artists manage booking requests, clients, tattoo projects, schedules, deposits, payments, reminders, aftercare information, and a public Digital Studio.
+
+## Product
+
+- [Koyomi](https://koyomi.ink/): Product overview, features, pricing, and artist signup.
+
+## Access
+
+- [Artist signup](https://koyomi.ink/signup): Create an artist account.
+- [Login](https://koyomi.ink/login): Sign in to an existing account.
