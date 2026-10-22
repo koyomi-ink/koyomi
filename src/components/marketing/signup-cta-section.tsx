@@ -20,9 +20,9 @@ export function SignupCTASection() {
 
             <MarketingCTA
               href='/signup'
-              label='Join as an artist'
+              label='Join waitlist'
               variant='light-shadow'
-              subtitle='No credit card required · No time limit'
+              subtitle='Be the first to know when Koyomi launches'
               className='mt-15'
               subtitleClassName='text-white'
             />

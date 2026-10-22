@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { MarketingContainer } from './marketing-container';
 
 import learnMoreImage from '@/imgs/marketing/hero/desktop-display.webp';
+import portfolioImage from '@/imgs/marketing/hero/desktop-display.webp';
 import flashImage from '@/imgs/marketing/hero/desktop-display.webp';
 import customImage from '@/imgs/marketing/hero/desktop-display.webp';
 import rescheduleImage from '@/imgs/marketing/hero/desktop-display.webp';
@@ -20,6 +21,14 @@ const journeys = [
       'Clients can view your policies, availability, portfolio, locations, and anything else you choose to share.',
     image: learnMoreImage,
     alt: 'Client viewing an artist profile on Koyomi',
+  },
+  {
+    id: 'portfolio',
+    label: 'Portfolio',
+    description:
+      'Clients can explore your work by style and category, making it easier to see what you do best before sending a booking request.',
+    image: portfolioImage,
+    alt: 'Client browsing portfolio on Koyomi',
   },
   {
     id: 'flash',
@@ -106,9 +115,9 @@ export function ClientJourneySection() {
           </div>
           <MarketingCTA
             href='/client-demo'
-            label='Try out client demo'
+            label='Join waitlist'
             variant='dark-shadow'
-            subtitle='Free · No registration'
+            subtitle='Be the first to know when Koyomi launches'
             className='mt-15'
           />
         </div>
