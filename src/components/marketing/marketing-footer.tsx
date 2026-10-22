@@ -3,7 +3,8 @@ import Link from 'next/link';
 
 import { MarketingContainer } from './marketing-container';
 import { MarketingNavLink } from './marketing-nav-link';
-import { marketingNavigation } from './marketing-navigation';
+
+import logo from '@/imgs/branding/logo/extended-red.png';
 
 export function MarketingFooter() {
   return (
@@ -16,7 +17,7 @@ export function MarketingFooter() {
               aria-label='Koyomi home'
               className='w-fit rounded-md focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none'
             >
-              <Image src='/logo-extended-red.png' alt='Koyomi' width={190} height={48} className='h-10 w-auto' />
+              <Image src={logo} alt='Koyomi' width={190} height={48} className='h-10 w-auto' />
             </MarketingNavLink>
           </div>
 

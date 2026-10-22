@@ -6,13 +6,18 @@ import { useState } from 'react';
 import { MarketingContainer } from './marketing-container';
 import Link from 'next/link';
 
+import learnMoreImage from '@/imgs/marketing/hero/desktop-display.webp';
+import flashImage from '@/imgs/marketing/hero/desktop-display.webp';
+import customImage from '@/imgs/marketing/hero/desktop-display.webp';
+import rescheduleImage from '@/imgs/marketing/hero/desktop-display.webp';
+
 const journeys = [
   {
     id: 'learn-more',
     label: 'Learn more',
     description:
       'Clients can view your policies, availability, portfolio, locations, and anything else you choose to share.',
-    image: '/desktop display.png',
+    image: learnMoreImage,
     alt: 'Client viewing an artist profile on Koyomi',
   },
   {
@@ -20,7 +25,7 @@ const journeys = [
     label: 'Flash tattoos',
     description:
       'Clients can browse your available flash and send a booking request directly from the piece they want.',
-    image: '/desktop display.png',
+    image: flashImage,
     alt: 'Client browsing flash tattoos on Koyomi',
   },
   {
@@ -28,7 +33,7 @@ const journeys = [
     label: 'Custom tattoos',
     description:
       'Clients can send the information, references, placement, and date options you need to review a custom request.',
-    image: '/desktop display.png',
+    image: customImage,
     alt: 'Client submitting a custom tattoo request on Koyomi',
   },
   {
@@ -36,7 +41,7 @@ const journeys = [
     label: 'Reschedule',
     description:
       'Clients can manage an existing appointment through their portal without another long back-and-forth conversation.',
-    image: '/desktop display.png',
+    image: rescheduleImage,
     alt: 'Client rescheduling an appointment on Koyomi',
   },
 ] as const;
@@ -94,10 +99,7 @@ export function ClientJourneySection() {
               key={selectedJourney.id}
               src={selectedJourney.image}
               alt={selectedJourney.alt}
-              width={1000}
-              height={500}
-              preload={true}
-              sizes='(max-width: 768px) 100vw, 672px'
+              sizes='(max-width: 768px) calc(100vw - 40px), 672px'
               className='h-auto w-full'
             />
           </div>

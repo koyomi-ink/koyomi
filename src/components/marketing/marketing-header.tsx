@@ -5,6 +5,8 @@ import { MobileNavigation } from './mobile-navigation';
 import { marketingNavigation } from './marketing-navigation';
 import { MarketingNavLink } from './marketing-nav-link';
 
+import logo from '@/imgs/branding/logo/extended-red.png';
+
 const navigationLinkClassName =
   'rounded-md px-2 py-2 font-marketing-mono text-sm font-medium text-[var(--marketing-ink)] transition-colors hover:text-[var(--marketing-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)]';
 
@@ -20,7 +22,7 @@ export function MarketingHeader() {
           aria-label='Koyomi home'
           className='shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:outline-none'
         >
-          <Image src='/logo-extended-red.png' alt='Koyomi' width={190} height={48} className='h-10 w-auto' />
+          <Image src={logo} alt='Koyomi' width={190} height={48} className='h-10 w-auto' />
         </MarketingNavLink>
 
         <div className='hidden min-w-0 flex-1 items-center gap-1 lg:flex'>
