@@ -7,7 +7,7 @@ import { ClientJourneySection } from '@/components/marketing/client-journey-sect
 import { SignupCTASection } from '@/components/marketing/signup-cta-section';
 import { FeaturesSection } from '@/components/marketing/features-section';
 import { PricingSection } from '@/components/marketing/pricing-section';
-import { WaitlistForm } from '@/components/marketing/waitlist-section';
+import { WaitlistSection } from '@/components/marketing/waitlist-section';
 import { ContactSection } from '@/components/marketing/contact-section';
 import { MarketingFooter } from '@/components/marketing/marketing-footer';
 
@@ -67,7 +67,7 @@ export default function HomePage() {
 
         <PricingSection />
 
-        <WaitlistForm />
+        <WaitlistSection />
 
         <hr className='mx-auto my-8 w-[85%] max-w-5xl border-0 border-t border-[var(--marketing-accent)]/90' />
 
