@@ -4,7 +4,7 @@ import Link from 'next/link';
 export function Logo() {
   return (
     <Link href='/' className='flex w-fit items-center gap-2'>
-      <Image src='/logo-extended-red.png' width={40} height={40} priority quality={100} alt='Koyomi logo mark' />
+      <Image src='/logo-extended-red.png' width={40} height={40} alt='Koyomi logo mark' />
       <span className='font-alt text-xl text-white'>Koyomi</span>
     </Link>
   );

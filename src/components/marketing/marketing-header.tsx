@@ -20,7 +20,7 @@ export function MarketingHeader() {
           aria-label='Koyomi home'
           className='shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:outline-none'
         >
-          <Image src='/logo-extended-red.png' alt='Koyomi' width={190} height={48} priority className='h-10 w-auto' />
+          <Image src='/logo-extended-red.png' alt='Koyomi' width={190} height={48} className='h-10 w-auto' />
         </MarketingNavLink>
 
         <div className='hidden min-w-0 flex-1 items-center gap-1 lg:flex'>

@@ -78,7 +78,6 @@ export function HowItWorksSection() {
                       alt={step.alt}
                       width={1600}
                       height={900}
-                      quality={100}
                       sizes='(max-width: 1024px) 100vw, 50vw'
                       className='h-auto w-full'
                     />
