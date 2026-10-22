@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { MarketingContainer } from './marketing-container';
 
 import learnMoreImage from '@/imgs/marketing/hero/desktop-display.webp';
+import portfolioImage from '@/imgs/marketing/hero/desktop-display.webp';
 import flashImage from '@/imgs/marketing/hero/desktop-display.webp';
 import customImage from '@/imgs/marketing/hero/desktop-display.webp';
 import rescheduleImage from '@/imgs/marketing/hero/desktop-display.webp';
@@ -20,6 +21,13 @@ const journeys = [
       'Clients can view your policies, availability, portfolio, locations, and anything else you choose to share.',
     image: learnMoreImage,
     alt: 'Client viewing an artist profile on Koyomi',
+  },
+  {
+    id: 'portfolio',
+    label: 'Portfolio',
+    description: 'TODO -------------',
+    image: portfolioImage,
+    alt: 'Client browsing portfolio on Koyomi',
   },
   {
     id: 'flash',
