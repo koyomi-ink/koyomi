@@ -2,10 +2,10 @@ import { MarketingContainer } from './marketing-container';
 
 export function ContactSection() {
   return (
-    <section id='contact' data-marketing-section className='py-24 sm:py-28 lg:py-36'>
+    <section id='contact' data-marketing-section className='pt-40 pb-35'>
       <MarketingContainer>
         <div className='grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20'>
-          <div>
+          <div className='text-center lg:text-left'>
             <p className='font-marketing-mono text-sm font-semibold tracking-wide text-[var(--marketing-blue)] sm:text-base'>
               Feel free to
             </p>

@@ -39,11 +39,7 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section
-      id='how-it-works'
-      data-marketing-section
-      className='bg-[var(--marketing-dark)] py-24 text-[#f3dfdc] sm:py-28 lg:py-15'
-    >
+    <section id='how-it-works' data-marketing-section className='bg-[var(--marketing-dark)] py-15 text-[#f3dfdc]'>
       <MarketingContainer>
         <div className='text-center'>
           <p className='font-marketing-mono text-sm font-semibold tracking-wide text-[var(--marketing-blue)] sm:text-base'>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,12 +21,33 @@ export function MobileNavigation() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button type='button' variant='ghost' size='icon' className='lg:hidden' aria-label='Open navigation'>
+        <Button
+          type='button'
+          variant='ghost'
+          size='icon'
+          className='size-10 rounded-full lg:hidden'
+          aria-label='Open navigation'
+        >
           <Menu className='size-5' />
         </Button>
       </SheetTrigger>
 
-      <SheetContent side='right' className='w-[min(88vw,22rem)] bg-[var(--marketing-background)]'>
+      <SheetContent
+        side='right'
+        showCloseButton={false}
+        className='w-[min(88vw,22rem)] bg-[var(--marketing-background)]'
+      >
+        <SheetClose asChild>
+          <Button
+            type='button'
+            variant='ghost'
+            size='icon'
+            aria-label='Close navigation'
+            className='absolute top-3 right-4 size-10 rounded-full focus-visible:ring-0 focus-visible:ring-offset-0'
+          >
+            <X className='size-5' />
+          </Button>
+        </SheetClose>
         <SheetHeader>
           <SheetTitle className='sr-only'>Navigation</SheetTitle>
 

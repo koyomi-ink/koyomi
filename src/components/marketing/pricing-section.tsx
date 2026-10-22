@@ -6,11 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 export function PricingSection() {
   return (
-    <section
-      id='pricing'
-      data-marketing-section
-      className='mt-10 bg-[var(--marketing-dark)] py-17 text-white sm:py-28 lg:py-17'
-    >
+    <section id='pricing' data-marketing-section className='mt-10 bg-[var(--marketing-dark)] py-15 text-white'>
       <MarketingContainer>
         <div className='mx-auto max-w-4xl text-center'>
           <p className='font-marketing-mono text-sm font-semibold tracking-wide text-[var(--marketing-blue)] sm:text-base'>
@@ -42,18 +38,18 @@ export function PricingSection() {
           </div>
         </div>
         <div>
-          <div className='mx-auto mt-10 max-w-120 rounded-[2.5rem] bg-[var(--marketing-ink)]/70 p-6 text-white/70'>
-            <div className='mx-auto flex max-w-md items-center justify-between'>
-              <div className='min-w-40 text-center'>
-                <p className='font-marketing-mono text-sm'>Upfront</p>
+          <div className='mx-auto mt-10 w-full max-w-120 rounded-[2.5rem] bg-[var(--marketing-ink)]/70 px-4 py-6 text-white/70 sm:px-6'>
+            <div className='mx-auto grid w-full max-w-sm grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-5'>
+              <div className='text-center'>
+                <p className='font-marketing-mono text-xs sm:text-sm'>Upfront</p>
 
                 <p className='font-marketing-display mt-2 text-2xl text-[var(--marketing-accent)]'>£0</p>
               </div>
 
-              <ArrowRight aria-hidden='true' strokeWidth={3} className='w-10 shrink-0' />
+              <ArrowRight aria-hidden='true' strokeWidth={3} className='w-5 shrink-0 sm:w-6' />
 
-              <div className='min-w-40 text-center'>
-                <p className='font-marketing-mono text-sm'>Monthly max</p>
+              <div className='text-center'>
+                <p className='font-marketing-mono text-xs sm:text-sm'>Monthly max</p>
 
                 <p className='font-marketing-display mt-2 text-2xl text-[var(--marketing-accent)]'>£30</p>
               </div>
