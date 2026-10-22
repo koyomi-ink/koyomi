@@ -39,12 +39,14 @@ export function HeroSection() {
               className='h-auto w-full'
             />
 
-            <Image
-              src={mobileDisplay}
-              alt='Koyomi mobile experience'
-              sizes='(max-width: 640px) 42vw, (max-width: 1024px) 34vw, 32vw'
-              className='absolute right-[1%] -bottom-[5%] h-auto w-[42%] sm:right-[2%] sm:-bottom-[7%] sm:w-[34%] lg:w-[32%]'
-            />
+            <div className='pointer-events-none absolute right-0 bottom-0 w-[40%] translate-x-[2%] translate-y-[8%] sm:w-[32%] sm:translate-x-[4%] sm:translate-y-[0%] lg:w-[28%]'>
+              <Image
+                src={mobileDisplay}
+                alt='Koyomi mobile experience'
+                sizes='(max-width: 640px) 40vw, (max-width: 1024px) 32vw, 28vw'
+                className='h-auto w-full'
+              />
+            </div>
           </div>
 
           <div className='mt-12 flex flex-col items-center gap-3 sm:mt-5'>
