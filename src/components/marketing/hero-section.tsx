@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import desktopDisplay from '@/imgs/marketing/hero/desktop-display.webp';
+import mobileDisplay from '@/imgs/marketing/hero/mobile-display.webp';
+
 import { MarketingContainer } from './marketing-container';
 
 export function HeroSection() {
@@ -24,22 +27,19 @@ export function HeroSection() {
           {/* Product preview */}
           <div className='relative mt-12 w-full max-w-4xl pb-10 sm:pb-14'>
             <Image
-              src='/desktop display.png'
+              src={desktopDisplay}
               alt='Koyomi artist dashboard'
-              preload={true}
-              width={1600}
-              height={900}
-              sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 896px'
+              sizes='(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 80vw, 896px'
+              loading='eager'
+              fetchPriority='high'
               className='h-auto w-full'
             />
 
             <Image
-              src='/mobile display.png'
+              src={mobileDisplay}
               alt='Koyomi mobile experience'
-              width={600}
-              height={1200}
-              sizes='(max-width: 640px) 34vw, 25vw'
-              className='absolute right-[0%] -bottom-[0%] h-auto w-[42%] sm:right-[0%] sm:-bottom-[0%] sm:w-[34%]'
+              sizes='(max-width: 640px) 42vw, (max-width: 1024px) 34vw, 32vw'
+              className='absolute right-[1%] -bottom-[5%] h-auto w-[42%] sm:right-[2%] sm:-bottom-[7%] sm:w-[34%] lg:w-[32%]'
             />
           </div>
 
