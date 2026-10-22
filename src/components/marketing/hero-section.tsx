@@ -8,7 +8,11 @@ import { MarketingContainer } from './marketing-container';
 
 export function HeroSection() {
   return (
-    <section id='home' className='overflow-hidden py-15'>
+    <section
+      id='home'
+      data-marketing-section
+      className='scroll-mt-28 overflow-hidden pt-20 pb-24 sm:scroll-mt-32 sm:pt-24 lg:pt-28 lg:pb-32'
+    >
       <MarketingContainer>
         <div className='mx-auto flex max-w-5xl flex-col items-center text-center'>
           <p className='font-marketing-mono text-sm font-semibold tracking-wide text-[var(--marketing-blue)] sm:text-base'>
