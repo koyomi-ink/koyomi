@@ -68,7 +68,7 @@ export function PricingSection() {
               Join as an artist
             </Link>
 
-            <p className='font-marketing-body mt-4 text-sm text-white/70'>No credit card required · No setup fee</p>
+            <p className='font-marketing-body mt-4 text-sm text-white'>No credit card required · No setup fee</p>
           </div>
         </div>
       </MarketingContainer>

@@ -51,7 +51,7 @@ export function HeroSection() {
               Join as an artist
             </Link>
 
-            <p className='font-marketing-body text-sm text-[var(--marketing-ink)]/65'>
+            <p className='font-marketing-body text-sm text-[var(--marketing-ink)]'>
               No credit card required · No time limit
             </p>
           </div>
