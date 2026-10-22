@@ -4,7 +4,7 @@ import { MarketingContainer } from './marketing-container';
 
 export function SignupCTASection() {
   return (
-    <section className='py-15'>
+    <section className='py-10'>
       <MarketingContainer>
         <div className='overflow-hidden rounded-[2rem] bg-[var(--marketing-blue)] px-6 py-10 text-center sm:px-10 sm:py-10 lg:px-16 lg:py-10'>
           <div className='mx-auto flex max-w-3xl flex-col items-center'>
