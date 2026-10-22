@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import desktopDisplay from '@/imgs/marketing/hero/desktop-display.webp';
+
 import { MarketingContainer } from './marketing-container';
 
 const steps = [
@@ -8,7 +10,7 @@ const steps = [
     title: 'Set up your account',
     description:
       'Add your availability, locations, flash, pricing, policies, and the details your clients need before booking.',
-    image: '/desktop display.png',
+    image: desktopDisplay,
     alt: 'Koyomi studio setup',
   },
   {
@@ -16,7 +18,7 @@ const steps = [
     title: 'Customize your Digital Studio',
     description:
       'Build your public page around your work. Show your portfolio, flash, bio, locations, availability, and booking information.',
-    image: '/desktop display.png',
+    image: desktopDisplay,
     alt: 'Koyomi Digital Studio',
   },
   {
@@ -24,7 +26,7 @@ const steps = [
     title: 'Share your link, take bookings',
     description:
       'Put your Koyomi link in your bio and let clients learn about your work, check your policies, and send booking requests based on your availability.',
-    image: '/desktop display.png',
+    image: desktopDisplay,
     alt: 'Koyomi public booking experience',
   },
   {
@@ -32,7 +34,7 @@ const steps = [
     title: 'Manage your work',
     description:
       'Review requests, confirm sessions, keep track of clients, deposits, payments, and single or multi-session tattoo projects in one place.',
-    image: '/desktop display.png',
+    image: desktopDisplay,
     alt: 'Koyomi booking management',
   },
 ] as const;
@@ -74,7 +76,6 @@ export function HowItWorksSection() {
                       alt={step.alt}
                       width={1600}
                       height={900}
-                      preload={true}
                       sizes='(max-width: 1024px) 100vw, 50vw'
                       className='h-auto w-full'
                     />
