@@ -16,6 +16,10 @@ export const marketingNavigation = [
     href: '/#pricing',
   },
   {
+    label: 'Waitlist',
+    href: '/#waitlist',
+  },
+  {
     label: 'Get in touch',
     href: '/#contact',
   },

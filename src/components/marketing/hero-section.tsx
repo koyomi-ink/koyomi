@@ -52,7 +52,7 @@ export function HeroSection() {
           </div>
 
           <MarketingCTA
-            href='/signup'
+            href='/#waitlist'
             label='Join waitlist'
             subtitle='Be the first to know when Koyomi launches'
             className='mt-12 sm:mt-5'
