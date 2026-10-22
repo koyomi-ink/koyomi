@@ -26,7 +26,7 @@ export function HeroSection() {
             <Image
               src='/desktop display.png'
               alt='Koyomi artist dashboard'
-              loading='eager'
+              preload={true}
               width={1600}
               height={900}
               sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 896px'

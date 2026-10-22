@@ -96,6 +96,7 @@ export function ClientJourneySection() {
               alt={selectedJourney.alt}
               width={1000}
               height={500}
+              preload={true}
               sizes='(max-width: 768px) 100vw, 672px'
               className='h-auto w-full'
             />
