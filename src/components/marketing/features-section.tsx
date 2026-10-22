@@ -2,46 +2,45 @@ import { MarketingContainer } from './marketing-container';
 
 const features = [
   {
-    number: '01',
-    title: 'Tailor your page to your brand',
+    number: 'Digital Studio',
+    title: 'Your studio, online',
     description:
-      'Review requests, choose dates, keep track of appointment details, and manage single or multi-session tattoo projects.',
+      'Show your work, flash, locations, availability, pricing, policies, and everything clients need before booking.',
   },
   {
-    number: '02',
-    title: 'Tailor your page to your brand 2',
+    number: 'Booking requests',
+    title: 'No more back-and-forth',
     description:
-      'Keep client information, tattoo projects, appointments, payments, and history together instead of scattered across messages.',
+      'Collect the details you need upfront, let clients suggest dates based on your availability, and review, accept or decline requests from one place.',
   },
   {
-    number: '03',
-    title: 'Tailor your page to your brand 3',
-    description:
-      'Give clients one place to see your work, flash, locations, availability, pricing, policies, and booking information.',
+    number: 'Clients',
+    title: 'Know who you’re working with',
+    description: 'Keep client details, notes, projects, payments, and appointment history together in one place.',
   },
   {
-    number: '04',
-    title: 'Tailor your page to your brand 4',
+    number: 'Tattoo projects',
+    title: 'Organize multi-session projects',
     description:
-      'Review requests, choose dates, keep track of appointment details, and manage single or multi-session tattoo projects.',
+      'Keep multi-session work together as one project, with its appointments, dates, details and progress all connected.',
   },
   {
-    number: '05',
-    title: 'Tailor your page to your brand 5',
+    number: 'Schedule',
+    title: 'Stay in control of your time',
     description:
-      'Keep client information, tattoo projects, appointments, payments, and history together instead of scattered across messages.',
+      'Set when and where you work, manage appointment dates, and only receive requests that fit your availability.',
   },
   {
-    number: '06',
-    title: 'Tailor your page to your brand 6',
+    number: 'Payments & follow-up',
+    title: 'From deposit to aftercare',
     description:
-      'Give clients one place to see your work, flash, locations, availability, pricing, policies, and booking information.',
+      'Track deposits and payments, and automate reminders for upcoming sessions and aftercare instructions.',
   },
 ] as const;
 
 export function FeaturesSection() {
   return (
-    <section id='features' data-marketing-section className='py-24 sm:py-28 lg:py-15'>
+    <section id='features' data-marketing-section className='py-15'>
       <MarketingContainer>
         <div className='mx-auto max-w-3xl text-center'>
           <p className='font-marketing-mono text-sm font-semibold tracking-wide text-[var(--marketing-blue)] sm:text-base'>
@@ -53,11 +52,13 @@ export function FeaturesSection() {
           </h2>
 
           <p className='font-marketing-body mx-auto mt-6 max-w-2xl text-base leading-7 text-[var(--marketing-ink)]/75 sm:text-lg'>
-            Koyomi was built around your work, so you can spend less time on admin and more on tattooing.
+            From the first booking request to the final session.
+            <br />
+            See how Koyomi can help you spend less time on admin.
           </p>
         </div>
 
-        <div className='mt-16 grid gap-6 md:grid-cols-2 lg:mt-10 xl:grid-cols-3'>
+        <div className='mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3'>
           {features.map((feature) => (
             <article
               key={feature.title}
@@ -65,7 +66,7 @@ export function FeaturesSection() {
             >
               <p className='font-marketing-mono text-sm font-semibold text-[var(--marketing-blue)]'>{feature.number}</p>
 
-              <div className='mt-auto pt-5'>
+              <div className='mt-auto pt-3'>
                 <h3 className='font-marketing-display text-2xl leading-tight text-[var(--marketing-accent)] sm:text-3xl'>
                   {feature.title}
                 </h3>

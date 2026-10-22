@@ -49,7 +49,7 @@ export function ClientJourneySection() {
   const selectedJourney = journeys.find((journey) => journey.id === selectedId) ?? journeys[0];
 
   return (
-    <section id='client-journey' data-marketing-section className='py-24 sm:py-28 lg:py-15'>
+    <section id='client-journey' data-marketing-section className='py-15'>
       <MarketingContainer>
         <div className='mx-auto flex max-w-4xl flex-col items-center text-center'>
           <p className='font-marketing-mono text-sm font-semibold tracking-wide text-[var(--marketing-blue)] sm:text-base'>
@@ -61,7 +61,7 @@ export function ClientJourneySection() {
           </h2>
 
           <div
-            className='mt-10 flex w-full max-w-3xl flex-wrap justify-center gap-2'
+            className='mt-8 flex w-full max-w-3xl flex-wrap justify-center gap-2'
             aria-label='Client journey examples'
           >
             {journeys.map((journey) => {
@@ -109,8 +109,8 @@ export function ClientJourneySection() {
               Try out demo
             </Link>
 
-            <p className='font-marketing-body text-sm text-[var(--marketing-ink)]/65'>
-              See what your clients will experience · No registration needed
+            <p className='font-marketing-body py-1 text-sm text-[var(--marketing-ink)]/65'>
+              Free · No registration needed
             </p>
           </div>
         </div>
