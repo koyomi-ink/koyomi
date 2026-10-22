@@ -38,6 +38,7 @@ export function HeroSection() {
               alt='Koyomi mobile experience'
               width={600}
               height={1200}
+              loading='eager'
               sizes='(max-width: 640px) 34vw, 25vw'
               className='absolute right-[0%] -bottom-[0%] h-auto w-[42%] sm:right-[0%] sm:-bottom-[0%] sm:w-[34%]'
             />
