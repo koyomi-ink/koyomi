@@ -53,8 +53,8 @@ export function HeroSection() {
 
           <MarketingCTA
             href='/signup'
-            label='Join as an artist'
-            subtitle='No credit card required · No time limit'
+            label='Join waitlist'
+            subtitle='Be the first to know when Koyomi launches'
             className='mt-12 sm:mt-5'
           />
         </div>
