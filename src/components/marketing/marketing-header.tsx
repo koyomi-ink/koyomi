@@ -34,15 +34,15 @@ export function MarketingHeader() {
         </div>
 
         <div className='ml-auto hidden shrink-0 items-center gap-2 lg:flex'>
-          <Link href='/login' className={navigationLinkClassName}>
+          {/* <Link href='/login' className={navigationLinkClassName}>
             Login
-          </Link>
+          </Link> */}
 
           <Link
-            href='/signup'
+            href='/#waitlist'
             className='inline-flex h-10 items-center justify-center rounded-full bg-[var(--marketing-accent)] px-6 text-sm font-medium text-white transition-colors hover:bg-[var(--marketing-accent-hover)] focus-visible:ring-2 focus-visible:ring-[var(--marketing-accent)] focus-visible:ring-offset-2 focus-visible:outline-none'
           >
-            Join as an artist
+            Join waitlist
           </Link>
         </div>
 
