@@ -17,9 +17,9 @@ import {
   GlobeCode,
   LayoutDashboard,
   LogOut,
-  Mailbox,
   Settings,
   Users,
+  GraduationCap,
 } from 'lucide-react';
 
 import { GuardedLink } from '@/components/app-panel/guarded-link';
@@ -116,9 +116,9 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
       icon: CircleDashedCheck,
     },
     {
-      title: "What's new",
-      url: `/app/${currentStudio.slug}/whats-new`,
-      icon: Mailbox,
+      title: 'Academy',
+      url: `/app/${currentStudio.slug}/academy`,
+      icon: GraduationCap,
     },
   ];
 
