@@ -24,7 +24,7 @@ export function PricingSection() {
           </p>
         </div>
 
-        <div className='mx-auto mt-10 max-w-120 rounded-[2.5rem] border-2 border-white/40 p-6 text-white'>
+        <div className='mx-auto mt-10 max-w-120 rounded-[2.5rem] p-6 text-white'>
           <div className='text-center'>
             <div className='flex flex-wrap items-end justify-center gap-x-3'>
               <span className='font-marketing-display text-6xl leading-none text-[var(--marketing-accent)] sm:text-7xl lg:text-8xl'>
