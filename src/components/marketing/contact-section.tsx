@@ -2,7 +2,7 @@ import { MarketingContainer } from './marketing-container';
 
 export function ContactSection() {
   return (
-    <section id='contact' data-marketing-section className='pt-40 pb-35'>
+    <section id='contact' data-marketing-section className='pt-20 pb-40'>
       <MarketingContainer>
         <div className='grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20'>
           <div className='text-center lg:text-left'>

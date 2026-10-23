@@ -17,7 +17,7 @@ export function WaitlistSection() {
   const hasJoined = state.status === 'success' || state.status === 'already-joined';
 
   return (
-    <section id='waitlist' data-marketing-section className='pt-40 pb-35'>
+    <section id='waitlist' data-marketing-section className='pt-40 pb-20'>
       <MarketingContainer>
         <div className='grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20'>
           <div className='text-center lg:text-left'>
