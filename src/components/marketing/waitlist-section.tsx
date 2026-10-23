@@ -32,7 +32,7 @@ export function WaitlistSection() {
             <p className='font-marketing-body mt-6 max-w-lg text-base leading-7 text-[var(--marketing-ink)]/75 sm:text-lg'>
               We will let you know when Koyomi launches.
               <br />
-              No spam.
+              No spam, and you can unsubscribe any time.
             </p>
           </div>
 

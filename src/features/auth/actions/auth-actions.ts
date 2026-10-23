@@ -4,14 +4,46 @@ import { redirect } from 'next/navigation';
 
 import { sendLoginHelpEmail } from '@/features/auth/emails/send-login-help-email';
 import { checkAuthEmailRateLimit } from '@/features/auth/rate-limit/check-auth-email-rate-limit';
+import { authEmailSchema } from '@/features/auth/schemas/auth-email-schema';
 import { createSupabaseServerClient } from '@/libs/supabase/supabase-server-client';
 import type { ActionResponse } from '@/types/action-response';
 import { getURL } from '@/utils/get-url';
 
 type AuthIntent = 'login' | 'artist-signup';
 
+type ValidatedEmail =
+  | {
+      email: string;
+      error: null;
+    }
+  | {
+      email: null;
+      error: ActionResponse;
+    };
+
 function getCallbackUrl(intent: AuthIntent) {
   return getURL(`/auth/callback?intent=${intent}`);
+}
+
+function validateAuthEmail(email: string): ValidatedEmail {
+  const result = authEmailSchema.safeParse({
+    email,
+  });
+
+  if (!result.success) {
+    return {
+      email: null,
+      error: {
+        data: null,
+        error: result.error.issues[0]?.message ?? 'Enter a valid email address.',
+      },
+    };
+  }
+
+  return {
+    email: result.data.email,
+    error: null,
+  };
 }
 
 async function checkEmailRateLimit(email: string): Promise<ActionResponse | null> {
@@ -36,18 +68,33 @@ async function checkEmailRateLimit(email: string): Promise<ActionResponse | null
   }
 }
 
-async function startOAuth(provider: 'google', intent: AuthIntent): Promise<ActionResponse> {
+function isUnknownOtpUserError(error: { code?: string; message?: string }) {
+  return error.code === 'otp_disabled' && error.message?.toLowerCase().includes('signups not allowed for otp');
+}
+
+function isSupabaseRateLimitError(error: { code?: string }) {
+  return error.code === 'over_email_send_rate_limit' || error.code === 'over_request_rate_limit';
+}
+
+/*
+ * Google OAuth
+ *
+ * These are safe to leave in place even though Google
+ * isn't configured yet. The UI can hide the buttons
+ * until the provider is actually enabled.
+ */
+async function startGoogleOAuth(intent: AuthIntent): Promise<ActionResponse> {
   const supabase = await createSupabaseServerClient();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider,
+    provider: 'google',
     options: {
       redirectTo: getCallbackUrl(intent),
     },
   });
 
   if (error) {
-    console.error('OAuth authentication failed:', error);
+    console.error('Google authentication failed:', error);
 
     return {
       data: null,
@@ -58,15 +105,30 @@ async function startOAuth(provider: 'google', intent: AuthIntent): Promise<Actio
   redirect(data.url);
 }
 
-export async function signInWithOAuth(provider: 'google'): Promise<ActionResponse> {
-  return startOAuth(provider, 'login');
+export async function signInWithGoogle(): Promise<ActionResponse> {
+  return startGoogleOAuth('login');
 }
 
+export async function signUpArtistWithGoogle(): Promise<ActionResponse> {
+  return startGoogleOAuth('artist-signup');
+}
+
+/*
+ * EMAIL LOGIN
+ *
+ * Existing accounts only.
+ */
 export async function signInWithEmail(email: string): Promise<ActionResponse> {
-  const normalizedEmail = email.trim().toLowerCase();
+  const validation = validateAuthEmail(email);
+
+  if (validation.error) {
+    return validation.error;
+  }
+
+  const normalizedEmail = validation.email;
 
   /*
-   * Rate-limit BEFORE Supabase or Resend.
+   * Validate first, then consume the rate-limit bucket.
    */
   const rateLimitError = await checkEmailRateLimit(normalizedEmail);
 
@@ -82,8 +144,7 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
       emailRedirectTo: getCallbackUrl('login'),
 
       /*
-       * Signing in must never create
-       * a brand-new Koyomi identity.
+       * /login must not create a new Auth user.
        */
       shouldCreateUser: false,
     },
@@ -97,12 +158,19 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
   }
 
   /*
-   * Unknown/non-email-login identity:
-   * send the informational Resend email
-   * without revealing account existence
-   * in the browser.
+   * Supabase currently returns:
+   *
+   *   code: otp_disabled
+   *   message: "Signups not allowed for otp"
+   *
+   * when shouldCreateUser=false and the user
+   * doesn't exist.
+   *
+   * Do not treat every otp_disabled error as this,
+   * because otp_disabled can also mean email OTP
+   * itself is disabled in the project.
    */
-  if (error.code === 'otp_disabled') {
+  if (isUnknownOtpUserError(error)) {
     try {
       await sendLoginHelpEmail(normalizedEmail);
     } catch (emailError) {
@@ -114,9 +182,21 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
       };
     }
 
+    /*
+     * Deliberately return the same browser result as
+     * a successful login request so we don't expose
+     * account existence through the UI.
+     */
     return {
       data: null,
       error: null,
+    };
+  }
+
+  if (isSupabaseRateLimitError(error)) {
+    return {
+      data: null,
+      error: 'Too many email attempts. Please wait a few minutes and try again.',
     };
   }
 
@@ -128,18 +208,24 @@ export async function signInWithEmail(email: string): Promise<ActionResponse> {
   };
 }
 
-export async function signUpArtistWithOAuth(provider: 'google'): Promise<ActionResponse> {
-  return startOAuth(provider, 'artist-signup');
-}
-
+/*
+ * ARTIST SIGNUP
+ *
+ * New Auth users are allowed here.
+ */
 export async function signUpArtistWithEmail(email: string): Promise<ActionResponse> {
-  const normalizedEmail = email.trim().toLowerCase();
+  const validation = validateAuthEmail(email);
+
+  if (validation.error) {
+    return validation.error;
+  }
+
+  const normalizedEmail = validation.email;
 
   /*
-   * Same limiter as login.
-   *
-   * This prevents someone from bypassing
-   * /login limits simply by using /signup.
+   * Login and signup intentionally share the limiter,
+   * preventing users from switching endpoints to
+   * bypass email-auth limits.
    */
   const rateLimitError = await checkEmailRateLimit(normalizedEmail);
 
@@ -155,24 +241,31 @@ export async function signUpArtistWithEmail(email: string): Promise<ActionRespon
       emailRedirectTo: getCallbackUrl('artist-signup'),
 
       /*
-       * /signup is explicitly the artist
-       * account creation flow.
+       * /signup explicitly allows creation of a
+       * new Supabase Auth identity.
        */
       shouldCreateUser: true,
     },
   });
 
-  if (error) {
-    console.error('Artist email signup failed:', error);
-
+  if (!error) {
     return {
       data: null,
-      error: 'Could not send the email. Please try again.',
+      error: null,
     };
   }
 
+  if (isSupabaseRateLimitError(error)) {
+    return {
+      data: null,
+      error: 'Too many email attempts. Please wait a few minutes and try again.',
+    };
+  }
+
+  console.error('Artist email signup failed:', error);
+
   return {
     data: null,
-    error: null,
+    error: 'Could not send the email. Please try again.',
   };
 }

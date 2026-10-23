@@ -17,7 +17,7 @@ type AuthMode = 'login' | 'artist-signup';
 
 type AuthUIProps = {
   mode: AuthMode;
-  authenticateWithOAuth: (provider: 'google') => Promise<ActionResponse>;
+  authenticateWithOAuth: () => Promise<ActionResponse>;
   authenticateWithEmail: (email: string) => Promise<ActionResponse>;
   initialError?: string | null;
 };
@@ -80,7 +80,7 @@ export function AuthUI({ mode, authenticateWithOAuth, authenticateWithEmail, ini
     setMessage(null);
     setIsError(false);
 
-    const response = await authenticateWithOAuth('google');
+    const response = await authenticateWithOAuth();
 
     if (response?.error) {
       setIsError(true);

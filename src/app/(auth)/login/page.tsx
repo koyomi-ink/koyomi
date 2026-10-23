@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { signInWithEmail, signInWithOAuth } from '@/features/auth/actions/auth-actions';
+import { signInWithEmail, signUpArtistWithGoogle } from '@/features/auth/actions/auth-actions';
 import { AuthUI } from '@/features/auth/components/auth-ui';
 
 type LoginPageProps = {
@@ -26,7 +26,7 @@ async function LoginContent({ searchParams }: LoginPageProps) {
   return (
     <AuthUI
       mode='login'
-      authenticateWithOAuth={signInWithOAuth}
+      authenticateWithOAuth={signUpArtistWithGoogle}
       authenticateWithEmail={signInWithEmail}
       initialError={initialError}
     />
@@ -34,7 +34,7 @@ async function LoginContent({ searchParams }: LoginPageProps) {
 }
 
 function LoginFallback() {
-  return <AuthUI mode='login' authenticateWithOAuth={signInWithOAuth} authenticateWithEmail={signInWithEmail} />;
+  return <AuthUI mode='login' authenticateWithOAuth={signUpArtistWithGoogle} authenticateWithEmail={signInWithEmail} />;
 }
 
 export default function LoginPage({ searchParams }: LoginPageProps) {
