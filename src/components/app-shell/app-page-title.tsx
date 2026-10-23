@@ -9,7 +9,7 @@ const pageTitles: Record<string, string> = {
   insights: 'Insights',
   settings: 'Settings',
   'setup-progress': 'Setup progress',
-  'whats-new': "What's new",
+  academy: 'Academy',
 };
 
 export function AppPageTitle() {

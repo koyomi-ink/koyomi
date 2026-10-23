@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { useAppPanel } from '@/components/app-panel/app-panel-provider';
 
@@ -16,18 +17,20 @@ import {
   GlobeCode,
   LayoutDashboard,
   LogOut,
-  Mailbox,
   Settings,
   Users,
+  GraduationCap,
 } from 'lucide-react';
 
 import { GuardedLink } from '@/components/app-panel/guarded-link';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
 import {
   Sidebar,
   SidebarContent,
@@ -38,7 +41,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
+
 import { logout } from '@/features/auth/actions/logout';
 
 type Studio = {
@@ -60,6 +65,20 @@ type AppSidebarProps = {
 };
 
 export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
+  const pathname = usePathname();
+
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const [copied, setCopied] = useState(false);
+
+  const { runGuardedAction, isSaving } = useAppPanel();
+
+  useEffect(() => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }, [pathname, isMobile, setOpenMobile]);
+
   const menuItems = [
     {
       title: 'Home',
@@ -97,15 +116,11 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
       icon: CircleDashedCheck,
     },
     {
-      title: "What's new",
-      url: `/app/${currentStudio.slug}/whats-new`,
-      icon: Mailbox,
+      title: 'Academy',
+      url: `/app/${currentStudio.slug}/academy`,
+      icon: GraduationCap,
     },
   ];
-
-  const [copied, setCopied] = useState(false);
-
-  const { runGuardedAction, isSaving } = useAppPanel();
 
   async function handleCopyBookingUrl() {
     await navigator.clipboard.writeText(`https://koyomi.ink/${currentStudio.slug}`);
@@ -115,6 +130,16 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
     window.setTimeout(() => {
       setCopied(false);
     }, 2000);
+  }
+
+  function isMenuItemActive(url: string) {
+    const studioHome = `/app/${currentStudio.slug}`;
+
+    if (url === studioHome) {
+      return pathname === url;
+    }
+
+    return pathname === url || pathname.startsWith(`${url}/`);
   }
 
   return (
@@ -203,7 +228,7 @@ export function AppSidebar({ currentStudio, memberships }: AppSidebarProps) {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title} isActive={isMenuItemActive(item.url)}>
                     <GuardedLink href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
