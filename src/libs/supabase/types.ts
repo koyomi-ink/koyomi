@@ -827,6 +827,30 @@ export type Database = {
           },
         ];
       };
+      rate_limits: {
+        Row: {
+          attempt_count: number;
+          bucket: string;
+          key_hash: string;
+          scope: string;
+          window_started_at: string;
+        };
+        Insert: {
+          attempt_count?: number;
+          bucket: string;
+          key_hash: string;
+          scope: string;
+          window_started_at?: string;
+        };
+        Update: {
+          attempt_count?: number;
+          bucket?: string;
+          key_hash?: string;
+          scope?: string;
+          window_started_at?: string;
+        };
+        Relationships: [];
+      };
       schedule_overrides: {
         Row: {
           artist_id: string;
@@ -1054,6 +1078,16 @@ export type Database = {
           p_bucket: string;
           p_key_hash: string;
           p_limit: number;
+          p_window_seconds: number;
+        };
+        Returns: boolean;
+      };
+      consume_rate_limit: {
+        Args: {
+          p_bucket: string;
+          p_key_hash: string;
+          p_limit: number;
+          p_scope: string;
           p_window_seconds: number;
         };
         Returns: boolean;
