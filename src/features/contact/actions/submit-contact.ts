@@ -3,6 +3,8 @@
 import { contactSchema } from '@/features/contact/schemas/contact-schema';
 import { createSupabaseAdminClient } from '@/utils/supabase/supabase-admin-client';
 
+import { checkContactRateLimit } from '@/features/contact/rate-limit/check-contact-rate-limit';
+
 export type ContactState = {
   status: 'idle' | 'success' | 'error';
   message: string;
@@ -29,6 +31,24 @@ export async function submitContact(_previousState: ContactState, formData: Form
     return {
       status: 'error',
       message: result.error.issues[0]?.message ?? 'Check your details and try again.',
+    };
+  }
+
+  try {
+    const allowed = await checkContactRateLimit(result.data.email);
+
+    if (!allowed) {
+      return {
+        status: 'error',
+        message: 'Too many messages. Please wait a little while and try again.',
+      };
+    }
+  } catch (error) {
+    console.error('Contact rate limiter failed:', error);
+
+    return {
+      status: 'error',
+      message: 'We could not process your message right now. Please try again.',
     };
   }
 

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://koyomi.ink'),
 
   title: {
-    default: 'Koyomi | Tattoo Booking & Studio Management',
+    default: 'Koyomi | Your tattoo business, all in one place',
     template: '%s | Koyomi',
   },
 
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: 'Koyomi | Tattoo Booking & Studio Management',
+    title: 'Koyomi | Your tattoo business, all in one place',
     description:
       'Manage booking requests, clients, tattoo projects, schedules, payments, and your Digital Studio in one place.',
     url: '/',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Koyomi | Tattoo Booking & Studio Management',
+    title: 'Koyomi | Your tattoo business, all in one place',
     description: 'Booking and studio management built for tattoo artists.',
   },
 
