@@ -6,6 +6,8 @@ import { createResendClient } from '@/libs/resend/resend-client';
 import { getEnvVar } from '@/utils/get-env-var';
 import { getURL } from '@/utils/get-url';
 
+const IDEMPOTENCY_WINDOW_MS = 15 * 60 * 1000;
+
 export async function sendLoginHelpEmail(email: string) {
   const normalizedEmail = email.trim().toLowerCase();
 
@@ -14,7 +16,6 @@ export async function sendLoginHelpEmail(email: string) {
   const from = getEnvVar(process.env.RESEND_FROM_EMAIL, 'RESEND_FROM_EMAIL');
 
   const signupUrl = getURL('/signup');
-  const loginUrl = getURL('/login');
 
   const subject = 'Koyomi login';
 
@@ -26,23 +27,20 @@ export async function sendLoginHelpEmail(email: string) {
 
       <p style="line-height: 1.6;">
         We received a request to sign in to Koyomi,
-        but this email address is not linked to the login method selected.
-      </p>
-
-      <p style="line-height: 1.6;">
-        If you normally sign in with Google, return to the
-        <a href="${loginUrl}">login page</a> and choose
-        <strong>Continue with Google</strong>.
+        but this email address is not currently linked to an account
+        that can sign in by email.
       </p>
 
       <p style="line-height: 1.6;">
         If you're a <strong>tattoo artist</strong> and don't have a Koyomi
-        account yet, you can create an artist account and set up your studio <a href="${signupUrl}">here</a>.
+        account yet, you can
+        <a href="${signupUrl}">create an artist account and set up your studio</a>.
       </p>
 
       <p style="line-height: 1.6;">
         <strong>Looking to book a tattoo?</strong>
-        You don't need to create an artist account. Book directly with you prefered artist.
+        You don't need to create an artist account.
+        Book directly with your preferred artist.
       </p>
 
       <p style="margin-top: 32px; color: #71717a; font-size: 14px; line-height: 1.5;">
@@ -52,19 +50,21 @@ export async function sendLoginHelpEmail(email: string) {
   `;
 
   /*
-   * Do not put the raw email address in the
-   * idempotency key.
+   * Never expose the raw email in an idempotency key.
    */
   const emailHash = createHash('sha256').update(normalizedEmail).digest('hex');
 
   /*
-   * Changing the email template creates a new
-   * idempotency key, avoiding Resend's 409 when
-   * the request body changes.
+   * Changing the template creates a new key,
+   * so updated email content can still be sent.
    */
   const templateHash = createHash('sha256').update(`${subject}\n${html}`).digest('hex').slice(0, 16);
 
-  const date = new Date().toISOString().slice(0, 10);
+  /*
+   * Allow another legitimate help email after
+   * the same 15-minute window used by our email limiter.
+   */
+  const timeBucket = Math.floor(Date.now() / IDEMPOTENCY_WINDOW_MS);
 
   const { error } = await resend.emails.send(
     {
@@ -74,7 +74,7 @@ export async function sendLoginHelpEmail(email: string) {
       html,
     },
     {
-      idempotencyKey: `login-help/${emailHash}/${date}/${templateHash}`,
+      idempotencyKey: `login-help/${emailHash}/${timeBucket}/${templateHash}`,
     },
   );
 

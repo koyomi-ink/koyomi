@@ -1,4 +1,4 @@
-import { signUpArtistWithEmail, signUpArtistWithOAuth } from '@/features/auth/actions/auth-actions';
+import { signUpArtistWithEmail, signUpArtistWithGoogle } from '@/features/auth/actions/auth-actions';
 import { AuthUI } from '@/features/auth/components/auth-ui';
 
 export default function SignupPage() {
@@ -12,7 +12,7 @@ export default function SignupPage() {
       <div className='relative w-full max-w-sm'>
         <AuthUI
           mode='artist-signup'
-          authenticateWithOAuth={signUpArtistWithOAuth}
+          authenticateWithOAuth={signUpArtistWithGoogle}
           authenticateWithEmail={signUpArtistWithEmail}
         />
       </div>
