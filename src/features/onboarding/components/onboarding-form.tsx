@@ -148,7 +148,16 @@ export function OnboardingForm() {
   const progress = ((step + 1) / TOTAL_STEPS) * 100;
 
   return (
-    <form action={formAction} className='space-y-8'>
+    <form
+      action={formAction}
+      className='space-y-8'
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' && step < TOTAL_STEPS - 1) {
+          event.preventDefault();
+          handleNext();
+        }
+      }}
+    >
       {/*
        * The visible step controls are managed
        * with React state.
